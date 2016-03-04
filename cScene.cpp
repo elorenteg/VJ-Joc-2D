@@ -13,15 +13,15 @@ bool cScene::LoadLevel(int level)
 {
 	bool res;
 	FILE *fd;
-	char file[16];
+	char file[32];
 	int i, j, px, py;
 	char tile;
 	float coordx_tile, coordy_tile;
 
 	res = true;
 
-	if (level < 10) sprintf(file, "%s0%d%s", (char *)FILENAME, level, (char *)FILENAME_EXT);
-	else		 sprintf(file, "%s%d%s", (char *)FILENAME, level, (char *)FILENAME_EXT);
+	if (level < 10) sprintf(file, "%s/%s0%d%s", (char *)LEVELS_FOLDER, (char *)FILENAME, level, (char *)FILENAME_EXT);
+	else		 sprintf(file, "%s/%s%d%s", (char *)LEVELS_FOLDER, (char *)FILENAME, level, (char *)FILENAME_EXT);
 
 	fd = fopen(file, "r");
 	if (fd == NULL) return false;
