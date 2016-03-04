@@ -23,8 +23,8 @@ public:
 	~cData(void);
 
 	int  GetID(int img);
-	void GetSize(int img,int *w,int *h);
-	bool LoadImage(int img,char *filename,int type = GL_RGBA);
+	void GetSize(int img, int *w, int *h);
+	bool LoadImage(int img, char *filename, int type = GL_RGBA);
 
 private:
 	cTexture texture[NUM_IMG];
