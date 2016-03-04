@@ -7,7 +7,7 @@
 #define NUM_IMG		2
 
 //Image identifiers
-#define IMG_BLOCKS	0
+//#define IMG_BLOCKS	0
 #define IMG_PLAYER	1
 /*
 #define IMG_ENEMY1	2
@@ -15,6 +15,10 @@
 #define IMG_SHOOT	4
 ...
 */
+
+#define IMG_LEV1	0
+#define IMG_LEV2	3
+#define IMG_LEV3	4
 
 class cData
 {

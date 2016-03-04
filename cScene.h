@@ -21,6 +21,7 @@ public:
 	virtual ~cScene(void);
 
 	bool LoadLevel(int level);
+	bool LoadBackground(int level);
 	void Draw(int tex_id);
 	int *GetMap();
 

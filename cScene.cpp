@@ -73,6 +73,28 @@ bool cScene::LoadLevel(int level)
 	return res;
 }
 
+bool cScene::LoadBackground(int level)
+{
+	bool res;
+
+	res = true;
+
+	id_DL = glGenLists(1);
+	glNewList(id_DL, GL_COMPILE);
+
+	//glTranslatef(-GAME_WIDTH / 2, -GAME_HEIGHT / 2, 0);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 1.0f); glVertex2i(0, 0);
+	glTexCoord2i(1, 1.0f); glVertex2i(GAME_WIDTH, 0);
+	glTexCoord2i(1, 0.0f); glVertex2i(GAME_WIDTH, GAME_HEIGHT);
+	glTexCoord2i(0, 0.0f); glVertex2i(0, GAME_HEIGHT);
+	glEnd();
+
+	glEndList();
+
+	return res;
+}
+
 void cScene::Draw(int tex_id)
 {
 	glEnable(GL_TEXTURE_2D);
