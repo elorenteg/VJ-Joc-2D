@@ -11,34 +11,40 @@ void AppRender()
 {
 	Game.Render();
 }
+
 void AppKeyboard(unsigned char key, int x, int y)
 {
-	Game.ReadKeyboard(key,x,y,true);
+	Game.ReadKeyboard(key, x, y, true);
 }
+
 void AppKeyboardUp(unsigned char key, int x, int y)
 {
-	Game.ReadKeyboard(key,x,y,false);
+	Game.ReadKeyboard(key, x, y, false);
 }
+
 void AppSpecialKeys(int key, int x, int y)
 {
-	Game.ReadKeyboard(key,x,y,true);
+	Game.ReadKeyboard(key, x, y, true);
 }
+
 void AppSpecialKeysUp(int key, int x, int y)
 {
-	Game.ReadKeyboard(key,x,y,false);
+	Game.ReadKeyboard(key, x, y, false);
 }
+
 void AppMouse(int button, int state, int x, int y)
 {
-	Game.ReadMouse(button,state,x,y);
+	Game.ReadMouse(button, state, x, y);
 }
+
 void AppIdle()
 {
-	if(!Game.Loop()) exit(0);
+	if (!Game.Loop()) exit(0);
 }
 
 void main(int argc, char** argv)
 {
-	int res_x,res_y,pos_x,pos_y;
+	int res_x, res_y, pos_x, pos_y;
 
 	//GLUT initialization
 	glutInit(&argc, argv);
@@ -49,11 +55,11 @@ void main(int argc, char** argv)
 	//Create centered window
 	res_x = glutGet(GLUT_SCREEN_WIDTH);
 	res_y = glutGet(GLUT_SCREEN_HEIGHT);
-	pos_x = (res_x>>1)-(GAME_WIDTH>>1);
-	pos_y = (res_y>>1)-(GAME_HEIGHT>>1);
-	
-	glutInitWindowPosition(pos_x,pos_y);
-	glutInitWindowSize(GAME_WIDTH,GAME_HEIGHT);
+	pos_x = (res_x >> 1) - (GAME_WIDTH >> 1);
+	pos_y = (res_y >> 1) - (GAME_HEIGHT >> 1);
+
+	glutInitWindowPosition(pos_x, pos_y);
+	glutInitWindowSize(GAME_WIDTH, GAME_HEIGHT);
 	glutCreateWindow("Bubble returns!");
 
 	/*glutGameModeString("800x600:32");
@@ -63,10 +69,10 @@ void main(int argc, char** argv)
 	//glutSetCursor(GLUT_CURSOR_NONE);
 
 	//Register callback functions
-	glutDisplayFunc(AppRender);			
-	glutKeyboardFunc(AppKeyboard);		
-	glutKeyboardUpFunc(AppKeyboardUp);	
-	glutSpecialFunc(AppSpecialKeys);	
+	glutDisplayFunc(AppRender);
+	glutKeyboardFunc(AppKeyboard);
+	glutKeyboardUpFunc(AppKeyboardUp);
+	glutSpecialFunc(AppSpecialKeys);
 	glutSpecialUpFunc(AppSpecialKeysUp);
 	glutMouseFunc(AppMouse);
 	glutIdleFunc(AppIdle);
@@ -75,5 +81,5 @@ void main(int argc, char** argv)
 	Game.Init();
 
 	//Application loop
-	glutMainLoop();	
+	glutMainLoop();
 }
