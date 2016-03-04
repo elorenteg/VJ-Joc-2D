@@ -3,6 +3,7 @@
 #include "cScene.h"
 #include "cPlayer.h"
 #include "cData.h"
+#include "Globals.h"
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480

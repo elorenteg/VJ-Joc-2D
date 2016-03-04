@@ -1,7 +1,6 @@
 #include "cGame.h"
 #include "Globals.h"
 
-
 //http://www.koonsolo.com/news/dewitters-gameloop/
 const int FRAMES_PER_SECOND = 70;
 const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
@@ -35,13 +34,21 @@ bool cGame::Init()
 	glEnable(GL_ALPHA_TEST);
 
 	//Scene initialization
-	res = Data.LoadImage(IMG_BLOCKS, "blocks.png", GL_RGBA);
+	char scene_path[64];
+	strcpy(scene_path, IMAGES_FOLDER);
+	strcat(scene_path, "/");
+	strcat(scene_path, "blocks.png");
+	res = Data.LoadImage(IMG_BLOCKS, scene_path, GL_RGBA);
 	if (!res) return false;
 	res = Scene.LoadLevel(1);
 	if (!res) return false;
 
 	//Player initialization
-	res = Data.LoadImage(IMG_PLAYER, "bub.png", GL_RGBA);
+	char player_path[64];
+	strcpy(player_path, IMAGES_FOLDER);
+	strcat(player_path, "/");
+	strcat(player_path, "bub.png");
+	res = Data.LoadImage(IMG_PLAYER, player_path, GL_RGBA);
 	if (!res) return false;
 	Player.SetWidthHeight(32, 32);
 	Player.SetTile(4, 1);
@@ -92,9 +99,12 @@ bool cGame::Process()
 	//Process Input
 	if (keys[27])	res = false;
 
-	if (keys[GLUT_KEY_UP])			Player.Jump(Scene.GetMap());
-	if (keys[GLUT_KEY_LEFT])			Player.MoveLeft(Scene.GetMap());
-	else if (keys[GLUT_KEY_RIGHT])	Player.MoveRight(Scene.GetMap());
+	if (keys[GLUT_KEY_UP])
+		Player.Jump(Scene.GetMap());
+	if (keys[GLUT_KEY_LEFT])
+		Player.MoveLeft(Scene.GetMap());
+	else if (keys[GLUT_KEY_RIGHT])
+		Player.MoveRight(Scene.GetMap());
 	else Player.Stop();
 
 	//Game Logic

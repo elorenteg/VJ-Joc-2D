@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cTexture.h"
+#include "Globals.h"
 
 #define SCENE_Xo		(2*TILE_SIZE)
 #define SCENE_Yo		TILE_SIZE
