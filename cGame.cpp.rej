@@ -1,9 +1,0 @@
-diff a/cGame.cpp b/cGame.cpp	(rejected hunks)
-@@ -33,6 +33,7 @@
- 	glAlphaFunc(GL_GREATER, 0.05f);
- 	glEnable(GL_ALPHA_TEST);
- 
-+	/*
- 	//Scene initialization
- 	char scene_path[64];
- 	strcpy(scene_path, IMAGES_FOLDER);
