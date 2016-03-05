@@ -33,26 +33,24 @@ bool cGame::Init()
 	glAlphaFunc(GL_GREATER, 0.05f);
 	glEnable(GL_ALPHA_TEST);
 
-	/*
-	//Scene initialization
-	char scene_path[64];
-	strcpy(scene_path, IMAGES_FOLDER);
-	strcat(scene_path, "/");
-	strcat(scene_path, "blocks.png");
-	res = Data.LoadImage(IMG_BLOCKS, scene_path, GL_RGBA);
-	if (!res) return false;
-	res = Scene.LoadLevel(1);
-	if (!res) return false;
-	*/
-
 	//Background initialization
 	char backgr_path[64];
 	strcpy(backgr_path, IMAGES_FOLDER);
 	strcat(backgr_path, "/");
-	strcat(backgr_path, "fondo3.png");
-	res = Data.LoadImage(IMG_LEV1, backgr_path, GL_RGBA);
+	strcat(backgr_path, "fondo_cielo.png");
+	res = Data.LoadImage(IMG_BACKGROUND, backgr_path, GL_RGBA);
 	if (!res) return false;
 	res = Scene.LoadBackground(1);
+	if (!res) return false;
+
+	//Layer2 initialization
+	char layer2_path[64];
+	strcpy(layer2_path, IMAGES_FOLDER);
+	strcat(layer2_path, "/");
+	strcat(layer2_path, "fondo_capa2.png");
+	res = Data.LoadImage(IMG_LAYER2, layer2_path, GL_RGBA);
+	if (!res) return false;
+	res = Scene.LoadLayer2(1);
 	if (!res) return false;
 
 	//Player initialization
@@ -132,8 +130,8 @@ void cGame::Render()
 
 	glLoadIdentity();
 
-	//Scene.Draw(Data.GetID(IMG_BLOCKS));
-	Scene.Draw(Data.GetID(IMG_LEV1));
+	Scene.setDisplayList(1); Scene.Draw(Data.GetID(IMG_BACKGROUND));
+	Scene.setDisplayList(2); Scene.Draw(Data.GetID(IMG_LAYER2));
 	Player.Draw(Data.GetID(IMG_PLAYER));
 
 	glutSwapBuffers();

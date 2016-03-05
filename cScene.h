@@ -22,10 +22,14 @@ public:
 
 	bool LoadLevel(int level);
 	bool LoadBackground(int level);
+	bool LoadLayer2(int level);
 	void Draw(int tex_id);
 	int *GetMap();
+	void setDisplayList(int id);
 
 private:
 	int map[SCENE_WIDTH * SCENE_HEIGHT];	//scene
 	int id_DL;								//actual level display list
+	int id_DL_Background;
+	int id_DL_Layer2;
 };
