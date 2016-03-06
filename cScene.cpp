@@ -18,11 +18,12 @@ bool cScene::LoadBackground(int level)
 	id_DL_Background = glGenLists(1);
 	glNewList(id_DL_Background, GL_COMPILE);
 
+	// TODO: Z != 0 no se ve
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	glTexCoord2f(2.5f, 1.0f); glVertex2i(GAME_WIDTH, 0);
-	glTexCoord2f(2.5f, 0.0f); glVertex2i(GAME_WIDTH, GAME_HEIGHT);
-	glTexCoord2f(0.0f, 0.0f); glVertex2i(0, GAME_HEIGHT);
+	glTexCoord2f(0.0f, 1.0f); glVertex3i(0, 0, 0);
+	glTexCoord2f(1.0f, 1.0f); glVertex3i(GAME_WIDTH, 0, 0);
+	glTexCoord2f(1.0f, 0.0f); glVertex3i(GAME_WIDTH, GAME_HEIGHT, 0);
+	glTexCoord2f(0.0f, 0.0f); glVertex3i(0, GAME_HEIGHT, 0);
 	glEnd();
 
 	glEndList();
@@ -41,8 +42,8 @@ bool cScene::LoadLayer2(int level)
 
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	glTexCoord2f(2.5f, 1.0f); glVertex2i(GAME_WIDTH, 0);
-	glTexCoord2f(2.5f, 0.0f); glVertex2i(GAME_WIDTH, GAME_HEIGHT/2);
+	glTexCoord2f(1.0f, 1.0f); glVertex2i(GAME_WIDTH, 0);
+	glTexCoord2f(1.0f, 0.0f); glVertex2i(GAME_WIDTH, GAME_HEIGHT/2);
 	glTexCoord2f(0.0f, 0.0f); glVertex2i(0, GAME_HEIGHT/2);
 	glEnd();
 

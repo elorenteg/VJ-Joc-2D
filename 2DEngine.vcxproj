@@ -90,8 +90,10 @@
     <ClCompile Include="cBicho.cpp" />
     <ClCompile Include="cData.cpp" />
     <ClCompile Include="cGame.cpp" />
+    <ClCompile Include="cMountainLayer.cpp" />
     <ClCompile Include="cPlayer.cpp" />
     <ClCompile Include="cScene.cpp" />
+    <ClCompile Include="cSkyLayer.cpp" />
     <ClCompile Include="cTexture.cpp" />
     <ClCompile Include="GLUTMain.cpp" />
   </ItemGroup>
@@ -99,8 +101,10 @@
     <ClInclude Include="cBicho.h" />
     <ClInclude Include="cData.h" />
     <ClInclude Include="cGame.h" />
+    <ClInclude Include="cMountainLayer.h" />
     <ClInclude Include="cPlayer.h" />
     <ClInclude Include="cScene.h" />
+    <ClInclude Include="cSkyLayer.h" />
     <ClInclude Include="cTexture.h" />
     <ClInclude Include="Globals.h" />
   </ItemGroup>

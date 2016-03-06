@@ -1,6 +1,8 @@
 #pragma once
 
 #include "cScene.h"
+#include "cSkyLayer.h"
+#include "cMountainLayer.h"
 #include "cPlayer.h"
 #include "cData.h"
 #include "Globals.h"
@@ -24,10 +26,17 @@ public:
 
 	//Output
 	void Render();
+	void UpdateCameraSkyLayer();
+	void UpdateCameraMountainLayer();
 
 private:
 	unsigned char keys[256];
 	cScene Scene;
+	cSkyLayer SkyLayer;
+	cMountainLayer MountainLayer;
 	cPlayer Player;
 	cData Data;
+
+	float cameraXSky;
+	float cameraXMountain;
 };

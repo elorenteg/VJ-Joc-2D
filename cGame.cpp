@@ -22,12 +22,14 @@ cGame::~cGame(void)
 bool cGame::Init()
 {
 	bool res = true;
+	cameraXSky = 0;
+	cameraXMountain = 0;
 
 	//Graphics initialization
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, GAME_WIDTH, 0, GAME_HEIGHT, 0, 1);
+	glOrtho(0, GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
 	glMatrixMode(GL_MODELVIEW);
 
 	glAlphaFunc(GL_GREATER, 0.05f);
@@ -40,7 +42,8 @@ bool cGame::Init()
 	strcat(backgr_path, "fondo_cielo.png");
 	res = Data.LoadImage(IMG_BACKGROUND, backgr_path, GL_RGBA);
 	if (!res) return false;
-	res = Scene.LoadBackground(1);
+	//res = Scene.LoadBackground(1);
+	res = SkyLayer.LoadSky();
 	if (!res) return false;
 
 	//Layer2 initialization
@@ -50,7 +53,8 @@ bool cGame::Init()
 	strcat(layer2_path, "fondo_capa2.png");
 	res = Data.LoadImage(IMG_LAYER2, layer2_path, GL_RGBA);
 	if (!res) return false;
-	res = Scene.LoadLayer2(1);
+	//res = Scene.LoadLayer2(1);
+	res = MountainLayer.LoadMountain();
 	if (!res) return false;
 
 	//Player initialization
@@ -128,11 +132,27 @@ void cGame::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glLoadIdentity();
-
-	Scene.setDisplayList(1); Scene.Draw(Data.GetID(IMG_BACKGROUND));
-	Scene.setDisplayList(2); Scene.Draw(Data.GetID(IMG_LAYER2));
+	UpdateCameraSkyLayer(); SkyLayer.Draw(Data.GetID(IMG_BACKGROUND));
+	UpdateCameraMountainLayer(); MountainLayer.Draw(Data.GetID(IMG_LAYER2));
 	Player.Draw(Data.GetID(IMG_PLAYER));
 
 	glutSwapBuffers();
+}
+
+void cGame::UpdateCameraSkyLayer() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(cameraXSky, cameraXSky + GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
+	glMatrixMode(GL_MODELVIEW);
+
+	cameraXSky += 0.3f;
+}
+
+void cGame::UpdateCameraMountainLayer() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(cameraXMountain, cameraXMountain + GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
+	glMatrixMode(GL_MODELVIEW);
+
+	cameraXMountain += 0.6f;
 }
