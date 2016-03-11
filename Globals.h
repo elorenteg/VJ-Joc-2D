@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <gl/glut.h>
+#include <string>
+#include <iostream>
+using namespace std;
 
 #define LEVELS_FOLDER	"Levels"
 #define IMAGES_FOLDER	"Images"
