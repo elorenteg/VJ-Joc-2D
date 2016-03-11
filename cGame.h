@@ -26,17 +26,16 @@ public:
 
 	//Output
 	void Render();
-	void UpdateCameraSkyLayer();
-	void UpdateCameraMountainLayer();
+	void UpdateCameraScene();
+	void RestartCameraScene();
 
 private:
 	unsigned char keys[256];
-	cScene Scene;
 	cSkyLayer SkyLayer;
 	cMountainLayer MountainLayer;
+	cScene Scene;
 	cPlayer Player;
 	cData Data;
 
-	float cameraXSky;
-	float cameraXMountain;
+	float cameraXScene;
 };

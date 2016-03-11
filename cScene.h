@@ -1,11 +1,10 @@
 #pragma once
 
 #include "cTexture.h"
-#include "Globals.h"
 
-#define SCENE_Xo		(2*TILE_SIZE)
-#define SCENE_Yo		TILE_SIZE
-#define SCENE_WIDTH		36
+#define SCENE_Xo		0
+#define SCENE_Yo		0
+#define SCENE_WIDTH		300
 #define SCENE_HEIGHT	28
 
 #define FILENAME		"level"
@@ -14,6 +13,9 @@
 #define TILE_SIZE		16
 #define BLOCK_SIZE		24
 
+#define DEPTH			0
+#define SPEED			3
+
 class cScene
 {
 public:
@@ -21,11 +23,8 @@ public:
 	virtual ~cScene(void);
 
 	bool LoadLevel(int level);
-	bool LoadBackground(int level);
-	bool LoadLayer2(int level);
 	void Draw(int tex_id);
 	int *GetMap();
-	void setDisplayList(int id);
 
 private:
 	int map[SCENE_WIDTH * SCENE_HEIGHT];	//scene
