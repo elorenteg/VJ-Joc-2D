@@ -19,5 +19,9 @@ void cSkyLayer::Draw(int tex_id) {
 
 	glDisable(GL_TEXTURE_2D);
 
-	texX = texX + 0.0002f * SPEED;
+	if (!isEndOfGame) texX = texX + 0.0002f * SPEED;
+}
+
+void cSkyLayer::endOfGame() {
+	isEndOfGame = true;
 }

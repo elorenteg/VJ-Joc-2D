@@ -4,7 +4,7 @@
 #include "Globals.h"
 
 #define DEPTH			-5
-#define SPEED			2
+#define SPEED			1.0f
 
 class cMountainLayer {
 public:
@@ -12,8 +12,9 @@ public:
 	virtual ~cMountainLayer(void);
 
 	void Draw(int tex_id);
+	void endOfGame();
 
 private:
-	int id_DL;								//actual level display list
 	float texX = 0.0f;
+	bool isEndOfGame;
 };
