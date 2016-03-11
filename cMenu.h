@@ -1,17 +1,13 @@
 #pragma once
 
-#include "cScene.h"
-#include "cSkyLayer.h"
-#include "cMountainLayer.h"
-#include "cPlayer.h"
 #include "cData.h"
 #include "Globals.h"
 
-class cGame
+class cMenu
 {
 public:
-	cGame(void);
-	virtual ~cGame(void);
+	cMenu(void);
+	virtual ~cMenu(void);
 
 	bool Init();
 	bool Loop();
@@ -26,19 +22,10 @@ public:
 
 	//Output
 	void Render();
-	void UpdateCameraSkyLayer();
-	void UpdateCameraMountainLayer();
 
 private:
 	unsigned char keys[256];
-	cScene Scene;
-	cSkyLayer SkyLayer;
-	cMountainLayer MountainLayer;
-	cPlayer Player;
 	cData Data;
-
-	float cameraXSky;
-	float cameraXMountain;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;
@@ -47,4 +34,6 @@ private:
 	DWORD next_game_tick = GetTickCount();
 	int sleep_time = 0;
 	bool game_is_running = true;
+
+	void drawRectangle(float x, float y, float z, float width, float height);
 };

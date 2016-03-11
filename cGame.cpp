@@ -1,16 +1,6 @@
 #include "cGame.h"
 #include "Globals.h"
 
-//http://www.koonsolo.com/news/dewitters-gameloop/
-const int FRAMES_PER_SECOND = 70;
-const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
-
-// Returns the current number of ms elapsed since the system was started
-DWORD next_game_tick = GetTickCount();
-
-int sleep_time = 0;
-bool game_is_running = true;
-
 cGame::cGame(void)
 {
 }
