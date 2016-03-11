@@ -42,9 +42,6 @@ bool cGame::Init()
 	strcat(backgr_path, "fondo_cielo.png");
 	res = Data.LoadImage(IMG_BACKGROUND, backgr_path, GL_RGBA);
 	if (!res) return false;
-	//res = Scene.LoadBackground(1);
-	res = SkyLayer.LoadSky();
-	if (!res) return false;
 
 	//Layer2 initialization
 	char layer2_path[64];
@@ -52,9 +49,6 @@ bool cGame::Init()
 	strcat(layer2_path, "/");
 	strcat(layer2_path, "fondo_capa2.png");
 	res = Data.LoadImage(IMG_LAYER2, layer2_path, GL_RGBA);
-	if (!res) return false;
-	//res = Scene.LoadLayer2(1);
-	res = MountainLayer.LoadMountain();
 	if (!res) return false;
 
 	//Player initialization
@@ -132,8 +126,8 @@ void cGame::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	UpdateCameraSkyLayer(); SkyLayer.Draw(Data.GetID(IMG_BACKGROUND));
-	UpdateCameraMountainLayer(); MountainLayer.Draw(Data.GetID(IMG_LAYER2));
+	SkyLayer.Draw(Data.GetID(IMG_BACKGROUND));
+	MountainLayer.Draw(Data.GetID(IMG_LAYER2));
 	Player.Draw(Data.GetID(IMG_PLAYER));
 
 	glutSwapBuffers();

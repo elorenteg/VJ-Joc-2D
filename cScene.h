@@ -30,6 +30,4 @@ public:
 private:
 	int map[SCENE_WIDTH * SCENE_HEIGHT];	//scene
 	int id_DL;								//actual level display list
-	int id_DL_Background;
-	int id_DL_Layer2;
 };
