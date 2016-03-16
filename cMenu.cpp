@@ -12,6 +12,8 @@ cMenu::~cMenu(void)
 bool cMenu::Init()
 {
 	bool res = true;
+	actionSelected = game;
+	processingKey = false;
 
 	//Graphics initialization
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -51,12 +53,15 @@ void cMenu::Finalize()
 
 //Input
 void cMenu::ReadKeyboard(unsigned char key, int x, int y, bool press)
-{
+{		
 	keys[key] = press;
+
+	processingKey = press;
 }
 
 void cMenu::ReadMouse(int button, int state, int x, int y)
 {
+
 }
 
 //Process
@@ -64,19 +69,27 @@ bool cMenu::Process()
 {
 	bool res = true;
 
-	//Process Input
-	if (keys[27])	res = false;
+	if (processingKey) {
+		processingKey = false;
 
-	/*if (keys[GLUT_KEY_UP])
-		Player.Jump(Scene.GetMap());
-	if (keys[GLUT_KEY_LEFT])
-		Player.MoveLeft(Scene.GetMap());
-	else if (keys[GLUT_KEY_RIGHT])
-		Player.MoveRight(Scene.GetMap());
-	else Player.Stop();*/
+		//Process Input
+		if (keys[27]) {
+			res = false;
+		}
 
-	//Game Logic
-	//Player.Logic(Scene.GetMap());
+		if (keys[GLUT_KEY_UP]) {
+			OutputDebugStringA("UP");
+			moveAction(-1);
+		}
+		else if (keys[GLUT_KEY_DOWN]) {
+			OutputDebugStringA("DOWN");
+			moveAction(1);
+		}
+
+		if (keys[13]) {
+			executeAction();
+		}
+	}
 
 	return res;
 }
@@ -86,14 +99,58 @@ void cMenu::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glColor3f(0.0f, 1.0f, 0.0f);
-	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 25.0f, -1.0f, 300.0f, 75.0f);
+	if (actionSelected == game)
+		glColor3f(1.0f, 0.0f, 0.0f);
+	else
+		glColor3f(0.5f, 0.5f, 0.5f);
+	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 75.0f, -1.0f, 300.0f, 75.0f);
 
+	if (actionSelected == options)
+		glColor3f(0.0f, 1.0f, 0.0f);
+	else
+		glColor3f(0.5f, 0.5f, 0.5f);
+	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 25.0f, -1.0f, 300.0f, 75.0f);
 
-	glColor3f(0.0f, 0.0f, 1.0f);
+	if (actionSelected == stop)
+		glColor3f(0.0f, 0.0f, 1.0f);
+	else
+		glColor3f(0.5f, 0.5f, 0.5f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 125.0f, -1.0f, 300.0f, 75.0f);
 
 	glutSwapBuffers();
+}
+
+void cMenu::executeAction() {
+	if (actionSelected == game) {
+
+	}
+	else if (actionSelected == options) {
+
+	}
+	else if (actionSelected == stop) {
+		exit(0);
+	}
+}
+
+void cMenu::moveAction(int moveTo) {
+	if (actionSelected == game) {
+		if (moveTo == 1) {
+			actionSelected = options;
+		}
+	}
+	else if (actionSelected == options) {
+		if (moveTo == 1) {
+			actionSelected = stop;
+		}
+		else if (moveTo == -1) {
+			actionSelected = game;
+		}
+	}
+	else if (actionSelected == stop) {
+		if (moveTo == -1) {
+			actionSelected = options;
+		}
+	}
 }
 
 // Draw the rectangle

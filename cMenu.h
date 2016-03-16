@@ -26,6 +26,7 @@ public:
 private:
 	unsigned char keys[256];
 	cData Data;
+	bool processingKey;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;
@@ -35,5 +36,10 @@ private:
 	int sleep_time = 0;
 	bool game_is_running = true;
 
+	enum Action { game, options, stop };
+	Action actionSelected;
+
+	void moveAction(int moveTo);
+	void executeAction();
 	void drawRectangle(float x, float y, float z, float width, float height);
 };
