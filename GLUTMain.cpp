@@ -11,43 +11,86 @@ cMenu Menu;
 
 void AppRender()
 {
-	Menu.Render();
+	switch (Menu.GetState()) {
+	case 0:
+		Menu.Render();
+		break;
+	case 1:
+		Game.Render();
+		break;
+	}
 }
 
 void AppKeyboard(unsigned char key, int x, int y)
 {
-	//Game.ReadKeyboard(key, x, y, true);
-	Menu.ReadKeyboard(key, x, y, true);
+	switch (Menu.GetState()) {
+	case 0:
+		Menu.ReadKeyboard(key, x, y, true);
+		break;
+	case 1:
+		Game.ReadKeyboard(key, x, y, true);
+		break;
+	}
 }
 
 void AppKeyboardUp(unsigned char key, int x, int y)
 {
-	//Game.ReadKeyboard(key, x, y, false);
-	Menu.ReadKeyboard(key, x, y, false);
+	switch (Menu.GetState()) {
+	case 0:
+		Menu.ReadKeyboard(key, x, y, false);
+		break;
+	case 1:
+		Game.ReadKeyboard(key, x, y, false);
+		break;
+	}
 }
 
 void AppSpecialKeys(int key, int x, int y)
 {
-	//Game.ReadKeyboard(key, x, y, true);
-	Menu.ReadKeyboard(key, x, y, true);
+	switch (Menu.GetState()) {
+	case 0:
+		Menu.ReadKeyboard(key, x, y, true);
+		break;
+	case 1:
+		Game.ReadKeyboard(key, x, y, true);
+		break;
+	}
 }
 
 void AppSpecialKeysUp(int key, int x, int y)
 {
-	//Game.ReadKeyboard(key, x, y, false);
-	Menu.ReadKeyboard(key, x, y, false);
+	switch (Menu.GetState()) {
+	case 0:
+		Menu.ReadKeyboard(key, x, y, false);
+		break;
+	case 1:
+		Game.ReadKeyboard(key, x, y, false);
+		break;
+	}
 }
 
 void AppMouse(int button, int state, int x, int y)
 {
-	//Game.ReadMouse(button, state, x, y);
-	Menu.ReadMouse(button, state, x, y);
+	switch (Menu.GetState()) {
+	case 0:
+		Menu.ReadMouse(button, state, x, y);
+		break;
+	case 1:
+		Game.ReadMouse(button, state, x, y);
+		break;
+	}
 }
 
 void AppIdle()
 {
-	//if (!Game.Loop()) exit(0);
-	if (!Menu.Loop()) exit(0);
+	switch (Menu.GetState()) {
+	case 0:
+		if (!Menu.Loop()) exit(0);
+		break;
+	case 1:
+		if (!Game.Loop()) exit(0);
+		break;
+	}
 }
 
 void main(int argc, char** argv)
@@ -86,21 +129,8 @@ void main(int argc, char** argv)
 	glutIdleFunc(AppIdle);
 
 	Menu.Init();
+	Game.Init();
 
 	//Application loop
 	glutMainLoop();
-}
-
-void startMenu() {
-	
-}
-
-void initializeGame() {
-	Game.Init();
-}
-
-void startGame() {
-	Game.Loop(); //Game Main Loop
-
-	Game.Render();
 }

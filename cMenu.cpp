@@ -12,8 +12,9 @@ cMenu::~cMenu(void)
 bool cMenu::Init()
 {
 	bool res = true;
-	actionSelected = game;
+	actionSelected = gameAction;
 	processingKey = false;
+	currentState = MENU;
 
 	//Graphics initialization
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -78,11 +79,9 @@ bool cMenu::Process()
 		}
 
 		if (keys[GLUT_KEY_UP]) {
-			OutputDebugStringA("UP");
 			moveAction(-1);
 		}
 		else if (keys[GLUT_KEY_DOWN]) {
-			OutputDebugStringA("DOWN");
 			moveAction(1);
 		}
 
@@ -99,19 +98,19 @@ void cMenu::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	if (actionSelected == game)
+	if (actionSelected == gameAction)
 		glColor3f(1.0f, 0.0f, 0.0f);
 	else
 		glColor3f(0.5f, 0.5f, 0.5f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 75.0f, -1.0f, 300.0f, 75.0f);
 
-	if (actionSelected == options)
+	if (actionSelected == optionsAction)
 		glColor3f(0.0f, 1.0f, 0.0f);
 	else
 		glColor3f(0.5f, 0.5f, 0.5f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 25.0f, -1.0f, 300.0f, 75.0f);
 
-	if (actionSelected == stop)
+	if (actionSelected == stopAction)
 		glColor3f(0.0f, 0.0f, 1.0f);
 	else
 		glColor3f(0.5f, 0.5f, 0.5f);
@@ -120,35 +119,40 @@ void cMenu::Render()
 	glutSwapBuffers();
 }
 
+//State in use
+int cMenu::GetState() {
+	return currentState;
+}
+
 void cMenu::executeAction() {
-	if (actionSelected == game) {
+	if (actionSelected == gameAction) {
+		currentState = GAME;
+	}
+	else if (actionSelected == optionsAction) {
 
 	}
-	else if (actionSelected == options) {
-
-	}
-	else if (actionSelected == stop) {
+	else if (actionSelected == stopAction) {
 		exit(0);
 	}
 }
 
 void cMenu::moveAction(int moveTo) {
-	if (actionSelected == game) {
+	if (actionSelected == gameAction) {
 		if (moveTo == 1) {
-			actionSelected = options;
+			actionSelected = optionsAction;
 		}
 	}
-	else if (actionSelected == options) {
+	else if (actionSelected == optionsAction) {
 		if (moveTo == 1) {
-			actionSelected = stop;
+			actionSelected = stopAction;
 		}
 		else if (moveTo == -1) {
-			actionSelected = game;
+			actionSelected = gameAction;
 		}
 	}
-	else if (actionSelected == stop) {
+	else if (actionSelected == stopAction) {
 		if (moveTo == -1) {
-			actionSelected = options;
+			actionSelected = optionsAction;
 		}
 	}
 }

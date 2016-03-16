@@ -3,6 +3,10 @@
 #include "cData.h"
 #include "Globals.h"
 
+#define MENU		0
+#define GAME		1
+#define OPTIONS		2
+
 class cMenu
 {
 public:
@@ -23,6 +27,9 @@ public:
 	//Output
 	void Render();
 
+	//State in use
+	int GetState();
+
 private:
 	unsigned char keys[256];
 	cData Data;
@@ -36,8 +43,10 @@ private:
 	int sleep_time = 0;
 	bool game_is_running = true;
 
-	enum Action { game, options, stop };
+	enum Action { gameAction, optionsAction, stopAction };
 	Action actionSelected;
+
+	int currentState;
 
 	void moveAction(int moveTo);
 	void executeAction();
