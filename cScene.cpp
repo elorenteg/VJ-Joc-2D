@@ -3,6 +3,7 @@
 #include <windows.h>
 
 cScene::cScene(void) {
+	map = Mapa(SCENE_WIDTH, vector<int>(SCENE_HEIGHT));
 }
 
 cScene::~cScene(void) {
@@ -38,15 +39,19 @@ bool cScene::LoadLevel(int level) {
 		for (i = 0; i<SCENE_WIDTH; i++) {
 			fscanf(fd, "%c", &tile);
 			if (tile == ' ') {
-				map[(j*SCENE_WIDTH) + i] = 0;
+				//map[(j*SCENE_WIDTH) + i] = 0;
+				map[i][j] = 0;
 			}
 			else {
-				map[(j*SCENE_WIDTH) + i] = tile - 48;
+				//map[(j*SCENE_WIDTH) + i] = tile - 48;
+				map[i][j] = 48;
 
-				if (map[(j*SCENE_WIDTH) + i] % 2) coordx_tile = 0.0f;
+				//if (map[(j*SCENE_WIDTH) + i] % 2) coordx_tile = 0.0f;
+				if (map[i][j] % 2) coordx_tile = 0.0f;
 				else coordx_tile = 0.5f;
 
-				if (map[(j*SCENE_WIDTH) + i]<3) coordy_tile = 0.0f;
+				//if (map[(j*SCENE_WIDTH) + i]<3) coordy_tile = 0.0f;
+				if (map[i][j]<3) coordy_tile = 0.0f;
 				else coordy_tile = 0.5f;
 
 				glTexCoord2f(coordx_tile, coordy_tile + 0.5f);			glVertex3i(px, py, DEPTH);
@@ -73,7 +78,8 @@ void cScene::Draw(int tex_id) {
 	glCallList(id_DL);
 	glDisable(GL_TEXTURE_2D);
 }
-int* cScene::GetMap() {
+
+Mapa cScene::GetMap() {
 	return map;
 }
 

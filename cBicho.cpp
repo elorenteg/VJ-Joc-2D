@@ -107,53 +107,102 @@ void cBicho::GetArea(cRect *rc) {
 }
 
 void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
-	int screen_x, screen_y;
-
-	screen_x = x + SCENE_Xo;
-	screen_y = y + SCENE_Yo + (BLOCK_SIZE - TILE_SIZE);
-
 	glEnable(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 	glBegin(GL_QUADS);
-	glTexCoord2f(xo, yo);	glVertex2i(screen_x, screen_y);
-	glTexCoord2f(xf, yo);	glVertex2i(screen_x + w, screen_y);
-	glTexCoord2f(xf, yf);	glVertex2i(screen_x + w, screen_y + h);
-	glTexCoord2f(xo, yf);	glVertex2i(screen_x, screen_y + h);
+	glTexCoord2f(xo, yo);	glVertex2i(x, y);
+	glTexCoord2f(xf, yo);	glVertex2i(x + w, y);
+	glTexCoord2f(xf, yf);	glVertex2i(x + w, y + h);
+	glTexCoord2f(xo, yf);	glVertex2i(x, y + h);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
 }
 
-void cBicho::MoveLeft(int *map) {
-	// TODO: Mirar colision
+bool cBicho::insideWindow(Mapa map, int x, int y) {
+	bool inside = true;
 
-	if (x - STEP_LENGTH >= 0) x -= STEP_LENGTH;
+	if (x < 0 || y < 0) inside = false;
+	else if (x + w > GAME_WIDTH) inside = false;
+	else if (y + h > GAME_HEIGHT) inside = false;
+
+	return inside;
 }
 
-void cBicho::MoveRight(int *map) {
-	// TODO: Mirar colision
+bool cBicho::MapCollides(Mapa map, int x, int y) {
+	bool collides = false;
 
-	if (x + STEP_LENGTH + 100 <= GAME_WIDTH) x += STEP_LENGTH;
+	int tile_x, tile_y;
+	int width_tiles;
+	bool on_base;
+	int i;
+
+	tile_x = x / TILE_SIZE;
+	tile_y = y / TILE_SIZE;
+
+	width_tiles = w / TILE_SIZE;
+	if ((x % TILE_SIZE) != 0) width_tiles++;
+
+	on_base = false;
+	i = 0;
+	while ((i < width_tiles) && !on_base) {
+		if ((y % TILE_SIZE) == 0) {
+			//if (map[(tile_x + i) + ((tile_y - 1) * SCENE_WIDTH)] != 0)
+			//	on_base = true;
+		}
+		else {
+			//if (map[(tile_x + i) + (tile_y * SCENE_WIDTH)] != 0) {
+			//	y = (tile_y + 1) * TILE_SIZE;
+			//	on_base = true;
+			//}
+		}
+		i++;
+	}
+
+	return on_base;
+
+	return collides;
 }
 
-void cBicho::MoveUp(int *map) {
+void cBicho::MoveLeft(Mapa map) {
+	// TODO: Mirar colision
+
+	int aux = x - STEP_LENGTH;
+
+	//if (!MapCollides(map, aux, y)) x -= STEP_LENGTH;
+	if (insideWindow(map, aux, y)) x -= STEP_LENGTH;
+}
+
+void cBicho::MoveRight(Mapa map) {
+	// TODO: Mirar colision
+
+	int aux = x + STEP_LENGTH;
+
+	if (insideWindow(map, aux, y)) x += STEP_LENGTH;
+}
+
+void cBicho::MoveUp(Mapa map) {
 	int xaux;
 
+	int aux = y + STEP_LENGTH;
+
 	// TODO: Mirar colision
 
-	if (y + STEP_LENGTH + 70 <= GAME_HEIGHT) y += STEP_LENGTH;
+	if (insideWindow(map, x, aux)) y += STEP_LENGTH;
 }
 
-void cBicho::MoveDown(int *map) {
+void cBicho::MoveDown(Mapa map) {
 	int xaux;
 
+	int aux = y - STEP_LENGTH;
+
 	// TODO: Mirar colision
 
-	if (y - STEP_LENGTH >= 0) y -= STEP_LENGTH;
+	if (insideWindow(map, x, aux) && !MapCollides(map, y, aux)) y -= STEP_LENGTH;
 }
 
-void cBicho::Logic(int *map) {
+void cBicho::Logic(Mapa map) {
 	float alfa;
 
 	/*

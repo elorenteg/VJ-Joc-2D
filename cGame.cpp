@@ -1,16 +1,13 @@
 #include "cGame.h"
 #include "Globals.h"
 
-cGame::cGame(void)
-{
+cGame::cGame(void) {
 }
 
-cGame::~cGame(void)
-{
+cGame::~cGame(void) {
 }
 
-bool cGame::Init()
-{
+bool cGame::Init() {
 	bool res = true;
 	cameraXScene = 0;
 
@@ -64,8 +61,7 @@ bool cGame::Init()
 	return res;
 }
 
-bool cGame::Loop()
-{
+bool cGame::Loop() {
 	bool res = true;
 
 	res = Process();
@@ -83,23 +79,19 @@ bool cGame::Loop()
 	return res;
 }
 
-void cGame::Finalize()
-{
+void cGame::Finalize() {
 }
 
 //Input
-void cGame::ReadKeyboard(unsigned char key, int x, int y, bool press)
-{
+void cGame::ReadKeyboard(unsigned char key, int x, int y, bool press) {
 	keys[key] = press;
 }
 
-void cGame::ReadMouse(int button, int state, int x, int y)
-{
+void cGame::ReadMouse(int button, int state, int x, int y) {
 }
 
 //Process
-bool cGame::Process()
-{
+bool cGame::Process() {
 	bool res = true;
 
 	//Process Input
@@ -122,8 +114,7 @@ bool cGame::Process()
 }
 
 //Output
-void cGame::Render()
-{
+void cGame::Render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// If end of game, map do not scroll

@@ -6,6 +6,7 @@
 #include <gl/glut.h>
 #include <string>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 #define LEVELS_FOLDER	"Levels"
@@ -14,5 +15,7 @@ using namespace std;
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480
 #define GAME_DEPTH	10
+
+typedef vector<vector<int>> Mapa;
 
 //OutputDebugStringA("HI");

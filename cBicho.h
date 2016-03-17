@@ -38,12 +38,14 @@ public:
 	bool CollidesMapFloor(int *map);
 	void GetArea(cRect *rc);
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
+	bool insideWindow(Mapa map, int x, int y);
+	bool MapCollides(Mapa map, int x, int y);
 
-	void MoveRight(int *map);
-	void MoveLeft(int *map);
-	void MoveUp(int *map);
-	void MoveDown(int *map);
-	void Logic(int *map);
+	void MoveRight(Mapa map);
+	void MoveLeft(Mapa map);
+	void MoveUp(Mapa map);
+	void MoveDown(Mapa map);
+	void Logic(Mapa map);
 
 	int  GetState();
 	void SetState(int s);
