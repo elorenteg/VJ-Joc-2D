@@ -54,13 +54,12 @@ bool cGame::Init()
 	char player_path[64];
 	strcpy(player_path, IMAGES_FOLDER);
 	strcat(player_path, "/");
-	strcat(player_path, "bub.png");
+	strcat(player_path, "nyancat2.png");
 	res = Data.LoadImage(IMG_PLAYER, player_path, GL_RGBA);
 	if (!res) return false;
-	Player.SetWidthHeight(32, 32);
-	Player.SetTile(4, 1);
-	Player.SetWidthHeight(32, 32);
-	Player.SetState(STATE_LOOKRIGHT);
+	Player.SetTile(2, SCENE_HEIGHT/2);
+	Player.SetWidthHeight(100, 70);
+	//Player.SetState(STATE_LOOKRIGHT);
 
 	return res;
 }
@@ -107,12 +106,14 @@ bool cGame::Process()
 	if (keys[27])	res = false;
 
 	if (keys[GLUT_KEY_UP])
-		Player.Jump(Scene.GetMap());
+		Player.MoveUp(Scene.GetMap());
+	else if (keys[GLUT_KEY_DOWN])
+		Player.MoveDown(Scene.GetMap());
+
 	if (keys[GLUT_KEY_LEFT])
 		Player.MoveLeft(Scene.GetMap());
 	else if (keys[GLUT_KEY_RIGHT])
 		Player.MoveRight(Scene.GetMap());
-	else Player.Stop();
 
 	//Game Logic
 	Player.Logic(Scene.GetMap());

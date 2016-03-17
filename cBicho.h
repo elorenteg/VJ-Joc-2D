@@ -3,15 +3,15 @@
 #include "cTexture.h"
 #include "Globals.h"
 
-#define FRAME_DELAY		8
+#define FRAME_DELAY		10
 #define STEP_LENGTH		2
-#define JUMP_HEIGHT		96
-#define JUMP_STEP		4
 
-#define STATE_LOOKLEFT		0
-#define STATE_LOOKRIGHT		1
-#define STATE_WALKLEFT		2
-#define STATE_WALKRIGHT		3
+#define FRAME_0		0
+#define FRAME_1		1
+#define FRAME_2		2
+#define FRAME_3		3
+#define FRAME_4		4
+#define FRAME_5		5
 
 class cRect
 {
@@ -41,8 +41,8 @@ public:
 
 	void MoveRight(int *map);
 	void MoveLeft(int *map);
-	void Jump(int *map);
-	void Stop();
+	void MoveUp(int *map);
+	void MoveDown(int *map);
 	void Logic(int *map);
 
 	int  GetState();

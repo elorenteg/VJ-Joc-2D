@@ -3,8 +3,8 @@
 #include "cBicho.h"
 #include "Globals.h"
 
-#define PLAYER_START_CX		3
-#define PLAYER_START_CY		2
+#define PLAYER_START_CX		0
+#define PLAYER_START_CY		0
 
 class cPlayer : public cBicho
 {

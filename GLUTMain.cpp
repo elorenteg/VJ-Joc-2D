@@ -12,10 +12,10 @@ cMenu Menu;
 void AppRender()
 {
 	switch (Menu.GetState()) {
-	case 0:
+	case MENU:
 		Menu.Render();
 		break;
-	case 1:
+	case GAME:
 		Game.Render();
 		break;
 	}
@@ -24,10 +24,10 @@ void AppRender()
 void AppKeyboard(unsigned char key, int x, int y)
 {
 	switch (Menu.GetState()) {
-	case 0:
+	case MENU:
 		Menu.ReadKeyboard(key, x, y, true);
 		break;
-	case 1:
+	case GAME:
 		Game.ReadKeyboard(key, x, y, true);
 		break;
 	}
@@ -36,10 +36,10 @@ void AppKeyboard(unsigned char key, int x, int y)
 void AppKeyboardUp(unsigned char key, int x, int y)
 {
 	switch (Menu.GetState()) {
-	case 0:
+	case MENU:
 		Menu.ReadKeyboard(key, x, y, false);
 		break;
-	case 1:
+	case GAME:
 		Game.ReadKeyboard(key, x, y, false);
 		break;
 	}
@@ -48,10 +48,10 @@ void AppKeyboardUp(unsigned char key, int x, int y)
 void AppSpecialKeys(int key, int x, int y)
 {
 	switch (Menu.GetState()) {
-	case 0:
+	case MENU:
 		Menu.ReadKeyboard(key, x, y, true);
 		break;
-	case 1:
+	case GAME:
 		Game.ReadKeyboard(key, x, y, true);
 		break;
 	}
@@ -60,10 +60,10 @@ void AppSpecialKeys(int key, int x, int y)
 void AppSpecialKeysUp(int key, int x, int y)
 {
 	switch (Menu.GetState()) {
-	case 0:
+	case MENU:
 		Menu.ReadKeyboard(key, x, y, false);
 		break;
-	case 1:
+	case GAME:
 		Game.ReadKeyboard(key, x, y, false);
 		break;
 	}
@@ -72,10 +72,10 @@ void AppSpecialKeysUp(int key, int x, int y)
 void AppMouse(int button, int state, int x, int y)
 {
 	switch (Menu.GetState()) {
-	case 0:
+	case MENU:
 		Menu.ReadMouse(button, state, x, y);
 		break;
-	case 1:
+	case GAME:
 		Game.ReadMouse(button, state, x, y);
 		break;
 	}
@@ -84,10 +84,10 @@ void AppMouse(int button, int state, int x, int y)
 void AppIdle()
 {
 	switch (Menu.GetState()) {
-	case 0:
+	case MENU:
 		if (!Menu.Loop()) exit(0);
 		break;
-	case 1:
+	case GAME:
 		if (!Game.Loop()) exit(0);
 		break;
 	}
