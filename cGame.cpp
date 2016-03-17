@@ -47,7 +47,7 @@ bool cGame::Init()
 	strcat(scene_path, "blocks.png");
 	res = Data.LoadImage(IMG_BLOCKS, scene_path, GL_RGBA);
 	if (!res) return false;
-	res = Scene.LoadLevel(1);
+	res = Scene.LoadLevel(10);
 	if (!res) return false;
 
 	//Player initialization
@@ -125,6 +125,12 @@ void cGame::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	// If end of game, map do not scroll
+	if (Scene.endOfMap(cameraXScene)) {
+		SkyLayer.endOfGame();
+		MountainLayer.endOfGame();
+	}
+
 	SkyLayer.Draw(Data.GetID(IMG_BACKGROUND));
 	MountainLayer.Draw(Data.GetID(IMG_LAYER2));
 
@@ -137,15 +143,14 @@ void cGame::Render()
 	glutSwapBuffers();
 }
 
-
-
 void cGame::UpdateCameraScene() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(cameraXScene, cameraXScene + GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
 	glMatrixMode(GL_MODELVIEW);
 
-	cameraXScene += 0.2f;
+	// If not end of game, map can continue scrolling
+	if (!Scene.endOfMap(cameraXScene)) cameraXScene += 0.2f;
 }
 
 void cGame::RestartCameraScene() {

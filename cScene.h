@@ -4,7 +4,7 @@
 
 #define SCENE_Xo		0
 #define SCENE_Yo		0
-#define SCENE_WIDTH		300
+#define SCENE_WIDTH		45
 #define SCENE_HEIGHT	28
 
 #define FILENAME		"level"
@@ -25,6 +25,8 @@ public:
 	bool LoadLevel(int level);
 	void Draw(int tex_id);
 	int *GetMap();
+
+	bool endOfMap(float cameraX);
 
 private:
 	int map[SCENE_WIDTH * SCENE_HEIGHT];	//scene
