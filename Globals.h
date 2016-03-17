@@ -16,6 +16,6 @@ using namespace std;
 #define GAME_HEIGHT 480
 #define GAME_DEPTH	10
 
-typedef vector<vector<int>> Mapa;
+typedef vector<vector<int>> Matrix;
 
 //OutputDebugStringA("HI");

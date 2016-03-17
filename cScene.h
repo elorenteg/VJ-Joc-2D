@@ -21,11 +21,11 @@ public:
 
 	bool LoadLevel(int level);
 	void Draw(int tex_id);
-	Mapa GetMap();
+	Matrix GetMap();
 
 	bool endOfMap(float cameraX);
 
 private:
-	Mapa map;
+	Matrix map;
 	int id_DL;								//actual level display list
 };
