@@ -1,6 +1,4 @@
 #include "cBicho.h"
-#include "cScene.h"
-#include "Globals.h"
 
 cBicho::cBicho(void) {
 	seq = 0;
@@ -175,8 +173,6 @@ void cBicho::MoveRight(Matrix& map) {
 }
 
 void cBicho::MoveUp(Matrix& map) {
-	int xaux;
-
 	int aux = y + STEP_LENGTH;
 
 	// TODO: Mirar colision
@@ -185,8 +181,6 @@ void cBicho::MoveUp(Matrix& map) {
 }
 
 void cBicho::MoveDown(Matrix& map) {
-	int xaux;
-
 	int aux = y - STEP_LENGTH;
 
 	// TODO: Mirar colision
@@ -195,9 +189,9 @@ void cBicho::MoveDown(Matrix& map) {
 }
 
 void cBicho::Logic(Matrix& map) {
+	/*
 	float alfa;
 
-	/*
 	if (jumping) {
 		jump_alfa += JUMP_STEP;
 

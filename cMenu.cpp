@@ -1,5 +1,4 @@
 #include "cMenu.h"
-#include "Globals.h"
 
 cMenu::cMenu(void)
 {

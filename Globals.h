@@ -1,4 +1,3 @@
-
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,6 +6,9 @@
 #include <string>
 #include <iostream>
 #include <vector>
+
+#pragma warning(disable: 4996) // To supress _s warnings
+
 using namespace std;
 
 #define LEVELS_FOLDER	"Levels"

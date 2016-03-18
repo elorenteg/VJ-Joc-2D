@@ -1,7 +1,5 @@
-
 #include "cTexture.h"
 #include "corona.h"
-#include "Globals.h"
 
 cTexture::cTexture(void)
 {

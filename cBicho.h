@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cTexture.h"
+#include "cScene.h"
 #include "Globals.h"
 
 #define FRAME_DELAY		10
