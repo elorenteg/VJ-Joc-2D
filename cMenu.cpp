@@ -17,7 +17,7 @@ bool cMenu::Init()
 	currentState = MENU;
 
 	//Graphics initialization
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
@@ -103,7 +103,7 @@ void cMenu::Render()
 	else
 		glColor3f(0.5f, 0.5f, 0.5f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 75.0f, -1.0f, 300.0f, 75.0f);
-
+	
 	if (actionSelected == optionsAction)
 		glColor3f(0.0f, 1.0f, 0.0f);
 	else
@@ -115,7 +115,7 @@ void cMenu::Render()
 	else
 		glColor3f(0.5f, 0.5f, 0.5f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 125.0f, -1.0f, 300.0f, 75.0f);
-
+	
 	glutSwapBuffers();
 }
 

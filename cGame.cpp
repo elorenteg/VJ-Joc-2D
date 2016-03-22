@@ -12,7 +12,7 @@ bool cGame::Init() {
 	cameraXScene = 0;
 
 	//Graphics initialization
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
@@ -95,7 +95,7 @@ bool cGame::Process() {
 	bool res = true;
 
 	//Process Input
-	if (keys[27])	res = false;
+	if (keys[27]) res = false;
 
 	if (keys[GLUT_KEY_UP])
 		Player.MoveUp(Scene.GetMap());
@@ -108,7 +108,9 @@ bool cGame::Process() {
 		Player.MoveRight(Scene.GetMap());
 
 	//Game Logic
-	Player.Logic(Scene.GetMap());
+	if (!Scene.endOfMap(cameraXScene)) {
+		Player.Logic(Scene.GetMap(), GAME_SCROLL);
+	}
 
 	return res;
 }
@@ -116,6 +118,7 @@ bool cGame::Process() {
 //Output
 void cGame::Render() {
 	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1.0f, 1.0f, 1.0f);
 
 	// If end of game, map do not scroll
 	if (Scene.endOfMap(cameraXScene)) {
@@ -128,9 +131,10 @@ void cGame::Render() {
 
 	UpdateCameraScene();
 	Scene.Draw(Data.GetID(IMG_BLOCKS));
-	RestartCameraScene();
 
 	Player.Draw(Data.GetID(IMG_PLAYER));
+	RestartCameraScene();
+	//RestartCameraScene();
 
 	glutSwapBuffers();
 }
@@ -142,7 +146,7 @@ void cGame::UpdateCameraScene() {
 	glMatrixMode(GL_MODELVIEW);
 
 	// If not end of game, map can continue scrolling
-	if (!Scene.endOfMap(cameraXScene)) cameraXScene += 0.2f;
+	if (!Scene.endOfMap(cameraXScene)) cameraXScene += GAME_SCROLL;
 }
 
 void cGame::RestartCameraScene() {

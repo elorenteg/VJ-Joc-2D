@@ -4,7 +4,7 @@
 #include "Globals.h"
 
 #define FRAME_DELAY		10
-#define STEP_LENGTH		2
+#define STEP_LENGTH		4
 
 #define FRAME_0		0
 #define FRAME_1		1
@@ -23,11 +23,11 @@ class cBicho
 {
 public:
 	cBicho(void);
-	cBicho(int x, int y, int w, int h);
+	cBicho(float x, float y, int w, int h);
 	~cBicho(void);
 
-	void SetPosition(int x, int y);
-	void GetPosition(int *x, int *y);
+	void SetPosition(float x, float y);
+	void GetPosition(float *x, float *y);
 	void SetTile(int tx, int ty);
 	void GetTile(int *tx, int *ty);
 	void SetWidthHeight(int w, int h);
@@ -38,14 +38,18 @@ public:
 	bool CollidesMapFloor(int *map);
 	void GetArea(cRect *rc);
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
-	bool insideWindow(Matrix& map, int x, int y);
-	bool MapCollides(Matrix& map, int x, int y);
+	bool insideWindow(Matrix& map, float x, float y);
+	bool MapCollides(Matrix& map, float x, float y);
+	bool MapCollidesUp(Matrix& map, float x, float y);
+	bool MapCollidesDown(Matrix& map, float x, float y);
+	bool MapCollidesLeft(Matrix& map, float x, float y);
+	bool MapCollidesRight(Matrix& map, float x, float y);
 
 	void MoveRight(Matrix& map);
 	void MoveLeft(Matrix& map);
 	void MoveUp(Matrix& map);
 	void MoveDown(Matrix& map);
-	void Logic(Matrix& map);
+	void Logic(Matrix& map, float cameraXScene);
 
 	int  GetState();
 	void SetState(int s);
@@ -54,13 +58,10 @@ public:
 	int  GetFrame();
 
 private:
-	int x, y;
+	float x, y;
 	int w, h;
 	int state;
-
-	bool jumping;
-	int jump_alfa;
-	int jump_y;
+	float xWindow;
 
 	int seq, delay;
 };
