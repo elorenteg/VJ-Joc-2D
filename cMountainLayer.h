@@ -4,7 +4,7 @@
 #include "Globals.h"
 
 #define DEPTH			-5
-#define SPEED			1.0f
+#define SPEED			0.001f
 
 class cMountainLayer {
 public:

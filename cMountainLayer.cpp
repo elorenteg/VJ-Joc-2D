@@ -17,7 +17,7 @@ void cMountainLayer::Draw(int tex_id) {
 
 	glDisable(GL_TEXTURE_2D);
 
-	if (!isEndOfGame) texX = texX + 0.0002f * SPEED;
+	if (!isEndOfGame) texX += GAME_SCROLL * SPEED;
 }
 
 void cMountainLayer::endOfGame() {

@@ -4,7 +4,7 @@
 #include "Globals.h"
 
 #define DEPTH			-9
-#define SPEED			0.5f
+#define SPEED			0.0005f
 
 class cSkyLayer {
 public:

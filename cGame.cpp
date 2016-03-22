@@ -108,7 +108,7 @@ bool cGame::Process() {
 		Player.MoveRight(Scene.GetMap());
 
 	//Game Logic
-	if (!Scene.endOfMap(cameraXScene)) {
+	if (!Scene.endOfMap(cameraXScene + GAME_SCROLL)) {
 		Player.Logic(Scene.GetMap(), GAME_SCROLL);
 	}
 
@@ -121,7 +121,7 @@ void cGame::Render() {
 	glColor3f(1.0f, 1.0f, 1.0f);
 
 	// If end of game, map do not scroll
-	if (Scene.endOfMap(cameraXScene)) {
+	if (Scene.endOfMap(cameraXScene + GAME_SCROLL)) {
 		SkyLayer.endOfGame();
 		MountainLayer.endOfGame();
 	}
@@ -134,7 +134,6 @@ void cGame::Render() {
 
 	Player.Draw(Data.GetID(IMG_PLAYER));
 	RestartCameraScene();
-	//RestartCameraScene();
 
 	glutSwapBuffers();
 }
@@ -146,7 +145,7 @@ void cGame::UpdateCameraScene() {
 	glMatrixMode(GL_MODELVIEW);
 
 	// If not end of game, map can continue scrolling
-	if (!Scene.endOfMap(cameraXScene)) cameraXScene += GAME_SCROLL;
+	if (!Scene.endOfMap(cameraXScene + GAME_SCROLL)) cameraXScene += GAME_SCROLL;
 }
 
 void cGame::RestartCameraScene() {

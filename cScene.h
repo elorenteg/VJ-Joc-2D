@@ -13,7 +13,6 @@
 #define TILE_SIZE		16
 
 #define DEPTH			0
-#define SPEED			3
 
 class cScene
 {
