@@ -12,6 +12,7 @@ bool cGame::Init() {
 
 	//Graphics initialization
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
@@ -114,7 +115,8 @@ bool cGame::Process() {
 
 //Output
 void cGame::Render() {
-	glClear(GL_COLOR_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// If end of game, map do not scroll
 	if (Scene.endOfMap(cameraXScene)) {
