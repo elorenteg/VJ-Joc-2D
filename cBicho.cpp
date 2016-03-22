@@ -22,19 +22,9 @@ void cBicho::SetPosition(float posx, float posy) {
 	y = posy;
 }
 
-void cBicho::GetPosition(float *posx, float *posy) {
-	*posx = x;
-	*posy = y;
-}
-
 void cBicho::SetTile(int tx, int ty) {
 	x = tx * TILE_SIZE;
 	y = ty * TILE_SIZE;
-}
-
-void cBicho::GetTile(int *tx, int *ty) {
-	*tx = x / TILE_SIZE;
-	*ty = y / TILE_SIZE;
 }
 
 void cBicho::SetWidthHeight(int width, int height) {
@@ -42,20 +32,24 @@ void cBicho::SetWidthHeight(int width, int height) {
 	h = height;
 }
 
-void cBicho::GetWidthHeight(int *width, int *height) {
-	*width = w;
-	*height = h;
+float cBicho::GetX() {
+	return x;
 }
 
-bool cBicho::Collides(cRect *rc) {
-	return ((x > rc->left) && (x + w<rc->right) && (y>rc->bottom) && (y + h < rc->top));
+float cBicho::GetY() {
+	return y;
 }
 
-void cBicho::GetArea(cRect *rc) {
-	rc->left = x;
-	rc->right = x + w;
-	rc->bottom = y;
-	rc->top = y + h;
+float cBicho::GetXWindow() {
+	return xWindow;
+}
+
+int cBicho::GetWidth() {
+	return w;
+}
+
+int cBicho::GetHeight() {
+	return h;
 }
 
 void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
@@ -72,7 +66,7 @@ void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-bool cBicho::insideWindow(Matrix& map, float x, float y) {
+bool cBicho::InsideWindow(Matrix& map, float x, float y) {
 	bool inside = true;
 	x = x - xWindow;
 

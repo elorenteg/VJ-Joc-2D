@@ -28,19 +28,17 @@ public:
 	~cBicho(void);
 
 	void SetPosition(float x, float y);
-	void GetPosition(float *x, float *y);
 	void SetTile(int tx, int ty);
-	void GetTile(int *tx, int *ty);
 	void SetWidthHeight(int w, int h);
-	void GetWidthHeight(int *w, int *h);
 
-	bool Collides(cRect *rc);
-	bool CollidesMapWall(int *map, bool right);
-	bool CollidesMapFloor(int *map);
-	void GetArea(cRect *rc);
+	float GetX();
+	float GetY();
+	float GetXWindow();
+	int GetWidth();
+	int GetHeight();
+
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
-	bool insideWindow(Matrix& map, float x, float y);
-	bool MapCollides(Matrix& map, float x, float y);
+	bool InsideWindow(Matrix& map, float x, float y);
 	bool MapCollidesUp(Matrix& map, float x, float y);
 	bool MapCollidesDown(Matrix& map, float x, float y);
 	bool MapCollidesLeft(Matrix& map, float x, float y);

@@ -10,4 +10,5 @@ public:
 	~cPlayer();
 
 	void Draw(int tex_id);
+	bool isGameOver();
 };

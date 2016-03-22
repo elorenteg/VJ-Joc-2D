@@ -9,6 +9,7 @@ cGame::~cGame(void) {
 bool cGame::Init() {
 	bool res = true;
 	cameraXScene = 0;
+	isGameOver = false;
 
 	//Graphics initialization
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
@@ -112,26 +113,28 @@ bool cGame::Process() {
 	//Process Input
 	if (keys[27]) res = false;
 
-	if (keys[GLUT_KEY_UP])
-		Player.MoveUp(Scene.GetMap());
-	else if (keys[GLUT_KEY_DOWN])
-		Player.MoveDown(Scene.GetMap());
+	if (!isEndOfGame()) {
+		if (keys[GLUT_KEY_UP])
+			Player.MoveUp(Scene.GetMap());
+		else if (keys[GLUT_KEY_DOWN])
+			Player.MoveDown(Scene.GetMap());
 
-	if (keys[GLUT_KEY_LEFT])
-		Player.MoveLeft(Scene.GetMap());
-	else if (keys[GLUT_KEY_RIGHT])
-		Player.MoveRight(Scene.GetMap());
+		if (keys[GLUT_KEY_LEFT])
+			Player.MoveLeft(Scene.GetMap());
+		else if (keys[GLUT_KEY_RIGHT])
+			Player.MoveRight(Scene.GetMap());
 
-	//Game Logic
-	if (!Scene.endOfMap(cameraXScene + GAME_SCROLL)) {
+		//Game Logic
 		Player.Logic(Scene.GetMap(), GAME_SCROLL);
+
+		isGameOver = Player.isGameOver();
 	}
 
 	return res;
 }
 
 bool cGame::isEndOfGame() {
-	return Scene.endOfMap(cameraXScene + GAME_SCROLL);
+	return Player.isGameOver() || Scene.endOfMap(cameraXScene + GAME_SCROLL);
 }
 
 //Output
@@ -154,12 +157,12 @@ void cGame::Render() {
 	Player.Draw(Data.GetID(IMG_PLAYER));
 	RestartCameraScene();
 
-	if (isEndOfGame()) RenderEndOfGame(false);
+	if (isEndOfGame()) RenderMessage();
 
 	glutSwapBuffers();
 }
 
-void cGame::RenderEndOfGame(bool isGameOver) {
+void cGame::RenderMessage() {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, Data.GetID(IMG_MARCO));
 

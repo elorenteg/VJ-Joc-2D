@@ -40,3 +40,9 @@ void cPlayer::Draw(int tex_id) {
 
 	NextFrame(6);
 }
+
+bool cPlayer::isGameOver() {
+	if (GetX() + GetWidth() - GetXWindow() < 20) return true;
+
+	return false;
+}
