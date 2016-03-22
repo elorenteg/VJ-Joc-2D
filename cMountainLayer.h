@@ -3,7 +3,7 @@
 #include "cTexture.h"
 #include "Globals.h"
 
-#define DEPTH			-5
+#define DEPTH			-8
 #define SPEED			0.001f
 
 class cMountainLayer {

@@ -5,6 +5,7 @@
 #include "cMountainLayer.h"
 #include "cPlayer.h"
 #include "cData.h"
+#include "cFont.h"
 #include "Globals.h"
 
 class cGame
@@ -23,9 +24,11 @@ public:
 
 	//Process
 	bool Process();
+	bool isEndOfGame();
 
 	//Output
 	void Render();
+	void RenderEndOfGame(bool isGameOver);
 	void UpdateCameraScene();
 	void RestartCameraScene();
 
@@ -36,6 +39,7 @@ private:
 	cScene Scene;
 	cPlayer Player;
 	cData Data;
+	cFont Font;
 	
 	float cameraXScene;
 

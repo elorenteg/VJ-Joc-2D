@@ -47,10 +47,10 @@ bool cScene::LoadLevel(int level) {
 				if (map[j][i]<3) coordy_tile = 0.0f;
 				else coordy_tile = 0.5f;
 
-				glTexCoord2f(coordx_tile, coordy_tile + 0.5f);			glVertex3i(px, py, DEPTH);
-				glTexCoord2f(coordx_tile + 0.5f, coordy_tile + 0.5f);	glVertex3i(px + TILE_SIZE, py, DEPTH);
-				glTexCoord2f(coordx_tile + 0.5f, coordy_tile);			glVertex3i(px + TILE_SIZE, py + TILE_SIZE, DEPTH);
-				glTexCoord2f(coordx_tile, coordy_tile);					glVertex3i(px, py + TILE_SIZE, DEPTH);
+				glTexCoord2f(coordx_tile, coordy_tile + 0.5f);			glVertex3i(px, py, SCENE_DEPTH);
+				glTexCoord2f(coordx_tile + 0.5f, coordy_tile + 0.5f);	glVertex3i(px + TILE_SIZE, py, SCENE_DEPTH);
+				glTexCoord2f(coordx_tile + 0.5f, coordy_tile);			glVertex3i(px + TILE_SIZE, py + TILE_SIZE, SCENE_DEPTH);
+				glTexCoord2f(coordx_tile, coordy_tile);					glVertex3i(px, py + TILE_SIZE, SCENE_DEPTH);
 			}
 			px += TILE_SIZE;
 		}

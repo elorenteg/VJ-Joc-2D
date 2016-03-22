@@ -63,10 +63,10 @@ void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
 
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 	glBegin(GL_QUADS);
-	glTexCoord2f(xo, yo);	glVertex2f(x, y);
-	glTexCoord2f(xf, yo);	glVertex2f(x + w, y);
-	glTexCoord2f(xf, yf);	glVertex2f(x + w, y + h);
-	glTexCoord2f(xo, yf);	glVertex2f(x, y + h);
+		glTexCoord2f(xo, yo);	glVertex3f(x, y, SCENE_DEPTH);
+		glTexCoord2f(xf, yo);	glVertex3f(x + w, y, SCENE_DEPTH);
+		glTexCoord2f(xf, yf);	glVertex3f(x + w, y + h, SCENE_DEPTH);
+		glTexCoord2f(xo, yf);	glVertex3f(x, y + h, SCENE_DEPTH);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);

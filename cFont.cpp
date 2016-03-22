@@ -18,7 +18,7 @@ void cFont::setFont(int init_texture, int init_m_width, int init_m_height,
 	c_per_row = m_width / c_width;
 }
 
-void cFont::drawText(float x, float y, int w, int h, char * text) {
+void cFont::drawText(float x, float y, float z, int w, int h, char * text) {
 	glPushMatrix();
 	glEnable(GL_TEXTURE_2D);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -53,10 +53,10 @@ void cFont::drawText(float x, float y, int w, int h, char * text) {
 			float tx = float(col * c_width) / float(m_width);
 			float ty = float(row * c_height) / float(m_height);
 
-			glTexCoord2d(tx, ty + dty); glVertex2f(cx, cy);
-			glTexCoord2d(tx + dtx, ty + dty); glVertex2f(cx + cw, cy);
-			glTexCoord2d(tx + dtx, ty); glVertex2f(cx + cw, cy + ch);
-			glTexCoord2d(tx, ty); glVertex2f(cx, cy + ch);
+			glTexCoord2d(tx, ty + dty); glVertex3f(cx, cy, z);
+			glTexCoord2d(tx + dtx, ty + dty); glVertex3f(cx + cw, cy, z);
+			glTexCoord2d(tx + dtx, ty); glVertex3f(cx + cw, cy + ch, z);
+			glTexCoord2d(tx, ty); glVertex3f(cx, cy + ch, z);
 
 			cx += cw;
 		}

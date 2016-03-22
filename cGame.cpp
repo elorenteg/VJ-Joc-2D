@@ -58,6 +58,21 @@ bool cGame::Init() {
 	Player.SetWidthHeight(100, 70);
 	//Player.SetState(STATE_LOOKRIGHT);
 
+	char font_path[64];
+	strcpy(font_path, IMAGES_FOLDER);
+	strcat(font_path, "/");
+	strcat(font_path, "font.png");
+	res = Data.LoadImage(IMG_FONT, font_path, GL_RGBA);
+	if (!res) return false;
+	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
+
+	char marco_path[64];
+	strcpy(marco_path, IMAGES_FOLDER);
+	strcat(marco_path, "/");
+	strcat(marco_path, "marco_rosa.png");
+	res = Data.LoadImage(IMG_MARCO, marco_path, GL_RGBA);
+	if (!res) return false;
+
 	return res;
 }
 
@@ -115,13 +130,17 @@ bool cGame::Process() {
 	return res;
 }
 
+bool cGame::isEndOfGame() {
+	return Scene.endOfMap(cameraXScene + GAME_SCROLL);
+}
+
 //Output
 void cGame::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1.0f, 1.0f, 1.0f);
 
 	// If end of game, map do not scroll
-	if (Scene.endOfMap(cameraXScene + GAME_SCROLL)) {
+	if (isEndOfGame()) {
 		SkyLayer.endOfGame();
 		MountainLayer.endOfGame();
 	}
@@ -135,7 +154,32 @@ void cGame::Render() {
 	Player.Draw(Data.GetID(IMG_PLAYER));
 	RestartCameraScene();
 
+	if (isEndOfGame()) RenderEndOfGame(false);
+
 	glutSwapBuffers();
+}
+
+void cGame::RenderEndOfGame(bool isGameOver) {
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, Data.GetID(IMG_MARCO));
+
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(GAME_WIDTH/2 - 200.0f, GAME_HEIGHT/2 - 100.0f, MSS_DEPTH-1);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(GAME_WIDTH/2 + 200.0f, GAME_HEIGHT/2 - 100.0f, MSS_DEPTH-1);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(GAME_WIDTH/2 + 200.0f, GAME_HEIGHT/2 + 100.0f, MSS_DEPTH-1);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(GAME_WIDTH/2 - 200.0f, GAME_HEIGHT/2 + 100.0f, MSS_DEPTH-1);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+
+	if (isGameOver) {
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, "GAME OVER");
+	}
+	else {
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, "THE END");
+	}
 }
 
 void cGame::UpdateCameraScene() {
@@ -145,7 +189,7 @@ void cGame::UpdateCameraScene() {
 	glMatrixMode(GL_MODELVIEW);
 
 	// If not end of game, map can continue scrolling
-	if (!Scene.endOfMap(cameraXScene + GAME_SCROLL)) cameraXScene += GAME_SCROLL;
+	if (!isEndOfGame()) cameraXScene += GAME_SCROLL;
 }
 
 void cGame::RestartCameraScene() {

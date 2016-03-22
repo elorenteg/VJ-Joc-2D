@@ -12,8 +12,6 @@
 
 #define TILE_SIZE		16
 
-#define DEPTH			0
-
 class cScene
 {
 public:

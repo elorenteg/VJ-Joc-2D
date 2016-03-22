@@ -9,7 +9,7 @@ public:
 	cFont(void);
 
 	void setFont(int init_texture, int init_m_width, int init_m_height, int init_c_width, int init_c_height);
-	void drawText(float x, float y, int w, int h, char * text);
+	void drawText(float x, float y, float z, int w, int h, char * text);
 
 private:
 	int texture;

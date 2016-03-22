@@ -108,13 +108,13 @@ void cMenu::Render()
 
 	glPushMatrix();
 		glColor3f(1.0f, 1.0f, 1.0f);
-		Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 88.0f, 200.0f, 50.0f, PLAY_TEXT);
+		Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 88.0f, MSS_DEPTH, 200.0f, 50.0f, PLAY_TEXT);
 
 		glColor3f(1.0f, 1.0f, 1.0f);
-		Font.drawText(GAME_WIDTH / 2.0f - 100.0f, GAME_HEIGHT / 2.0f - 12.0f, 200.0f, 50.0f, OPTIONS_TEXT);
+		Font.drawText(GAME_WIDTH / 2.0f - 100.0f, GAME_HEIGHT / 2.0f - 12.0f, MSS_DEPTH, 200.0f, 50.0f, OPTIONS_TEXT);
 
 		glColor3f(1.0f, 01.0f, 1.0f);
-		Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f - 112.0f, 200.0f, 50.0f, EXIT_TEXT);
+		Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f - 112.0f, MSS_DEPTH, 200.0f, 50.0f, EXIT_TEXT);
 	glPopMatrix();
 	
 	glPushMatrix();
