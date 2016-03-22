@@ -117,8 +117,8 @@ bool cGame::Process() {
 
 //Output
 void cGame::Render() {
-	//glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glColor3f(1.0f, 1.0f, 1.0f);
 
 	// If end of game, map do not scroll
 	if (Scene.endOfMap(cameraXScene)) {
