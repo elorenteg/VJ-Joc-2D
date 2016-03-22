@@ -52,11 +52,12 @@ bool cGame::Init() {
 	char player_path[64];
 	strcpy(player_path, IMAGES_FOLDER);
 	strcat(player_path, "/");
-	strcat(player_path, "nyancat2.png");
+	strcat(player_path, "nyancat_alas.png");
 	res = Data.LoadImage(IMG_PLAYER, player_path, GL_RGBA);
 	if (!res) return false;
 	Player.SetTile(2, SCENE_HEIGHT/2);
-	Player.SetWidthHeight(100, 70);
+	//Player.SetWidthHeight(100, 70);
+	Player.SetWidthHeight(64, 40);
 	//Player.SetState(STATE_LOOKRIGHT);
 
 	char font_path[64];
