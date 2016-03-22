@@ -1,6 +1,4 @@
 #include "cSkyLayer.h"
-#include "Globals.h"
-#include <cmath>
 
 cSkyLayer::cSkyLayer(void) {}
 

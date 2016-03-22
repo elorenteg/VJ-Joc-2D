@@ -1,6 +1,4 @@
 #include "cScene.h"
-#include "Globals.h"
-#include <windows.h>
 
 cScene::cScene(void) {
 	map = Matrix(SCENE_HEIGHT, vector<int>(SCENE_WIDTH));
@@ -12,7 +10,6 @@ cScene::~cScene(void) {
 bool cScene::LoadLevel(int level) {
 	bool res;
 	FILE *fd;
-	char file[16];
 	int i, j, px, py;
 	char tile;
 	float coordx_tile, coordy_tile;

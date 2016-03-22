@@ -1,11 +1,16 @@
 #pragma once
 
 #include "cData.h"
+#include "cFont.h"
 #include "Globals.h"
 
 #define MENU		0
 #define GAME		1
 #define OPTIONS		2
+
+#define PLAY_TEXT		"JUGAR"
+#define OPTIONS_TEXT	"OPCIONS"
+#define EXIT_TEXT		"SORTIR"
 
 class cMenu
 {
@@ -33,6 +38,7 @@ public:
 private:
 	unsigned char keys[256];
 	cData Data;
+	cFont Font;
 	bool processingKey;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/

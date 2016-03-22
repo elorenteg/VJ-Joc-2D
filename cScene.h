@@ -1,6 +1,8 @@
 #pragma once
 
 #include "cTexture.h"
+#include "Globals.h"
+#include <windows.h>
 
 #define SCENE_WIDTH		90
 #define SCENE_HEIGHT	30

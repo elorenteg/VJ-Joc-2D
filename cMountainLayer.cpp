@@ -1,5 +1,4 @@
 #include "cMountainLayer.h"
-#include "Globals.h"
 
 cMountainLayer::cMountainLayer(void) {}
 

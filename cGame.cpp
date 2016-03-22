@@ -1,5 +1,4 @@
 #include "cGame.h"
-#include "Globals.h"
 
 cGame::cGame(void) {
 }
@@ -13,6 +12,7 @@ bool cGame::Init() {
 
 	//Graphics initialization
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
@@ -117,7 +117,7 @@ bool cGame::Process() {
 
 //Output
 void cGame::Render() {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1.0f, 1.0f, 1.0f);
 
 	// If end of game, map do not scroll

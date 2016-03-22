@@ -3,7 +3,7 @@
 #include "cTexture.h"
 #include "Globals.h"
 
-#define DEPTH			-10
+#define DEPTH			-9
 #define SPEED			0.5f
 
 class cSkyLayer {

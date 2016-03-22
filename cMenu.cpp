@@ -1,5 +1,4 @@
 #include "cMenu.h"
-#include "Globals.h"
 
 cMenu::cMenu(void)
 {
@@ -25,6 +24,14 @@ bool cMenu::Init()
 
 	glAlphaFunc(GL_GREATER, 0.05f);
 	glEnable(GL_ALPHA_TEST);
+
+	char font_path[64];
+	strcpy(font_path, IMAGES_FOLDER);
+	strcat(font_path, "/");
+	strcat(font_path, "font.png");
+	res = Data.LoadImage(IMG_FONT, font_path, GL_RGBA);
+	if (!res) return false;
+	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 
 	return res;
 }
@@ -96,26 +103,39 @@ bool cMenu::Process()
 //Output
 void cMenu::Render()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
 
-	if (actionSelected == gameAction)
-		glColor3f(1.0f, 0.0f, 0.0f);
-	else
-		glColor3f(0.5f, 0.5f, 0.5f);
-	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 75.0f, -1.0f, 300.0f, 75.0f);
+	glPushMatrix();
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 88.0f, 200.0f, 50.0f, PLAY_TEXT);
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Font.drawText(GAME_WIDTH / 2.0f - 100.0f, GAME_HEIGHT / 2.0f - 12.0f, 200.0f, 50.0f, OPTIONS_TEXT);
+
+		glColor3f(1.0f, 01.0f, 1.0f);
+		Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f - 112.0f, 200.0f, 50.0f, EXIT_TEXT);
+	glPopMatrix();
 	
-	if (actionSelected == optionsAction)
-		glColor3f(0.0f, 1.0f, 0.0f);
-	else
-		glColor3f(0.5f, 0.5f, 0.5f);
-	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 25.0f, -1.0f, 300.0f, 75.0f);
+	glPushMatrix();
+		if (actionSelected == gameAction)
+			glColor3f(1.0f, 0.0f, 0.0f);
+		else
+			glColor3f(0.5f, 0.5f, 0.5f);
+		drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 75.0f, -1.0f, 300.0f, 75.0f);
+
+		if (actionSelected == optionsAction)
+			glColor3f(0.0f, 1.0f, 0.0f);
+		else
+			glColor3f(0.5f, 0.5f, 0.5f);
+		drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 25.0f, -1.0f, 300.0f, 75.0f);
 
 	if (actionSelected == stopAction)
 		glColor3f(0.0f, 0.0f, 1.0f);
 	else
 		glColor3f(0.5f, 0.5f, 0.5f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 125.0f, -1.0f, 300.0f, 75.0f);
-	
+
 	glutSwapBuffers();
 }
 
