@@ -18,6 +18,8 @@ using namespace std;
 #define GAME_HEIGHT 480
 #define GAME_DEPTH	10
 
+#define GAME_SCROLL 0.2f
+
 typedef vector<vector<int>> Matrix;
 
 //OutputDebugStringA("HI");

@@ -4,8 +4,8 @@
 #include "Globals.h"
 #include <windows.h>
 
-#define SCENE_WIDTH		45
-#define SCENE_HEIGHT	28
+#define SCENE_WIDTH		90
+#define SCENE_HEIGHT	30
 
 #define FILENAME		"level"
 #define FILENAME_EXT	".txt"
