@@ -89,8 +89,10 @@
   <ItemGroup>
     <ClCompile Include="cBicho.cpp" />
     <ClCompile Include="cData.cpp" />
+    <ClCompile Include="cDataManager.cpp" />
     <ClCompile Include="cFont.cpp" />
     <ClCompile Include="cGame.cpp" />
+    <ClCompile Include="cGameInfoLayer.cpp" />
     <ClCompile Include="cMenu.cpp" />
     <ClCompile Include="cMountainLayer.cpp" />
     <ClCompile Include="cPlayer.cpp" />
@@ -102,8 +104,10 @@
   <ItemGroup>
     <ClInclude Include="cBicho.h" />
     <ClInclude Include="cData.h" />
+    <ClInclude Include="cDataManager.h" />
     <ClInclude Include="cFont.h" />
     <ClInclude Include="cGame.h" />
+    <ClInclude Include="cGameInfoLayer.h" />
     <ClInclude Include="cMenu.h" />
     <ClInclude Include="cMountainLayer.h" />
     <ClInclude Include="cPlayer.h" />

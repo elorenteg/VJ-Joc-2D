@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cData.h"
+#include "cDataManager.h"
 #include "cFont.h"
 #include "Globals.h"
 
@@ -39,6 +40,7 @@ private:
 	unsigned char keys[256];
 	cData Data;
 	cFont Font;
+	cDataManager DataManager;
 	bool processingKey;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/

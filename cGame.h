@@ -3,6 +3,7 @@
 #include "cScene.h"
 #include "cSkyLayer.h"
 #include "cMountainLayer.h"
+#include "cGameInfoLayer.h"
 #include "cPlayer.h"
 #include "cData.h"
 #include "cFont.h"
@@ -36,6 +37,7 @@ private:
 	unsigned char keys[256];
 	cSkyLayer SkyLayer;
 	cMountainLayer MountainLayer;
+	cGameInfoLayer GameInfoLayer;
 	cScene Scene;
 	cPlayer Player;
 	cData Data;

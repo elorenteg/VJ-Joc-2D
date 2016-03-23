@@ -75,6 +75,8 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_MARCO, marco_path, GL_RGBA);
 	if (!res) return false;
 
+	GameInfoLayer.Init();
+
 	return res;
 }
 
@@ -159,6 +161,8 @@ void cGame::Render() {
 	RestartCameraScene();
 
 	if (isEndOfGame()) RenderMessage();
+
+	GameInfoLayer.Draw();
 
 	glutSwapBuffers();
 }

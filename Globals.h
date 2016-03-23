@@ -20,8 +20,9 @@ using namespace std;
 
 #define GAME_SCROLL 1.2f
 
-#define SCENE_DEPTH -6
-#define MSS_DEPTH	0
+#define SCENE_DEPTH		-6
+#define MSS_DEPTH		0
+#define GAMEINFO_DEPTH	-1
 
 typedef vector<vector<int>> Matrix;
 

@@ -31,7 +31,10 @@ bool cMenu::Init()
 	strcat(font_path, "font.png");
 	res = Data.LoadImage(IMG_FONT, font_path, GL_RGBA);
 	if (!res) return false;
+
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
+
+	DataManager.saveFile("HOLA.TXT", "pepe1\npepe2");
 
 	return res;
 }

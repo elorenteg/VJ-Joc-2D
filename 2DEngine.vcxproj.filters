@@ -44,6 +44,12 @@
     <ClCompile Include="cFont.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cGameInfoLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cDataManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cBicho.h">
@@ -77,6 +83,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameInfoLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cDataManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
