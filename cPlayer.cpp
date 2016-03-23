@@ -40,5 +40,14 @@ void cPlayer::Draw(int tex_id) {
 bool cPlayer::isGameOver() {
 	if (GetX() + GetWidth() - GetXWindow() < 20) return true;
 
+	if (lifes <= 0) return true;
+
 	return false;
+}
+
+void cPlayer::HitEnemy() {
+	char msgbuf[64];
+	sprintf(msgbuf, "cPlayer - HIT %d lifes\n", lifes);
+	OutputDebugStringA(msgbuf);
+	lifes -= 1;
 }

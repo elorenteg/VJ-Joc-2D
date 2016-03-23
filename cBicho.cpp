@@ -66,21 +66,6 @@ void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-bool cBicho::InsideWindow(Matrix& map, float x, float y) {
-	bool inside = true;
-	x = x - xWindow;
-
-	char msgbuf[64];
-	sprintf(msgbuf, "[%f,%f] - %f\n", x, y, xWindow);
-	OutputDebugStringA(msgbuf);
-
-	if (x < 0 || y < 0) inside = false;
-	else if (x + w >= GAME_WIDTH) inside = false;
-	else if (y + h >= GAME_HEIGHT) inside = false;
-
-	return inside;
-}
-
 bool cBicho::MapCollidesUp(Matrix& map, float x, float y) {
 	bool collides = false;
 
@@ -122,6 +107,13 @@ bool cBicho::MapCollidesDown(Matrix& map, float x, float y) {
 				y = (tile_y + 1) * TILE_SIZE;
 			}
 			collides = true;
+		}
+
+		if (map[tile_y][tile_x + i] == 8) {
+			char msgbuf[64];
+			sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y, tile_x+i);
+			OutputDebugStringA(msgbuf);
+			HitEnemy();
 		}
 		i++;
 	}
@@ -178,47 +170,47 @@ bool cBicho::MapCollidesRight(Matrix& map, float x, float y) {
 }
 
 void cBicho::MoveLeft(Matrix& map) {
-	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = x - step_length;
+	//for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
+		float aux = x - STEP_LENGTH;
 
 		if (aux - xWindow >= 0 && !MapCollidesLeft(map, aux, y)) {
 			x = aux;
 			return;
 		}
-	}
+	//}
 }
 
 void cBicho::MoveRight(Matrix& map) {
-	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = x + step_length;
+	//for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
+		float aux = x + STEP_LENGTH;
 
 		if (aux + w - xWindow < GAME_WIDTH && !MapCollidesRight(map, aux, y)) {
 			x = aux;
 			return;
 		}
-	}
+	//}
 }
 
 void cBicho::MoveUp(Matrix& map) {
-	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = y + step_length;
+	//for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
+		float aux = y + STEP_LENGTH;
 
 		if (aux+ h < GAME_HEIGHT && !MapCollidesUp(map, x, aux)) {
 			y = aux;
 			return;
 		}
-	}
+	//}
 }
 
 void cBicho::MoveDown(Matrix& map) {
-	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = y - step_length;
+	//for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
+		float aux = y - STEP_LENGTH;
 
 		if (aux >= 0 && !MapCollidesDown(map, x, aux)) {
 			y = aux;
 			return;
 		}
-	}
+	//}
 }
 
 void cBicho::Logic(Matrix& map, float cameraXSceneInc) {
@@ -249,4 +241,8 @@ int cBicho::GetState() {
 
 void cBicho::SetState(int s) {
 	state = s;
+}
+
+void cBicho::HitEnemy() {
+	OutputDebugStringA("cBicho - HIT\n");
 }

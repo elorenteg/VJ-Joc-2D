@@ -11,4 +11,9 @@ public:
 
 	void Draw(int tex_id);
 	bool isGameOver();
+
+	void HitEnemy();
+
+private:
+	int lifes = 3;
 };

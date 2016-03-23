@@ -38,7 +38,7 @@ bool cScene::LoadLevel(int level) {
 			if (tile == ' ') {
 				map[j][i] = 0;
 			}
-			else if (tile == '8') {
+			else if (tile == '8' || tile == 'z') {
 				map[j][i] = 0;
 			}
 			else {
@@ -112,6 +112,10 @@ void cScene::Draw(int tex_id) {
 
 Matrix cScene::GetMap() {
 	return map;
+}
+
+void cScene::SetMap(Matrix &mapa) {
+	map = mapa;
 }
 
 bool cScene::endOfMap(float cameraX) {

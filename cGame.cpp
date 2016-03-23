@@ -57,8 +57,7 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PLAYER, player_path, GL_RGBA);
 	if (!res) return false;
 	Player.SetTile(2, SCENE_HEIGHT/2);
-	Player.SetWidthHeight(64, 40);
-	//Player.SetState(STATE_LOOKRIGHT);
+	Player.SetWidthHeight(60, 40);
 
 	char font_path[64];
 	strcpy(font_path, IMAGES_FOLDER);
@@ -113,8 +112,18 @@ bool cGame::InitEnemies(int level) {
 			if (tile == '8') {
 				cEnemy enemy;
 				enemy.SetTile(i, j);
-				Player.SetWidthHeight(64, 40);
+				enemy.SetWidthHeight(60, 40);
 				addEnemy(enemy);
+
+				Matrix map = Scene.GetMap();
+
+				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
+					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
+						map[j+jj][i+ii] = 8;
+					}
+				}
+
+				Scene.SetMap(map);
 			}
 		}
 		fscanf(fd, "%c", &tile); //pass enter
@@ -175,15 +184,23 @@ bool cGame::Process() {
 	if (keys[27]) res = false;
 
 	if (!isEndOfGame()) {
-		if (keys[GLUT_KEY_UP])
+		if (keys[GLUT_KEY_UP]) {
 			Player.MoveUp(Scene.GetMap());
-		else if (keys[GLUT_KEY_DOWN])
+			//keys[GLUT_KEY_UP] = false;
+		}
+		else if (keys[GLUT_KEY_DOWN]) {
 			Player.MoveDown(Scene.GetMap());
+			//keys[GLUT_KEY_DOWN] = false;
+		}
 
-		if (keys[GLUT_KEY_LEFT])
+		if (keys[GLUT_KEY_LEFT]) {
 			Player.MoveLeft(Scene.GetMap());
-		else if (keys[GLUT_KEY_RIGHT])
+			//keys[GLUT_KEY_LEFT] = false;
+		}
+		else if (keys[GLUT_KEY_RIGHT]) {
 			Player.MoveRight(Scene.GetMap());
+			//keys[GLUT_KEY_RIGHT] = false;
+		}
 
 		//Game Logic
 		Player.Logic(Scene.GetMap(), GAME_SCROLL);
@@ -216,15 +233,11 @@ void cGame::Render() {
 	Scene.Draw(Data.GetID(IMG_SCENE));
 
 	Player.Draw(Data.GetID(IMG_PLAYER));
-	RestartCameraScene();
 
 	for (int i = 0; i < Enemies.size(); ++i) {
 		Enemies[i].Draw(Data.GetID(IMG_ENEMY));
-
-		char msgbuf[64];
-		sprintf(msgbuf, "[%f,%f]\n", Enemies[i].GetX(), Enemies[i].GetY());
-		OutputDebugStringA(msgbuf);
 	}
+	RestartCameraScene();
 
 	if (isEndOfGame()) RenderMessage();
 

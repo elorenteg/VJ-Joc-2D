@@ -22,6 +22,7 @@ public:
 	void Draw(int tex_id);
 
 	Matrix GetMap();
+	void SetMap(Matrix &map);
 
 	bool endOfMap(float cameraX);
 

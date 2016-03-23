@@ -4,7 +4,7 @@
 #include "cScene.h"
 #include "Globals.h"
 
-#define FRAME_DELAY		10
+#define FRAME_DELAY		12
 #define STEP_LENGTH		4
 
 #define FRAME_0		0
@@ -38,7 +38,6 @@ public:
 	int GetHeight();
 
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
-	bool InsideWindow(Matrix& map, float x, float y);
 	bool MapCollidesUp(Matrix& map, float x, float y);
 	bool MapCollidesDown(Matrix& map, float x, float y);
 	bool MapCollidesLeft(Matrix& map, float x, float y);
@@ -49,6 +48,8 @@ public:
 	void MoveUp(Matrix& map);
 	void MoveDown(Matrix& map);
 	void Logic(Matrix& map, float cameraXScene);
+
+	virtual void HitEnemy();
 
 	int  GetState();
 	void SetState(int s);
