@@ -11,7 +11,7 @@ bool cDataManager::saveFile(char* filename, char* content) {
 	bool res = true;
 
 	char path[128];
-	strcpy(path, "Saved/");
+	strcpy(path, "Save/");
 	strcat(path, filename);
 	strcat(path, ".txt");
 
