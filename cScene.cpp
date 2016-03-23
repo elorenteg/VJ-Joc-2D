@@ -12,7 +12,7 @@ bool cScene::LoadLevel(int level) {
 	FILE *fd;
 	int i, j, px, py;
 	char tile;
-	float coordx_tile, coordy_tile;
+	float coordxo_tile, coordxf_tile, coordyo_tile, coordyf_tile;
 
 	res = true;
 
@@ -41,16 +41,51 @@ bool cScene::LoadLevel(int level) {
 			else {
 				map[j][i] = tile - 48;
 
-				if (map[j][i] % 2) coordx_tile = 0.0f;
-				else coordx_tile = 0.5f;
+				switch (map[j][i]) {
+					case GROUND:
+						coordxo_tile = 0.0f;
+						coordxf_tile = 0.1f;
+						break;
+					case CLOUD_SUP_ESQ:
+					case CLOUD_INF_ESQ:
+						coordxo_tile = 0.0f;
+						coordxf_tile = 0.33f;
+						break;
+					case CLOUD_SUP_CEN:
+					case CLOUD_INF_CEN:
+						coordxo_tile = 0.33f;
+						coordxf_tile = 0.67f;
+						break;
+					case CLOUD_SUP_DRE:
+					case CLOUD_INF_DRE:
+						coordxo_tile = 0.67f;
+						coordxf_tile = 1.0f;
+						break;
+				}
 
-				if (map[j][i]<3) coordy_tile = 0.0f;
-				else coordy_tile = 0.5f;
+				switch (map[j][i]) {
+					case GROUND:
+						coordyo_tile = 0.0f;
+						coordyf_tile = 0.25f;
+						break;
+					case CLOUD_SUP_ESQ:
+					case CLOUD_SUP_CEN:
+					case CLOUD_SUP_DRE:
+						coordyo_tile = 0.5f;
+						coordyf_tile = 0.75f;
+						break;
+					case CLOUD_INF_ESQ:
+					case CLOUD_INF_CEN:
+					case CLOUD_INF_DRE:
+						coordyo_tile = 0.75f;
+						coordyf_tile = 1.0f;
+						break;
+				}
 
-				glTexCoord2f(coordx_tile, coordy_tile + 0.5f);			glVertex3i(px, py, SCENE_DEPTH);
-				glTexCoord2f(coordx_tile + 0.5f, coordy_tile + 0.5f);	glVertex3i(px + TILE_SIZE, py, SCENE_DEPTH);
-				glTexCoord2f(coordx_tile + 0.5f, coordy_tile);			glVertex3i(px + TILE_SIZE, py + TILE_SIZE, SCENE_DEPTH);
-				glTexCoord2f(coordx_tile, coordy_tile);					glVertex3i(px, py + TILE_SIZE, SCENE_DEPTH);
+				glTexCoord2f(coordxo_tile, coordyf_tile);	glVertex3i(px, py, SCENE_DEPTH);
+				glTexCoord2f(coordxf_tile, coordyf_tile);	glVertex3i(px + TILE_SIZE, py, SCENE_DEPTH);
+				glTexCoord2f(coordxf_tile, coordyo_tile);	glVertex3i(px + TILE_SIZE, py + TILE_SIZE, SCENE_DEPTH);
+				glTexCoord2f(coordxo_tile, coordyo_tile);	glVertex3i(px, py + TILE_SIZE, SCENE_DEPTH);
 			}
 			px += TILE_SIZE;
 		}

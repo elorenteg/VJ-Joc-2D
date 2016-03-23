@@ -42,7 +42,7 @@ bool cGame::Init() {
 	char scene_path[64];
 	strcpy(scene_path, IMAGES_FOLDER);
 	strcat(scene_path, "/");
-	strcat(scene_path, "blocks.png");
+	strcat(scene_path, "escena.png");
 	res = Data.LoadImage(IMG_BLOCKS, scene_path, GL_RGBA);
 	if (!res) return false;
 	res = Scene.LoadLevel(10);
@@ -56,7 +56,6 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PLAYER, player_path, GL_RGBA);
 	if (!res) return false;
 	Player.SetTile(2, SCENE_HEIGHT/2);
-	//Player.SetWidthHeight(100, 70);
 	Player.SetWidthHeight(64, 40);
 	//Player.SetState(STATE_LOOKRIGHT);
 

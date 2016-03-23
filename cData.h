@@ -4,7 +4,7 @@
 #include "Globals.h"
 
 //Image array size
-#define NUM_IMG		6
+#define NUM_IMG			6
 
 #define IMG_FONT		0
 

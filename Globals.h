@@ -23,6 +23,14 @@ using namespace std;
 #define SCENE_DEPTH -6
 #define MSS_DEPTH	0
 
+#define	GROUND			1
+#define CLOUD_SUP_ESQ	2
+#define CLOUD_SUP_CEN	3
+#define CLOUD_SUP_DRE	4
+#define CLOUD_INF_ESQ	5
+#define CLOUD_INF_CEN	6
+#define CLOUD_INF_DRE	7
+
 typedef vector<vector<int>> Matrix;
 
 //OutputDebugStringA("HI");
