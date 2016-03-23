@@ -10,6 +10,7 @@ bool cGame::Init() {
 	bool res = true;
 	cameraXScene = 0;
 	isGameOver = false;
+	int level = 10;
 
 	//Graphics initialization
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
@@ -43,9 +44,9 @@ bool cGame::Init() {
 	strcpy(scene_path, IMAGES_FOLDER);
 	strcat(scene_path, "/");
 	strcat(scene_path, "escena.png");
-	res = Data.LoadImage(IMG_BLOCKS, scene_path, GL_RGBA);
+	res = Data.LoadImage(IMG_SCENE, scene_path, GL_RGBA);
 	if (!res) return false;
-	res = Scene.LoadLevel(10);
+	res = Scene.LoadLevel(level);
 	if (!res) return false;
 
 	//Player initialization
@@ -74,7 +75,67 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_MARCO, marco_path, GL_RGBA);
 	if (!res) return false;
 
+	char enemy_path[64];
+	strcpy(enemy_path, IMAGES_FOLDER);
+	strcat(enemy_path, "/");
+	strcat(enemy_path, "nyancat_ninja.png");
+	res = Data.LoadImage(IMG_ENEMY, enemy_path, GL_RGBA);
+	if (!res) return false;
+	res = InitEnemies(level);
+	if (!res) return false;
+
 	return res;
+}
+
+bool cGame::InitEnemies(int level) {
+	bool res;
+	FILE *fd;
+	int i, j, px, py;
+	char tile;
+
+	res = true;
+
+	string scene_path;
+	if (level == 1) scene_path = LEVELS_FOLDER "/" FILENAME "1" FILENAME_EXT;
+	else if (level == 2) scene_path = LEVELS_FOLDER "/" FILENAME "2" FILENAME_EXT;
+	else if (level == 3) scene_path = LEVELS_FOLDER "/" FILENAME "3" FILENAME_EXT;
+	else if (level == 10) scene_path = LEVELS_FOLDER "/" FILENAME "10" FILENAME_EXT;
+
+	fd = fopen(scene_path.c_str(), "r");
+	if (fd == NULL) return false;
+
+	for (j = SCENE_HEIGHT - 1; j >= 0; j--) {
+		px = 0;
+		py = j*TILE_SIZE;
+
+		for (i = 0; i<SCENE_WIDTH; i++) {
+			fscanf(fd, "%c", &tile);
+			if (tile == '8') {
+				cEnemy enemy;
+				enemy.SetTile(i, j);
+				Player.SetWidthHeight(64, 40);
+				addEnemy(enemy);
+			}
+		}
+		fscanf(fd, "%c", &tile); //pass enter
+	}
+
+	fclose(fd);
+
+	return res;
+}
+
+void cGame::addEnemy(cEnemy enemy) {
+	int size = Enemies.size();
+
+	vector<cEnemy> enemies_aux(size + 1);
+	for (int i = 0; i < size; ++i) {
+		enemies_aux[i] = Enemies[i];
+	}
+
+	enemies_aux[size] = enemy;
+
+	Enemies = enemies_aux;
 }
 
 bool cGame::Loop() {
@@ -152,10 +213,18 @@ void cGame::Render() {
 	MountainLayer.Draw(Data.GetID(IMG_LAYER2));
 
 	UpdateCameraScene();
-	Scene.Draw(Data.GetID(IMG_BLOCKS));
+	Scene.Draw(Data.GetID(IMG_SCENE));
 
 	Player.Draw(Data.GetID(IMG_PLAYER));
 	RestartCameraScene();
+
+	for (int i = 0; i < Enemies.size(); ++i) {
+		Enemies[i].Draw(Data.GetID(IMG_ENEMY));
+
+		char msgbuf[64];
+		sprintf(msgbuf, "[%f,%f]\n", Enemies[i].GetX(), Enemies[i].GetY());
+		OutputDebugStringA(msgbuf);
+	}
 
 	if (isEndOfGame()) RenderMessage();
 

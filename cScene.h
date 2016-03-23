@@ -20,6 +20,7 @@ public:
 
 	bool LoadLevel(int level);
 	void Draw(int tex_id);
+
 	Matrix GetMap();
 
 	bool endOfMap(float cameraX);

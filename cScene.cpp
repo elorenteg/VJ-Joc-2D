@@ -38,6 +38,9 @@ bool cScene::LoadLevel(int level) {
 			if (tile == ' ') {
 				map[j][i] = 0;
 			}
+			else if (tile == '8') {
+				map[j][i] = 0;
+			}
 			else {
 				map[j][i] = tile - 48;
 
