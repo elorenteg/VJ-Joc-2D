@@ -4,7 +4,7 @@
 #include "Globals.h"
 
 //Image array size
-#define NUM_IMG			9
+#define NUM_IMG			10
 
 #define IMG_FONT		0
 #define IMG_MARCO		1
@@ -17,6 +17,8 @@
 #define IMG_NINJA		6
 #define IMG_GRADIENT	7
 #define IMG_SHOOT		8
+
+#define IMG_RAINBOW		9
 
 
 class cData

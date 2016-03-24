@@ -75,6 +75,11 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_GRADIENT, path, GL_RGBA);
 	if (!res) return false;
 
+	//Rainbow initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "rainbow.png").c_str());
+	res = Data.LoadImage(IMG_RAINBOW, path, GL_RGBA);
+	if (!res) return false;
+
 	//Enemies initialization
 	res = InitEnemies(level);
 	if (!res) return false;
@@ -283,6 +288,8 @@ void cGame::Render() {
 	for (int i = 0; i < EnemiesC.size(); ++i) {
 		EnemiesC[i].Draw(Data.GetID(IMG_NINJA));
 	}
+
+	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
 	RestartCameraScene();
 
 	if (isEndOfGame()) RenderMessage();

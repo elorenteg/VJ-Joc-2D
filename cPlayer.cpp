@@ -8,26 +8,26 @@ void cPlayer::Draw(int tex_id) {
 	float xo, yo, xf, yf;
 
 	switch (GetFrame()) {
-		case FRAME_0:
-			xo = 0.0f;
-			xf = 0.2f;
-			break;
-		case FRAME_1:
-			xo = 0.2f;
-			xf = 0.4f;
-			break;
-		case FRAME_2:
-			xo = 0.4f;
-			xf = 0.6f;
-			break;
-		case FRAME_3:
-			xo = 0.6f;
-			xf = 0.8f;
-			break;
-		case FRAME_4:
-			xo = 0.8f;
-			xf = 1.0f;
-			break;
+	case FRAME_0:
+		xo = 0.0f;
+		xf = 0.2f;
+		break;
+	case FRAME_1:
+		xo = 0.2f;
+		xf = 0.4f;
+		break;
+	case FRAME_2:
+		xo = 0.4f;
+		xf = 0.6f;
+		break;
+	case FRAME_3:
+		xo = 0.6f;
+		xf = 0.8f;
+		break;
+	case FRAME_4:
+		xo = 0.8f;
+		xf = 1.0f;
+		break;
 	}
 	yo = 1.0f;
 	yf = 0.0f;
@@ -35,6 +35,36 @@ void cPlayer::Draw(int tex_id) {
 	DrawRect(tex_id, xo, yo, xf, yf);
 
 	NextFrame(5);
+}
+
+void cPlayer::DrawRainbow(int tex_id, float xWindow) {
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, tex_id);
+
+	float x = GetX();
+	float y = GetY();
+	int h = GetHeight();
+
+	float xo = 0.0f;
+	float xf = 1.0f;
+	float yo = 1.0f;
+	float yf = 0.0f;
+
+	int size_quad = 20;
+	int count = 0;
+	for (float i = xWindow; i < x + 15; i = i + size_quad) {
+		glBegin(GL_QUADS);
+			glTexCoord2f(xo, yo);	glVertex3f(i, y + count * 5, SCENE_DEPTH);
+			glTexCoord2f(xf, yo);	glVertex3f(i + size_quad, y + count * 5, SCENE_DEPTH);
+			glTexCoord2f(xf, yf);	glVertex3f(i + size_quad, y + h + count * 5, SCENE_DEPTH);
+			glTexCoord2f(xo, yf);	glVertex3f(i, y + h + count * 5, SCENE_DEPTH);
+		glEnd();
+
+		++count;
+		count = count % 2;
+	}
+
+	glDisable(GL_TEXTURE_2D);
 }
 
 bool cPlayer::isGameOver() {

@@ -10,6 +10,7 @@ public:
 	~cPlayer();
 
 	void Draw(int tex_id);
+	void DrawRainbow(int tex_id, float xWindow);
 	bool isGameOver();
 	
 	void Logic(Matrix& map, float cameraXScene);
