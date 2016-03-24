@@ -92,14 +92,21 @@ void cEnemyCircle::Logic(Matrix& map) {
 	}
 	else --time_state;
 
-	incX *= TILE_SIZE / 2;
-	incY *= TILE_SIZE / 2;
 
 	if (move && (x + incX) / TILE_SIZE < SCENE_WIDTH && (y + incY) / TILE_SIZE < SCENE_HEIGHT) {
-		//map[tile_y][tile_x] = 0;
-		//map[(y + inc)/TILE_SIZE][tile_x] = ENEMY_HOR - 48;
+		for (int i = tile_x; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
+			for (int j = tile_y; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
+				//map[j][i] = 0;
+			}
+		}
 
-		SetX(x + incX);
-		SetY(y + incY);
+		for (int i = tile_x + incX; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
+			for (int j = tile_y + incY; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
+				//map[j][i] = ENEMY_VER - 48;
+			}
+		}
+
+		SetX(x + incX * TILE_SIZE);
+		SetY(y + incY * TILE_SIZE);
 	}
 }

@@ -15,7 +15,7 @@ using namespace std;
 #define IMAGES_FOLDER	"Images"
 
 #define GAME_WIDTH	640
-#define GAME_HEIGHT 480
+#define GAME_HEIGHT 490
 #define GAME_MARGIN 30
 #define GAME_DEPTH	10
 

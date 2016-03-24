@@ -52,7 +52,7 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PLAYER, path, GL_RGBA);
 	if (!res) return false;
 	Player.SetTile(2, SCENE_HEIGHT/2);
-	Player.SetWidthHeight(60, 40);
+	Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 
 	//Font initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "font.png").c_str());
@@ -115,15 +115,13 @@ bool cGame::InitEnemies(int level) {
 			if (tile == ENEMY_VER) {
 				cEnemyVertical enemy;
 				enemy.SetTile(i, j);
-				enemy.SetWidthHeight(60, 40);
-
+				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 				EnemiesV.push_back(enemy);
-				//addEnemy(enemy);
 
 				Matrix map = Scene.GetMap();
 
-				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
-					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
+				for (int ii = 0; ii < BICHO_WIDTH / TILE_SIZE; ++ii) {
+					for (int jj = 0; jj < BICHO_HEIGHT / TILE_SIZE; ++jj) {
 						map[j + jj][i + ii] = ENEMY_VER - 48;
 					}
 				}
@@ -134,16 +132,13 @@ bool cGame::InitEnemies(int level) {
 			else if (tile == ENEMY_HOR) {
 				cEnemyHorizontal enemy;
 				enemy.SetTile(i, j);
-				enemy.SetWidthHeight(60, 40);
-
+				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 				EnemiesH.push_back(enemy);
-
-				//addEnemy(enemy);
 
 				Matrix map = Scene.GetMap();
 
-				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
-					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
+				for (int ii = 0; ii < BICHO_WIDTH / TILE_SIZE; ++ii) {
+					for (int jj = 0; jj < BICHO_HEIGHT / TILE_SIZE; ++jj) {
 						map[j + jj][i + ii] = ENEMY_HOR - 48;
 					}
 				}
@@ -154,16 +149,13 @@ bool cGame::InitEnemies(int level) {
 			else if (tile == ENEMY_CIR) {
 				cEnemyCircle enemy;
 				enemy.SetTile(i, j);
-				enemy.SetWidthHeight(60, 40);
-
+				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 				EnemiesC.push_back(enemy);
-
-				//addEnemy(enemy);
 
 				Matrix map = Scene.GetMap();
 
-				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
-					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
+				for (int ii = 0; ii < BICHO_WIDTH / TILE_SIZE; ++ii) {
+					for (int jj = 0; jj < BICHO_HEIGHT / TILE_SIZE; ++jj) {
 						map[j + jj][i + ii] = ENEMY_CIR - 48;
 					}
 				}

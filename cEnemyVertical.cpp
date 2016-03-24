@@ -78,12 +78,19 @@ void cEnemyVertical::Logic(Matrix& map) {
 	}
 	else --time_state;
 
-	inc *= TILE_SIZE / 2;
-
 	if (move && (y + inc) / TILE_SIZE < SCENE_HEIGHT) {
-		//map[tile_y][tile_x] = 0;
-		//map[(y + inc)/TILE_SIZE][tile_x] = ENEMY_VER-48;
+		for (int i = tile_x; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
+			for (int j = tile_y; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
+				map[j][i] = 0;
+			}
+		}
 
-		SetY(y + inc);
+		for (int i = tile_x; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
+			for (int j = tile_y + inc; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
+				//map[j][i] = ENEMY_VER - 48;
+			}
+		}
+
+		SetY(y + inc * TILE_SIZE);
 	}
 }
