@@ -89,8 +89,8 @@ bool cGame::Init() {
 	if (!res) return false;
 
 	res = InitEnemies(level);
-	if (!res) return 
-	
+	if (!res) return false;
+
 	GameInfoLayer.Init();
 
 	return res;
