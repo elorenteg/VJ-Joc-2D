@@ -74,12 +74,20 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_MARCO, marco_path, GL_RGBA);
 	if (!res) return false;
 
-	char enemy_path[64];
-	strcpy(enemy_path, IMAGES_FOLDER);
-	strcat(enemy_path, "/");
-	strcat(enemy_path, "nyancat_ninja.png");
-	res = Data.LoadImage(IMG_ENEMY, enemy_path, GL_RGBA);
+	char ninja_path[64];
+	strcpy(ninja_path, IMAGES_FOLDER);
+	strcat(ninja_path, "/");
+	strcat(ninja_path, "nyancat_ninja.png");
+	res = Data.LoadImage(IMG_NINJA, ninja_path, GL_RGBA);
 	if (!res) return false;
+
+	char gradient_path[64];
+	strcpy(gradient_path, IMAGES_FOLDER);
+	strcat(gradient_path, "/");
+	strcat(gradient_path, "nyancat_gradiente.png");
+	res = Data.LoadImage(IMG_GRADIENT, gradient_path, GL_RGBA);
+	if (!res) return false;
+
 	res = InitEnemies(level);
 	if (!res) return false;
 
@@ -109,17 +117,59 @@ bool cGame::InitEnemies(int level) {
 
 		for (i = 0; i<SCENE_WIDTH; i++) {
 			fscanf(fd, "%c", &tile);
-			if (tile == '8') {
-				cEnemy enemy;
+			if (tile == ENEMY_VER) {
+				cEnemyVertical enemy;
 				enemy.SetTile(i, j);
 				enemy.SetWidthHeight(60, 40);
-				addEnemy(enemy);
+
+				EnemiesV.push_back(enemy);
+				//addEnemy(enemy);
 
 				Matrix map = Scene.GetMap();
 
 				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
 					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
-						map[j+jj][i+ii] = 8;
+						map[j + jj][i + ii] = ENEMY_VER - 48;
+					}
+				}
+
+				Scene.SetMap(map);
+			}
+
+			else if (tile == ENEMY_HOR) {
+				cEnemyHorizontal enemy;
+				enemy.SetTile(i, j);
+				enemy.SetWidthHeight(60, 40);
+
+				EnemiesH.push_back(enemy);
+
+				//addEnemy(enemy);
+
+				Matrix map = Scene.GetMap();
+
+				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
+					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
+						map[j + jj][i + ii] = ENEMY_HOR - 48;
+					}
+				}
+
+				Scene.SetMap(map);
+			}
+
+			else if (tile == ENEMY_CIR) {
+				cEnemyCircle enemy;
+				enemy.SetTile(i, j);
+				enemy.SetWidthHeight(60, 40);
+
+				EnemiesC.push_back(enemy);
+
+				//addEnemy(enemy);
+
+				Matrix map = Scene.GetMap();
+
+				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
+					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
+						map[j + jj][i + ii] = ENEMY_CIR - 48;
 					}
 				}
 
@@ -132,19 +182,6 @@ bool cGame::InitEnemies(int level) {
 	fclose(fd);
 
 	return res;
-}
-
-void cGame::addEnemy(cEnemy enemy) {
-	int size = Enemies.size();
-
-	vector<cEnemy> enemies_aux(size + 1);
-	for (int i = 0; i < size; ++i) {
-		enemies_aux[i] = Enemies[i];
-	}
-
-	enemies_aux[size] = enemy;
-
-	Enemies = enemies_aux;
 }
 
 bool cGame::Loop() {
@@ -205,6 +242,19 @@ bool cGame::Process() {
 		//Game Logic
 		Player.Logic(Scene.GetMap(), GAME_SCROLL);
 
+		Matrix map = Scene.GetMap();
+		for (int i = 0; i < EnemiesH.size(); ++i) {
+			EnemiesH[i].Logic(map);
+		}
+		for (int i = 0; i < EnemiesV.size(); ++i) {
+			EnemiesV[i].Logic(map);
+		}
+		for (int i = 0; i < EnemiesC.size(); ++i) {
+			EnemiesC[i].Logic(map);
+		}
+
+		Scene.SetMap(map);
+
 		isGameOver = Player.isGameOver();
 	}
 
@@ -234,8 +284,14 @@ void cGame::Render() {
 
 	Player.Draw(Data.GetID(IMG_PLAYER));
 
-	for (int i = 0; i < Enemies.size(); ++i) {
-		Enemies[i].Draw(Data.GetID(IMG_ENEMY));
+	for (int i = 0; i < EnemiesH.size(); ++i) {
+		EnemiesH[i].Draw(Data.GetID(IMG_NINJA));
+	}
+	for (int i = 0; i < EnemiesV.size(); ++i) {
+		EnemiesV[i].Draw(Data.GetID(IMG_NINJA));
+	}
+	for (int i = 0; i < EnemiesC.size(); ++i) {
+		EnemiesC[i].Draw(Data.GetID(IMG_NINJA));
 	}
 	RestartCameraScene();
 

@@ -32,6 +32,18 @@ void cBicho::SetWidthHeight(int width, int height) {
 	h = height;
 }
 
+void cBicho::SetX(float posX) {
+	x = posX;
+}
+
+void cBicho::SetY(float posY) {
+	y = posY;
+}
+
+void cBicho::SetXWindow(float xWind) {
+	xWindow = xWind;
+}
+
 float cBicho::GetX() {
 	return x;
 }
@@ -170,56 +182,47 @@ bool cBicho::MapCollidesRight(Matrix& map, float x, float y) {
 }
 
 void cBicho::MoveLeft(Matrix& map) {
-	//for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = x - STEP_LENGTH;
+	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
+		float aux = x - step_length;
 
 		if (aux - xWindow >= 0 && !MapCollidesLeft(map, aux, y)) {
 			x = aux;
 			return;
 		}
-	//}
+	}
 }
 
 void cBicho::MoveRight(Matrix& map) {
-	//for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = x + STEP_LENGTH;
+	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
+		float aux = x + step_length;
 
 		if (aux + w - xWindow < GAME_WIDTH && !MapCollidesRight(map, aux, y)) {
 			x = aux;
 			return;
 		}
-	//}
+	}
 }
 
 void cBicho::MoveUp(Matrix& map) {
-	//for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = y + STEP_LENGTH;
+	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
+		float aux = y + step_length;
 
 		if (aux+ h < GAME_HEIGHT && !MapCollidesUp(map, x, aux)) {
 			y = aux;
 			return;
 		}
-	//}
+	}
 }
 
 void cBicho::MoveDown(Matrix& map) {
-	//for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = y - STEP_LENGTH;
+	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
+		float aux = y - step_length;
 
 		if (aux >= 0 && !MapCollidesDown(map, x, aux)) {
 			y = aux;
 			return;
 		}
-	//}
-}
-
-void cBicho::Logic(Matrix& map, float cameraXSceneInc) {
-	float alfa;
-
-	float aux = x + cameraXSceneInc;
-	if (!MapCollidesRight(map, aux, y)) x = aux;
-	
-	xWindow += cameraXSceneInc;
+	}
 }
 
 void cBicho::NextFrame(int max) {

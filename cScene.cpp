@@ -38,7 +38,7 @@ bool cScene::LoadLevel(int level) {
 			if (tile == ' ') {
 				map[j][i] = 0;
 			}
-			else if (tile == '8' || tile == 'z') {
+			else if (tile == ENEMY_HOR || tile == ENEMY_VER || tile == ENEMY_CIR || tile == 'z') {
 				map[j][i] = 0;
 			}
 			else {

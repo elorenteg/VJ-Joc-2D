@@ -6,7 +6,9 @@
 #include "cPlayer.h"
 #include "cData.h"
 #include "cFont.h"
-#include "cEnemy.h"
+#include "cEnemyVertical.h"
+#include "cEnemyHorizontal.h"
+#include "cEnemyCircle.h"
 #include "Globals.h"
 
 class cGame
@@ -19,7 +21,6 @@ public:
 	bool Loop();
 	void Finalize();
 	bool InitEnemies(int level);
-	void addEnemy(cEnemy enemy);
 
 	//Input
 	void ReadKeyboard(unsigned char key, int x, int y, bool press);
@@ -43,7 +44,9 @@ private:
 	cPlayer Player;
 	cData Data;
 	cFont Font;
-	vector<cEnemy> Enemies;
+	vector<cEnemyVertical> EnemiesV;
+	vector<cEnemyHorizontal> EnemiesH;
+	vector<cEnemyCircle> EnemiesC;
 	
 	float cameraXScene;
 	bool isGameOver;

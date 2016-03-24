@@ -40,9 +40,16 @@ void cPlayer::Draw(int tex_id) {
 bool cPlayer::isGameOver() {
 	if (GetX() + GetWidth() - GetXWindow() < 20) return true;
 
-	if (lifes <= 0) return true;
+	//if (lifes <= 0) return true;
 
 	return false;
+}
+
+void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
+	float aux = GetX() + cameraXSceneInc;
+	if (!MapCollidesRight(map, aux, GetY())) SetX(aux);
+
+	SetXWindow(GetXWindow() + cameraXSceneInc);
 }
 
 void cPlayer::HitEnemy() {

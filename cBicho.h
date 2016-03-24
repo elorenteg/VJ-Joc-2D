@@ -5,7 +5,7 @@
 #include "Globals.h"
 
 #define FRAME_DELAY		12
-#define STEP_LENGTH		4
+#define STEP_LENGTH		5
 
 #define FRAME_0		0
 #define FRAME_1		1
@@ -30,6 +30,9 @@ public:
 	void SetPosition(float x, float y);
 	void SetTile(int tx, int ty);
 	void SetWidthHeight(int w, int h);
+	void SetX(float x);
+	void SetY(float y);
+	void SetXWindow(float xWindow);
 
 	float GetX();
 	float GetY();
@@ -47,7 +50,6 @@ public:
 	void MoveLeft(Matrix& map);
 	void MoveUp(Matrix& map);
 	void MoveDown(Matrix& map);
-	void Logic(Matrix& map, float cameraXScene);
 
 	virtual void HitEnemy();
 

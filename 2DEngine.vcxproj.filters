@@ -44,7 +44,13 @@
     <ClCompile Include="cFont.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cEnemy.cpp">
+    <ClCompile Include="cEnemyVertical.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cEnemyHorizontal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cEnemyCircle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -82,7 +88,13 @@
     <ClInclude Include="cFont.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cEnemy.h">
+    <ClInclude Include="cEnemyVertical.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cEnemyHorizontal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cEnemyCircle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -31,6 +31,11 @@ using namespace std;
 #define CLOUD_INF_CEN	6
 #define CLOUD_INF_DRE	7
 
+#define ENEMY_VER		'v'
+#define	ENEMY_HOR		'h'
+#define ENEMY_CIR		'c'
+#define BOSS			'b'
+
 typedef vector<vector<int>> Matrix;
 
 //OutputDebugStringA("HI");
