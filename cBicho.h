@@ -4,6 +4,9 @@
 #include "cScene.h"
 #include "Globals.h"
 
+#define BICHO_WIDTH		TILE_SIZE*3
+#define BICHO_HEIGHT	TILE_SIZE*2
+
 #define FRAME_DELAY		12
 #define STEP_LENGTH		TILE_SIZE/2
 
