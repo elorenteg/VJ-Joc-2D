@@ -24,6 +24,19 @@ using namespace std;
 #define MSS_DEPTH		0
 #define GAMEINFO_DEPTH	-1
 
+#define	GROUND			1
+#define CLOUD_SUP_ESQ	2
+#define CLOUD_SUP_CEN	3
+#define CLOUD_SUP_DRE	4
+#define CLOUD_INF_ESQ	5
+#define CLOUD_INF_CEN	6
+#define CLOUD_INF_DRE	7
+
+#define ENEMY_VER		'v'
+#define	ENEMY_HOR		'h'
+#define ENEMY_CIR		'c'
+#define BOSS			'b'
+
 typedef vector<vector<int>> Matrix;
 
 //OutputDebugStringA("HI");

@@ -10,6 +10,7 @@ bool cGame::Init() {
 	bool res = true;
 	cameraXScene = 0;
 	isGameOver = false;
+	int level = 10;
 
 	//Graphics initialization
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
@@ -42,10 +43,10 @@ bool cGame::Init() {
 	char scene_path[64];
 	strcpy(scene_path, IMAGES_FOLDER);
 	strcat(scene_path, "/");
-	strcat(scene_path, "blocks.png");
-	res = Data.LoadImage(IMG_BLOCKS, scene_path, GL_RGBA);
+	strcat(scene_path, "escena.png");
+	res = Data.LoadImage(IMG_SCENE, scene_path, GL_RGBA);
 	if (!res) return false;
-	res = Scene.LoadLevel(10);
+	res = Scene.LoadLevel(level);
 	if (!res) return false;
 
 	//Player initialization
@@ -56,9 +57,7 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PLAYER, player_path, GL_RGBA);
 	if (!res) return false;
 	Player.SetTile(2, SCENE_HEIGHT/2);
-	//Player.SetWidthHeight(100, 70);
-	Player.SetWidthHeight(64, 40);
-	//Player.SetState(STATE_LOOKRIGHT);
+	Player.SetWidthHeight(60, 40);
 
 	char font_path[64];
 	strcpy(font_path, IMAGES_FOLDER);
@@ -75,7 +74,114 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_MARCO, marco_path, GL_RGBA);
 	if (!res) return false;
 
+	char ninja_path[64];
+	strcpy(ninja_path, IMAGES_FOLDER);
+	strcat(ninja_path, "/");
+	strcat(ninja_path, "nyancat_ninja.png");
+	res = Data.LoadImage(IMG_NINJA, ninja_path, GL_RGBA);
+	if (!res) return false;
+
+	char gradient_path[64];
+	strcpy(gradient_path, IMAGES_FOLDER);
+	strcat(gradient_path, "/");
+	strcat(gradient_path, "nyancat_gradiente.png");
+	res = Data.LoadImage(IMG_GRADIENT, gradient_path, GL_RGBA);
+	if (!res) return false;
+
+	res = InitEnemies(level);
+	if (!res) return 
+	
 	GameInfoLayer.Init();
+
+	return res;
+}
+
+bool cGame::InitEnemies(int level) {
+	bool res;
+	FILE *fd;
+	int i, j, px, py;
+	char tile;
+
+	res = true;
+
+	string scene_path;
+	if (level == 1) scene_path = LEVELS_FOLDER "/" FILENAME "1" FILENAME_EXT;
+	else if (level == 2) scene_path = LEVELS_FOLDER "/" FILENAME "2" FILENAME_EXT;
+	else if (level == 3) scene_path = LEVELS_FOLDER "/" FILENAME "3" FILENAME_EXT;
+	else if (level == 10) scene_path = LEVELS_FOLDER "/" FILENAME "10" FILENAME_EXT;
+
+	fd = fopen(scene_path.c_str(), "r");
+	if (fd == NULL) return false;
+
+	for (j = SCENE_HEIGHT - 1; j >= 0; j--) {
+		px = 0;
+		py = j*TILE_SIZE;
+
+		for (i = 0; i<SCENE_WIDTH; i++) {
+			fscanf(fd, "%c", &tile);
+			if (tile == ENEMY_VER) {
+				cEnemyVertical enemy;
+				enemy.SetTile(i, j);
+				enemy.SetWidthHeight(60, 40);
+
+				EnemiesV.push_back(enemy);
+				//addEnemy(enemy);
+
+				Matrix map = Scene.GetMap();
+
+				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
+					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
+						map[j + jj][i + ii] = ENEMY_VER - 48;
+					}
+				}
+
+				Scene.SetMap(map);
+			}
+
+			else if (tile == ENEMY_HOR) {
+				cEnemyHorizontal enemy;
+				enemy.SetTile(i, j);
+				enemy.SetWidthHeight(60, 40);
+
+				EnemiesH.push_back(enemy);
+
+				//addEnemy(enemy);
+
+				Matrix map = Scene.GetMap();
+
+				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
+					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
+						map[j + jj][i + ii] = ENEMY_HOR - 48;
+					}
+				}
+
+				Scene.SetMap(map);
+			}
+
+			else if (tile == ENEMY_CIR) {
+				cEnemyCircle enemy;
+				enemy.SetTile(i, j);
+				enemy.SetWidthHeight(60, 40);
+
+				EnemiesC.push_back(enemy);
+
+				//addEnemy(enemy);
+
+				Matrix map = Scene.GetMap();
+
+				for (int ii = 0; ii < 60 / TILE_SIZE; ++ii) {
+					for (int jj = 0; jj < 40 / TILE_SIZE; ++jj) {
+						map[j + jj][i + ii] = ENEMY_CIR - 48;
+					}
+				}
+
+				Scene.SetMap(map);
+			}
+		}
+		fscanf(fd, "%c", &tile); //pass enter
+	}
+
+	fclose(fd);
 
 	return res;
 }
@@ -117,18 +223,39 @@ bool cGame::Process() {
 	if (keys[27]) res = false;
 
 	if (!isEndOfGame()) {
-		if (keys[GLUT_KEY_UP])
+		if (keys[GLUT_KEY_UP]) {
 			Player.MoveUp(Scene.GetMap());
-		else if (keys[GLUT_KEY_DOWN])
+			//keys[GLUT_KEY_UP] = false;
+		}
+		else if (keys[GLUT_KEY_DOWN]) {
 			Player.MoveDown(Scene.GetMap());
+			//keys[GLUT_KEY_DOWN] = false;
+		}
 
-		if (keys[GLUT_KEY_LEFT])
+		if (keys[GLUT_KEY_LEFT]) {
 			Player.MoveLeft(Scene.GetMap());
-		else if (keys[GLUT_KEY_RIGHT])
+			//keys[GLUT_KEY_LEFT] = false;
+		}
+		else if (keys[GLUT_KEY_RIGHT]) {
 			Player.MoveRight(Scene.GetMap());
+			//keys[GLUT_KEY_RIGHT] = false;
+		}
 
 		//Game Logic
 		Player.Logic(Scene.GetMap(), GAME_SCROLL);
+
+		Matrix map = Scene.GetMap();
+		for (int i = 0; i < EnemiesH.size(); ++i) {
+			EnemiesH[i].Logic(map);
+		}
+		for (int i = 0; i < EnemiesV.size(); ++i) {
+			EnemiesV[i].Logic(map);
+		}
+		for (int i = 0; i < EnemiesC.size(); ++i) {
+			EnemiesC[i].Logic(map);
+		}
+
+		Scene.SetMap(map);
 
 		isGameOver = Player.isGameOver();
 	}
@@ -155,9 +282,19 @@ void cGame::Render() {
 	MountainLayer.Draw(Data.GetID(IMG_LAYER2));
 
 	UpdateCameraScene();
-	Scene.Draw(Data.GetID(IMG_BLOCKS));
+	Scene.Draw(Data.GetID(IMG_SCENE));
 
 	Player.Draw(Data.GetID(IMG_PLAYER));
+
+	for (int i = 0; i < EnemiesH.size(); ++i) {
+		EnemiesH[i].Draw(Data.GetID(IMG_NINJA));
+	}
+	for (int i = 0; i < EnemiesV.size(); ++i) {
+		EnemiesV[i].Draw(Data.GetID(IMG_NINJA));
+	}
+	for (int i = 0; i < EnemiesC.size(); ++i) {
+		EnemiesC[i].Draw(Data.GetID(IMG_NINJA));
+	}
 	RestartCameraScene();
 
 	if (isEndOfGame()) RenderMessage();

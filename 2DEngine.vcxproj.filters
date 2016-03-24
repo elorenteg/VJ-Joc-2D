@@ -49,6 +49,14 @@
     </ClCompile>
     <ClCompile Include="cDataManager.cpp">
       <Filter>Source Files</Filter>
+    <ClCompile Include="cEnemyVertical.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cEnemyHorizontal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cEnemyCircle.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +97,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cDataManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cEnemyVertical.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cEnemyHorizontal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cEnemyCircle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

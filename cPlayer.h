@@ -11,4 +11,10 @@ public:
 
 	void Draw(int tex_id);
 	bool isGameOver();
+	
+	void Logic(Matrix& map, float cameraXScene);
+	void HitEnemy();
+
+private:
+	int lifes = 3;
 };
