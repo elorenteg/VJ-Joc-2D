@@ -27,6 +27,8 @@ bool cGameInfoLayer::Init() {
 
 void cGameInfoLayer::Draw() {
 	//glPushMatrix();
+
+	glColor3f(0.9f, 0.9f, 1.0f);
 	
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, Data.GetID(IMG_SCENE));
@@ -34,7 +36,7 @@ void cGameInfoLayer::Draw() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.8f); glVertex3f(0, GAME_HEIGHT- GAME_MARGIN, SCENE_DEPTH);
+		glTexCoord2f(0.0f, 0.8f); glVertex3f(0, GAME_HEIGHT-GAME_MARGIN, SCENE_DEPTH);
 		glTexCoord2f(9.0f, 0.8f); glVertex3f(GAME_WIDTH, GAME_HEIGHT - GAME_MARGIN, SCENE_DEPTH);
 		glTexCoord2f(9.0f, 1.2f); glVertex3f(GAME_WIDTH, GAME_HEIGHT, SCENE_DEPTH);
 		glTexCoord2f(0.0f, 1.2f); glVertex3f(0, GAME_HEIGHT, SCENE_DEPTH);

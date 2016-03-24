@@ -86,7 +86,7 @@ bool cScene::LoadLevel(int level) {
 				}
 
 				if (map[j][i] == GROUND) glColor3f(1.0f, 1.0f, 1.0f);
-				else glColor3f(0.8f, 0.8f, 1.0f);
+				else glColor3f(0.9f, 0.9f, 1.0f);
 
 				glTexCoord2f(coordxo_tile, coordyf_tile);	glVertex3i(px, py, SCENE_DEPTH);
 				glTexCoord2f(coordxf_tile, coordyf_tile);	glVertex3i(px + TILE_SIZE, py, SCENE_DEPTH);
