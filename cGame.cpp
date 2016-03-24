@@ -277,6 +277,8 @@ void cGame::Render() {
 	UpdateCameraScene();
 	Scene.Draw(Data.GetID(IMG_SCENE));
 
+	glColor3f(1.0f, 1.0f, 1.0f);
+
 	Player.Draw(Data.GetID(IMG_PLAYER));
 
 	for (int i = 0; i < EnemiesH.size(); ++i) {

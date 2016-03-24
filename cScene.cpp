@@ -74,14 +74,14 @@ bool cScene::LoadLevel(int level) {
 					case CLOUD_SUP_ESQ:
 					case CLOUD_SUP_CEN:
 					case CLOUD_SUP_DRE:
-						coordyo_tile = 0.5f;
-						coordyf_tile = 0.75f;
+						coordyo_tile = 0.4f;
+						coordyf_tile = 0.6f;
 						break;
 					case CLOUD_INF_ESQ:
 					case CLOUD_INF_CEN:
 					case CLOUD_INF_DRE:
-						coordyo_tile = 0.75f;
-						coordyf_tile = 1.0f;
+						coordyo_tile = 0.6f;
+						coordyf_tile = 0.8f;
 						break;
 				}
 
