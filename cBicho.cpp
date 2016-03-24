@@ -32,6 +32,18 @@ void cBicho::SetWidthHeight(int width, int height) {
 	h = height;
 }
 
+void cBicho::SetX(float posX) {
+	x = posX;
+}
+
+void cBicho::SetY(float posY) {
+	y = posY;
+}
+
+void cBicho::SetXWindow(float xWind) {
+	xWindow = xWind;
+}
+
 float cBicho::GetX() {
 	return x;
 }
@@ -64,21 +76,6 @@ void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
-}
-
-bool cBicho::InsideWindow(Matrix& map, float x, float y) {
-	bool inside = true;
-	x = x - xWindow;
-
-	char msgbuf[64];
-	sprintf(msgbuf, "[%f,%f] - %f\n", x, y, xWindow);
-	OutputDebugStringA(msgbuf);
-
-	if (x < 0 || y < 0) inside = false;
-	else if (x + w >= GAME_WIDTH) inside = false;
-	else if (y + h >= GAME_HEIGHT) inside = false;
-
-	return inside;
 }
 
 bool cBicho::MapCollidesUp(Matrix& map, float x, float y) {
@@ -122,6 +119,13 @@ bool cBicho::MapCollidesDown(Matrix& map, float x, float y) {
 				y = (tile_y + 1) * TILE_SIZE;
 			}
 			collides = true;
+		}
+
+		if (map[tile_y][tile_x + i] == 8) {
+			char msgbuf[64];
+			sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y, tile_x+i);
+			OutputDebugStringA(msgbuf);
+			HitEnemy();
 		}
 		i++;
 	}
@@ -221,15 +225,6 @@ void cBicho::MoveDown(Matrix& map) {
 	}
 }
 
-void cBicho::Logic(Matrix& map, float cameraXSceneInc) {
-	float alfa;
-
-	float aux = x + cameraXSceneInc;
-	if (!MapCollidesRight(map, aux, y)) x = aux;
-	
-	xWindow += cameraXSceneInc;
-}
-
 void cBicho::NextFrame(int max) {
 	delay++;
 	if (delay == FRAME_DELAY) {
@@ -249,4 +244,8 @@ int cBicho::GetState() {
 
 void cBicho::SetState(int s) {
 	state = s;
+}
+
+void cBicho::HitEnemy() {
+	OutputDebugStringA("cBicho - HIT\n");
 }
