@@ -1,5 +1,10 @@
 #include "cGame.h"
 
+string concat_path(string folder, string file) {
+	string path = folder + "/" + file;
+	return path;
+}
+
 cGame::cGame(void) {
 }
 
@@ -23,71 +28,54 @@ bool cGame::Init() {
 	glAlphaFunc(GL_GREATER, 0.05f);
 	glEnable(GL_ALPHA_TEST);
 
+	char path[64];
+
 	//Background initialization
-	char backgr_path[64];
-	strcpy(backgr_path, IMAGES_FOLDER);
-	strcat(backgr_path, "/");
-	strcat(backgr_path, "fondo_cielo.png");
-	res = Data.LoadImage(IMG_BACKGROUND, backgr_path, GL_RGBA);
+	strcpy(path, concat_path(IMAGES_FOLDER, "fondo_cielo.png").c_str());
+	res = Data.LoadImage(IMG_BACKGROUND, path, GL_RGBA);
 	if (!res) return false;
 
 	//Layer2 initialization
-	char layer2_path[64];
-	strcpy(layer2_path, IMAGES_FOLDER);
-	strcat(layer2_path, "/");
-	strcat(layer2_path, "fondo_capa2.png");
-	res = Data.LoadImage(IMG_LAYER2, layer2_path, GL_RGBA);
+	strcpy(path, concat_path(IMAGES_FOLDER, "fondo_capa2.png").c_str());
+	res = Data.LoadImage(IMG_LAYER2, path, GL_RGBA);
 	if (!res) return false;
 
 	//Scene map initialization
-	char scene_path[64];
-	strcpy(scene_path, IMAGES_FOLDER);
-	strcat(scene_path, "/");
-	strcat(scene_path, "escena.png");
-	res = Data.LoadImage(IMG_SCENE, scene_path, GL_RGBA);
+	strcpy(path, concat_path(IMAGES_FOLDER, "escena.png").c_str());
+	res = Data.LoadImage(IMG_SCENE, path, GL_RGBA);
 	if (!res) return false;
 	res = Scene.LoadLevel(level);
 	if (!res) return false;
 
 	//Player initialization
-	char player_path[64];
-	strcpy(player_path, IMAGES_FOLDER);
-	strcat(player_path, "/");
-	strcat(player_path, "nyancat_alas.png");
-	res = Data.LoadImage(IMG_PLAYER, player_path, GL_RGBA);
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_alas.png").c_str());
+	res = Data.LoadImage(IMG_PLAYER, path, GL_RGBA);
 	if (!res) return false;
 	Player.SetTile(2, SCENE_HEIGHT/2);
 	Player.SetWidthHeight(60, 40);
 
-	char font_path[64];
-	strcpy(font_path, IMAGES_FOLDER);
-	strcat(font_path, "/");
-	strcat(font_path, "font.png");
-	res = Data.LoadImage(IMG_FONT, font_path, GL_RGBA);
+	//Font initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "font.png").c_str());
+	res = Data.LoadImage(IMG_FONT, path, GL_RGBA);
 	if (!res) return false;
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 
-	char marco_path[64];
-	strcpy(marco_path, IMAGES_FOLDER);
-	strcat(marco_path, "/");
-	strcat(marco_path, "marco_rosa.png");
-	res = Data.LoadImage(IMG_MARCO, marco_path, GL_RGBA);
+	//Marco initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "marco_rosa.png").c_str());
+	res = Data.LoadImage(IMG_MARCO, path, GL_RGBA);
 	if (!res) return false;
 
-	char ninja_path[64];
-	strcpy(ninja_path, IMAGES_FOLDER);
-	strcat(ninja_path, "/");
-	strcat(ninja_path, "nyancat_ninja.png");
-	res = Data.LoadImage(IMG_NINJA, ninja_path, GL_RGBA);
+	//Ninja-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_ninja.png").c_str());
+	res = Data.LoadImage(IMG_NINJA, path, GL_RGBA);
 	if (!res) return false;
 
-	char gradient_path[64];
-	strcpy(gradient_path, IMAGES_FOLDER);
-	strcat(gradient_path, "/");
-	strcat(gradient_path, "nyancat_gradiente.png");
-	res = Data.LoadImage(IMG_GRADIENT, gradient_path, GL_RGBA);
+	//Gradient-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_gradiente.png").c_str());
+	res = Data.LoadImage(IMG_GRADIENT, path, GL_RGBA);
 	if (!res) return false;
 
+	//Enemies initialization
 	res = InitEnemies(level);
 	if (!res) return false;
 
