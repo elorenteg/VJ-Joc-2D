@@ -66,6 +66,13 @@ void cEnemyVertical::Logic(Matrix& map) {
 	}
 
 	bool move = false;
+	/*
+	if (y + inc*TILE_SIZE >= 0 && y + inc*TILE_SIZE < GAME_HEIGHT - GAME_MARGIN) {
+		if (inc > 0) move = MapCollidesUp(map, x, y + inc*TILE_SIZE);
+		else move = MapCollidesDown(map, x, y + inc*TILE_SIZE);
+	}
+	*/
+
 	if (time_state == 0) {
 		if (num_moves == 0) {
 			++state;
@@ -74,11 +81,11 @@ void cEnemyVertical::Logic(Matrix& map) {
 		}
 		else --num_moves;
 		time_state = FRAMES_MOVE;
-		move = true;
+		move *= true;
 	}
 	else --time_state;
 
-	if (move && (y + inc) / TILE_SIZE < SCENE_HEIGHT) {
+	if (move) {
 		for (int i = tile_x; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
 			for (int j = tile_y; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
 				map[j][i] = 0;

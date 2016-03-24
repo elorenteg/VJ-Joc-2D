@@ -35,7 +35,7 @@ void cEnemyCircle::Draw(int tex_id) {
 		break;
 	}
 
-	if (state == RIGHT || state == CENTER_R || state == DOWN) {
+	if (state == RIGHT || state == CENTER_R || state == UP) {
 		float aux = xo;
 		xo = xf;
 		xf = aux;
