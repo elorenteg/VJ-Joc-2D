@@ -12,10 +12,8 @@ bool cDataManager::prepareUserData() {
 	{
 		myfile << "high_score:0";
 		myfile.close();
-		OutputDebugStringA("File saved correctly.\n");
 	}
 	else {
-		OutputDebugStringA("Unable to open file.\n");
 		res = false;
 	}
 	return res;
