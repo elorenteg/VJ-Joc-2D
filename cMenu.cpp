@@ -34,8 +34,6 @@ bool cMenu::Init()
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 
-	DataManager.saveFile("HOLA.TXT", "pepe1\npepe2");
-
 	return res;
 }
 
