@@ -22,12 +22,18 @@ bool cGameInfoLayer::Init() {
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 
+	current_level = 1;
+	high_score = 2;
+	current_score = 0;
+	current_life = 3;
+
 	return res;
 }
 
 void cGameInfoLayer::Draw() {
 	//glPushMatrix();
 
+	// Background
 	glColor3f(0.9f, 0.9f, 1.0f);
 	
 	glEnable(GL_TEXTURE_2D);
@@ -46,21 +52,78 @@ void cGameInfoLayer::Draw() {
 
 	// Nivell
 	glColor3f(0.0f, 0.0f, 0.0f);
-	Font.drawText(0.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 90.0f, 25.0f, ABR_LEVEL_TEXT);
+	char level_text[32];
+	strcpy(level_text, ABR_LEVEL_TEXT);
+	strcat(level_text, ": ");
+	char level_value[8];
+	sprintf(level_value, "%d", current_level);
+	strcat(level_text, level_value);
+	Font.drawText(5.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 90.0f, 25.0f, level_text);
 	
 	// Vides
 	glColor3f(0.0f, 0.0f, 0.0f);
-	Font.drawText(125.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 75.0f, 25.0f, ABR_HEALTH_TEXT);
+	char life_text[32];
+	strcpy(life_text, ABR_HEALTH_TEXT);
+	strcat(life_text, ": ");
+	char life_value[8];
+	sprintf(life_value, "%d", current_life);
+	strcat(life_text, life_value);
+	Font.drawText(110.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 75.0f, 25.0f, life_text);
 	
 	// Puntuacio
 	glColor3f(0.0f, 0.0f, 0.0f);
-	Font.drawText(GAME_WIDTH - 350.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 135.0f, 25.0f, ABR_SCORE_TEXT);
+	char score_text[32];
+	strcpy(score_text, ABR_SCORE_TEXT);
+	strcat(score_text, ": ");
+	char score_value[8];
+	sprintf(score_value, "%d", current_score);
+	strcat(score_text, score_value);
+	Font.drawText(GAME_WIDTH - 275.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 135.0f, 25.0f, score_text);
 	
 	// Maxima Puntuacio
 	glColor3f(0.0f, 0.0f, 0.0f);
-	Font.drawText(GAME_WIDTH - 175.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 135.0f, 25.0f, ABR_HIGH_SCORE_TEXT);
+	char high_score_text[32];
+	strcpy(high_score_text, ABR_HIGH_SCORE_TEXT);
+	strcat(high_score_text, ": ");
+	char high_score_value[8];
+	sprintf(high_score_value, "%d", high_score);
+	strcat(high_score_text, high_score_value);
+	Font.drawText(GAME_WIDTH - 125.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 120.0f, 25.0f, high_score_text);
 	
 	//glPopMatrix();
+}
+
+void cGameInfoLayer::SetCurrentLevel(int level) {
+	current_level = level;
+}
+
+int cGameInfoLayer::GetCurrentLevel() {
+	return current_level;
+}
+
+int cGameInfoLayer::GetHighScore() {
+	return high_score;
+}
+
+void cGameInfoLayer::SetCurrentScore(int score) {
+	current_score = score;
+
+	if (current_score > high_score) {
+		high_score = current_score;
+		//TODO Guardarlo en persistencia
+	}
+}
+
+int cGameInfoLayer::GetCurrentScore() {
+	return current_score;
+}
+
+void cGameInfoLayer::SetCurrentLife(int life) {
+	current_life = life;
+}
+
+int cGameInfoLayer::GetCurrentLife() {
+	return current_life;
 }
 
 // Draw the rectangle
