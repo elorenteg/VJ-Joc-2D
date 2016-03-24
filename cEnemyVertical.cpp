@@ -78,7 +78,7 @@ void cEnemyVertical::Logic(Matrix& map) {
 	}
 	else --time_state;
 
-	inc *= TILE_SIZE;
+	inc *= TILE_SIZE / 2;
 
 	if (move && (y + inc) / TILE_SIZE < SCENE_HEIGHT) {
 		//map[tile_y][tile_x] = 0;

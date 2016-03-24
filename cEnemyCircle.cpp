@@ -92,8 +92,8 @@ void cEnemyCircle::Logic(Matrix& map) {
 	}
 	else --time_state;
 
-	incX *= TILE_SIZE;
-	incY *= TILE_SIZE;
+	incX *= TILE_SIZE / 2;
+	incY *= TILE_SIZE / 2;
 
 	if (move && (x + incX) / TILE_SIZE < SCENE_WIDTH && (y + incY) / TILE_SIZE < SCENE_HEIGHT) {
 		//map[tile_y][tile_x] = 0;

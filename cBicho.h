@@ -5,7 +5,7 @@
 #include "Globals.h"
 
 #define FRAME_DELAY		12
-#define STEP_LENGTH		5
+#define STEP_LENGTH		TILE_SIZE/2
 
 #define FRAME_0		0
 #define FRAME_1		1
