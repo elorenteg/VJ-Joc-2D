@@ -18,7 +18,7 @@ bool cMenu::Init()
 	currentState = MENU;
 
 	//Graphics initialization
-	glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
@@ -35,7 +35,7 @@ bool cMenu::Init()
 	if (!res) return false;
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
-
+	Sound.PlayCustomSound(SOUND_NYAN_BASE);
 	calculate_stars();
 
 	return res;
@@ -173,7 +173,7 @@ void cMenu::executeAction() {
 		currentState = GAME;
 	}
 	else if (actionSelected == optionsAction) {
-
+		Sound.StopCustomSound(); //TODO only to test
 	}
 	else if (actionSelected == stopAction) {
 		exit(0);

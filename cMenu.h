@@ -3,6 +3,7 @@
 #include "cData.h"
 #include "cDataManager.h"
 #include "cFont.h"
+#include "cSound.h"
 #include "Globals.h"
 
 #define MENU		0
@@ -41,6 +42,7 @@ private:
 	cData Data;
 	cFont Font;
 	cDataManager DataManager;
+	cSound Sound;
 	bool processingKey;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/

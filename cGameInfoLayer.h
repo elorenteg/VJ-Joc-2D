@@ -5,10 +5,10 @@
 #include "cFont.h"
 #include "Globals.h"
 
-#define ABR_LEVEL_TEXT		"LVL"
-#define ABR_HEALTH_TEXT		"VIDA"
-#define ABR_SCORE_TEXT		"PUNT."
-#define ABR_HIGH_SCORE_TEXT		"RECORD"
+#define ABR_LEVEL_TEXT		"NIVELL: "
+#define ABR_HEALTH_TEXT		"VIDES: "
+#define ABR_SCORE_TEXT		"PUNTUACIO: "
+#define ABR_HIGH_SCORE_TEXT	"MAX. PUNT: "
 
 class cGameInfoLayer {
 public:
@@ -26,4 +26,6 @@ private:
 	int high_score;
 	int current_score;
 	int current_life;
+
+	void drawRectangle(float x, float y, float z, float width, float height);
 };
