@@ -1,5 +1,7 @@
 #include "cGame.h"
 
+bool firstRender;
+
 string concat_path(string folder, string file) {
 	string path = folder + "/" + file;
 	return path;
@@ -85,6 +87,8 @@ bool cGame::Init() {
 	if (!res) return false;
 
 	GameInfoLayer.Init();
+
+	firstRender = true;
 
 	return res;
 }
@@ -184,6 +188,11 @@ bool cGame::Loop() {
 
 	res = Process();
 	if (res) Render();
+
+	if (firstRender) {
+		next_game_tick = GetTickCount();
+		firstRender = false;
+	}
 
 	next_game_tick += SKIP_TICKS;
 	sleep_time = next_game_tick - GetTickCount();
