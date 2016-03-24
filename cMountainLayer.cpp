@@ -8,7 +8,7 @@ void cMountainLayer::Draw(int tex_id) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 
-	glColor3f(0.7f, 0.7f, 1.0f);
+	glColor3f(0.9f, 0.9f, 1.0f);
 
 	glBegin(GL_QUADS);
 	glTexCoord2f(texX, 1.0f); glVertex3i(0, 0, DEPTH);
