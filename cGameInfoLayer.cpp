@@ -13,16 +13,36 @@ bool cGameInfoLayer::Init() {
 	res = Data.LoadImage(IMG_FONT, font_path, GL_RGBA);
 	if (!res) return false;
 
+	char scene_path[64];
+	strcpy(scene_path, IMAGES_FOLDER);
+	strcat(scene_path, "/");
+	strcat(scene_path, "escena.png");
+	res = Data.LoadImage(IMG_SCENE, scene_path, GL_RGBA);
+	if (!res) return false;
+
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 
 	return res;
 }
 
 void cGameInfoLayer::Draw() {
-	glPushMatrix();
+	//glPushMatrix();
+
+	glColor3f(0.9f, 0.9f, 1.0f);
 	
-	//glColor3f(1.0f, 1.0f, 0.0f);
-	//drawRectangle(0.0f, GAME_HEIGHT - 25, -2.0f, GAME_WIDTH, 25.0f);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, Data.GetID(IMG_SCENE));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.8f); glVertex3f(0, GAME_HEIGHT-GAME_MARGIN, SCENE_DEPTH);
+		glTexCoord2f(9.0f, 0.8f); glVertex3f(GAME_WIDTH, GAME_HEIGHT - GAME_MARGIN, SCENE_DEPTH);
+		glTexCoord2f(9.0f, 1.2f); glVertex3f(GAME_WIDTH, GAME_HEIGHT, SCENE_DEPTH);
+		glTexCoord2f(0.0f, 1.2f); glVertex3f(0, GAME_HEIGHT, SCENE_DEPTH);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
 
 	// Nivell
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -40,7 +60,7 @@ void cGameInfoLayer::Draw() {
 	glColor3f(0.0f, 0.0f, 0.0f);
 	Font.drawText(GAME_WIDTH - 175.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 135.0f, 25.0f, ABR_HIGH_SCORE_TEXT);
 	
-	glPopMatrix();
+	//glPopMatrix();
 }
 
 // Draw the rectangle

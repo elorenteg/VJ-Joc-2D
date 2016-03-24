@@ -5,12 +5,12 @@
 #include <windows.h>
 
 #define SCENE_WIDTH		90
-#define SCENE_HEIGHT	24
+#define SCENE_HEIGHT	25
 
 #define FILENAME		"level"
 #define FILENAME_EXT	".txt"
 
-#define TILE_SIZE		20
+#define TILE_SIZE		18
 
 class cScene
 {

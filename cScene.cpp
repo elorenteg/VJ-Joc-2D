@@ -74,19 +74,19 @@ bool cScene::LoadLevel(int level) {
 					case CLOUD_SUP_ESQ:
 					case CLOUD_SUP_CEN:
 					case CLOUD_SUP_DRE:
-						coordyo_tile = 0.5f;
-						coordyf_tile = 0.75f;
+						coordyo_tile = 0.4f;
+						coordyf_tile = 0.6f;
 						break;
 					case CLOUD_INF_ESQ:
 					case CLOUD_INF_CEN:
 					case CLOUD_INF_DRE:
-						coordyo_tile = 0.75f;
-						coordyf_tile = 1.0f;
+						coordyo_tile = 0.6f;
+						coordyf_tile = 0.8f;
 						break;
 				}
 
 				if (map[j][i] == GROUND) glColor3f(1.0f, 1.0f, 1.0f);
-				else glColor3f(0.8f, 0.8f, 1.0f);
+				else glColor3f(0.9f, 0.9f, 1.0f);
 
 				glTexCoord2f(coordxo_tile, coordyf_tile);	glVertex3i(px, py, SCENE_DEPTH);
 				glTexCoord2f(coordxf_tile, coordyf_tile);	glVertex3i(px + TILE_SIZE, py, SCENE_DEPTH);
