@@ -110,7 +110,10 @@ void cGameInfoLayer::SetCurrentScore(int score) {
 
 	if (current_score > high_score) {
 		high_score = current_score;
-		//TODO Guardarlo en persistencia
+
+		char high_score_value[8];
+		sprintf(high_score_value, "%d", high_score);
+		DataManager.saveMaxScore(high_score_value);
 	}
 }
 

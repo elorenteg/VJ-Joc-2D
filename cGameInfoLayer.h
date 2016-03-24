@@ -2,6 +2,7 @@
 
 #include "cTexture.h"
 #include "cData.h"
+#include "cDataManager.h"
 #include "cFont.h"
 #include "Globals.h"
 
@@ -29,6 +30,7 @@ public:
 private:
 	cFont Font;
 	cData Data;
+	cDataManager DataManager;
 
 	int current_level;
 	int high_score;
