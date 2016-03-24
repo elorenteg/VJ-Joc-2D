@@ -34,6 +34,8 @@ bool cMenu::Init()
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 
+	Sound.PlayCustomSound(SOUND_NYAN_BASE);
+
 	return res;
 }
 
@@ -150,7 +152,7 @@ void cMenu::executeAction() {
 		currentState = GAME;
 	}
 	else if (actionSelected == optionsAction) {
-
+		Sound.StopCustomSound(); //TODO only to test
 	}
 	else if (actionSelected == stopAction) {
 		exit(0);
