@@ -49,6 +49,7 @@
     </ClCompile>
     <ClCompile Include="cDataManager.cpp">
       <Filter>Source Files</Filter>
+	</ClCompile>
     <ClCompile Include="cEnemyVertical.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
