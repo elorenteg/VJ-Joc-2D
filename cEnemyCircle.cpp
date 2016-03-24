@@ -2,6 +2,7 @@
 
 cEnemyCircle::cEnemyCircle() {
 	state = CENTER_L;
+	num_moves = TILES_MOVE;
 	time_state = FRAMES_MOVE;
 }
 
@@ -57,58 +58,44 @@ void cEnemyCircle::Logic(Matrix& map) {
 
 	float incX = 0;
 	float incY = 0;
-	switch (state) {
+	switch (moves[state]) {
 		case LEFT:
-			if (time_state == 0) {
-				state = UP;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
-			incX = -1;
-			break;
-		case UP:
-			if (time_state == 0) {
-				state = CENTER_R;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
 			incY = -1;
 			break;
+		case UP:
+			incX = 1;
+			break;
 		case CENTER_R:
-			if (time_state == 0) {
-				state = RIGHT;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
-			incX = 1;
-			break;
-		case RIGHT:
-			if (time_state == 0) {
-				state = DOWN;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
-			incX = 1;
-			break;
-		case DOWN:
-			if (time_state == 0) {
-				state = CENTER_L;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
 			incY = 1;
 			break;
-		case CENTER_L:
-			if (time_state == 0) {
-				state = LEFT;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
+		case RIGHT:
+			incY = 1;
+			break;
+		case DOWN:
 			incX = -1;
+			break;
+		case CENTER_L:
+			incY = -1;
 			break;
 	}
 
-	if ((x + incX) / TILE_SIZE < SCENE_WIDTH && (y + incY) / TILE_SIZE < SCENE_HEIGHT) {
+	bool move = false;
+	if (time_state == 0) {
+		if (num_moves == 0) {
+			++state;
+			state = state % MAX_MOVES;
+			num_moves = TILES_MOVE;
+		}
+		else --num_moves;
+		time_state = FRAMES_MOVE;
+		move = true;
+	}
+	else --time_state;
+
+	incX *= TILE_SIZE;
+	incY *= TILE_SIZE;
+
+	if (move && (x + incX) / TILE_SIZE < SCENE_WIDTH && (y + incY) / TILE_SIZE < SCENE_HEIGHT) {
 		//map[tile_y][tile_x] = 0;
 		//map[(y + inc)/TILE_SIZE][tile_x] = ENEMY_HOR - 48;
 

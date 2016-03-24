@@ -8,7 +8,9 @@
 #define	RIGHT		2
 #define	CENTER_L	3
 
-#define FRAMES_MOVE	20
+#define FRAMES_MOVE	15
+#define TILES_MOVE	3
+#define MAX_MOVES	4
 
 class cEnemyHorizontal : public cBicho
 {
@@ -21,6 +23,9 @@ public:
 	void Logic(Matrix& map);
 
 private:
-	int state;
+	int num_moves;
 	int time_state;
+
+	int state;
+	int moves[MAX_MOVES] = { LEFT, CENTER_R, RIGHT, CENTER_L };
 };

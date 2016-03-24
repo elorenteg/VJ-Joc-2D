@@ -2,6 +2,7 @@
 
 cEnemyVertical::cEnemyVertical() {
 	state = CENTER_D;
+	num_moves = TILES_MOVE;
 	time_state = FRAMES_MOVE;
 }
 
@@ -49,44 +50,39 @@ void cEnemyVertical::Logic(Matrix& map) {
 	int tile_y = y / TILE_SIZE;
 
 	float inc = 0;
-	switch (state) {
+	switch (moves[state]) {
 		case UP:
-			if (time_state == 0) {
-				state = CENTER_D;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
-			inc = -1;
+			inc = 1;
 			break;
 		case CENTER_D:
-			if (time_state == 0) {
-				state = DOWN;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
 			inc = -1;
 			break;
 		case DOWN:
-			if (time_state == 0) {
-				state = CENTER_U;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
-			inc = 1;
+			inc = -1;
 			break;
 		case CENTER_U:
-			if (time_state == 0) {
-				state = UP;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
 			inc = 1;
 			break;
 	}
 
-	if ((y + inc) / TILE_SIZE < SCENE_HEIGHT) {
-		map[tile_y][tile_x] = 0;
-		map[(y + inc)/TILE_SIZE][tile_x] = ENEMY_VER-48;
+	bool move = false;
+	if (time_state == 0) {
+		if (num_moves == 0) {
+			++state;
+			state = state % MAX_MOVES;
+			num_moves = TILES_MOVE;
+		}
+		else --num_moves;
+		time_state = FRAMES_MOVE;
+		move = true;
+	}
+	else --time_state;
+
+	inc *= TILE_SIZE;
+
+	if (move && (y + inc) / TILE_SIZE < SCENE_HEIGHT) {
+		//map[tile_y][tile_x] = 0;
+		//map[(y + inc)/TILE_SIZE][tile_x] = ENEMY_VER-48;
 
 		SetY(y + inc);
 	}
