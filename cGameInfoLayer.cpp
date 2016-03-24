@@ -26,7 +26,7 @@ bool cGameInfoLayer::Init() {
 }
 
 void cGameInfoLayer::Draw() {
-	glPushMatrix();
+	//glPushMatrix();
 	
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, Data.GetID(IMG_SCENE));
@@ -34,9 +34,9 @@ void cGameInfoLayer::Draw() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.8f); glVertex3f(0, GAME_HEIGHT-30, SCENE_DEPTH);
-		glTexCoord2f(7.0f, 0.8f); glVertex3f(GAME_WIDTH, GAME_HEIGHT - 30, SCENE_DEPTH);
-		glTexCoord2f(7.0f, 1.2f); glVertex3f(GAME_WIDTH, GAME_HEIGHT, SCENE_DEPTH);
+		glTexCoord2f(0.0f, 0.8f); glVertex3f(0, GAME_HEIGHT- GAME_MARGIN, SCENE_DEPTH);
+		glTexCoord2f(9.0f, 0.8f); glVertex3f(GAME_WIDTH, GAME_HEIGHT - GAME_MARGIN, SCENE_DEPTH);
+		glTexCoord2f(9.0f, 1.2f); glVertex3f(GAME_WIDTH, GAME_HEIGHT, SCENE_DEPTH);
 		glTexCoord2f(0.0f, 1.2f); glVertex3f(0, GAME_HEIGHT, SCENE_DEPTH);
 	glEnd();
 
@@ -58,7 +58,7 @@ void cGameInfoLayer::Draw() {
 	glColor3f(0.0f, 0.0f, 0.0f);
 	Font.drawText(GAME_WIDTH - 175.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 135.0f, 25.0f, ABR_HIGH_SCORE_TEXT);
 	
-	glPopMatrix();
+	//glPopMatrix();
 }
 
 // Draw the rectangle

@@ -16,6 +16,7 @@ using namespace std;
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480
+#define GAME_MARGIN 30
 #define GAME_DEPTH	10
 
 #define GAME_SCROLL 1.2f

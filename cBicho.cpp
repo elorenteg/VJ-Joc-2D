@@ -207,7 +207,7 @@ void cBicho::MoveUp(Matrix& map) {
 	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
 		float aux = y + step_length;
 
-		if (aux+ h < GAME_HEIGHT && !MapCollidesUp(map, x, aux)) {
+		if (aux+ h < GAME_HEIGHT-GAME_MARGIN && !MapCollidesUp(map, x, aux)) {
 			y = aux;
 			return;
 		}
