@@ -2,6 +2,8 @@
 
 cMenu::cMenu(void)
 {
+	starsX = vector<float>(maxStars);
+	starsY = vector<float>(maxStars);
 }
 
 cMenu::~cMenu(void)
@@ -16,7 +18,7 @@ bool cMenu::Init()
 	currentState = MENU;
 
 	//Graphics initialization
-	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
@@ -33,6 +35,8 @@ bool cMenu::Init()
 	if (!res) return false;
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
+
+	calculate_stars();
 
 	return res;
 }
@@ -51,6 +55,12 @@ bool cMenu::Loop()
 	}
 	else {
 		// Shit, we are running behind!
+	}
+
+	--time_same_stars;
+	if (time_same_stars == 0) {
+		time_same_stars = 5;
+		calculate_stars();
 	}
 
 	return res;
@@ -105,7 +115,20 @@ bool cMenu::Process()
 void cMenu::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 	glLoadIdentity();
+
+	for (int i = 0; i < starsX.size(); ++i) {
+		float x = starsX[i];
+		float y = starsY[i];
+		glColor3f(1.0f, 1.0f, 0.0f);
+		glBegin(GL_QUADS);
+			glVertex3f(x, y, MSS_DEPTH-2);
+			glVertex3f(x+3.5f, y, MSS_DEPTH-2);
+			glVertex3f(x+3.5f, y+3.5f, MSS_DEPTH-2);
+			glVertex3f(x, y+3.5f, MSS_DEPTH-2);
+		glEnd();
+	}
 
 	glPushMatrix();
 		glColor3f(1.0f, 1.0f, 1.0f);
@@ -123,19 +146,19 @@ void cMenu::Render()
 			glColor3f(1.0f, 0.0f, 0.0f);
 		else
 			glColor3f(0.5f, 0.5f, 0.5f);
-		drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 75.0f, -1.0f, 300.0f, 75.0f);
+		drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 75.0f, MSS_DEPTH-1, 300.0f, 75.0f);
 
 		if (actionSelected == optionsAction)
 			glColor3f(0.0f, 1.0f, 0.0f);
 		else
 			glColor3f(0.5f, 0.5f, 0.5f);
-		drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 25.0f, -1.0f, 300.0f, 75.0f);
+		drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 25.0f, MSS_DEPTH-1, 300.0f, 75.0f);
 
 	if (actionSelected == stopAction)
 		glColor3f(0.0f, 0.0f, 1.0f);
 	else
 		glColor3f(0.5f, 0.5f, 0.5f);
-	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 125.0f, -1.0f, 300.0f, 75.0f);
+	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 125.0f, MSS_DEPTH-1, 300.0f, 75.0f);
 
 	glutSwapBuffers();
 }
@@ -186,4 +209,17 @@ void cMenu::drawRectangle(float x, float y, float z, float width, float height) 
 	glVertex3f(x + width, y + height, z);
 	glVertex3f(x, y + height, z);
 	glEnd();
+}
+
+void cMenu::calculate_stars() {
+	for (int i = 0; i < maxStars; ++i) {
+		int w = rand() % GAME_WIDTH * 100;
+		int h = rand() % GAME_HEIGHT * 100;
+
+		float x = w / 100;
+		float y = h / 100;
+
+		starsX[i] = x;
+		starsY[i] = y;
+	}
 }

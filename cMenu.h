@@ -59,4 +59,11 @@ private:
 	void moveAction(int moveTo);
 	void executeAction();
 	void drawRectangle(float x, float y, float z, float width, float height);
+
+	int maxStars = 50;
+	int time_same_stars = 5;
+	vector<float> starsX;
+	vector<float> starsY;
+
+	void calculate_stars();
 };
