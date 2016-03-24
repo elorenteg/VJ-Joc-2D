@@ -1,7 +1,8 @@
 #include "cEnemyHorizontal.h"
 
 cEnemyHorizontal::cEnemyHorizontal() {
-	state = CENTER_L;
+	state = 0;
+	num_moves = TILES_MOVE;
 	time_state = FRAMES_MOVE;
 }
 
@@ -34,7 +35,7 @@ void cEnemyHorizontal::Draw(int tex_id) {
 		break;
 	}
 
-	if (state == RIGHT || state == CENTER_L) {
+	if (moves[state] == RIGHT || moves[state] == CENTER_L) {
 		float aux = xo;
 		xo = xf;
 		xf = aux;
@@ -56,44 +57,39 @@ void cEnemyHorizontal::Logic(Matrix& map) {
 	int tile_y = y / TILE_SIZE;
 
 	float inc = 0;
-	switch (state) {
+	switch (moves[state]) {
 		case LEFT:
-			if (time_state == 0) {
-				state = CENTER_R;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
 			inc = -1;
 			break;
 		case CENTER_R:
-			if (time_state == 0) {
-				state = RIGHT;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
 			inc = -1;
 			break;
 		case RIGHT:
-			if (time_state == 0) {
-				state = CENTER_L;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
 			inc = 1;
 			break;
 		case CENTER_L:
-			if (time_state == 0) {
-				state = LEFT;
-				time_state = FRAMES_MOVE;
-			}
-			else --time_state;
 			inc = 1;
 			break;
 	}
 
-	if ((x + inc) / TILE_SIZE < SCENE_WIDTH) {
-		map[tile_y][tile_x] = 0;
-		map[(y + inc)/TILE_SIZE][tile_x] = ENEMY_HOR - 48;
+	bool move = false;
+	if (time_state == 0) {
+		if (num_moves == 0) {
+			++state;
+			state = state % MAX_MOVES;
+			num_moves = TILES_MOVE;
+		}
+		else --num_moves;
+		time_state = FRAMES_MOVE;
+		move = true;
+	}
+	else --time_state;
+
+	inc *= TILE_SIZE / 2;
+
+	if (move && (x + inc) / TILE_SIZE < SCENE_WIDTH) {
+		//map[tile_y][tile_x] = 0;
+		//map[(y + inc)/TILE_SIZE][tile_x] = ENEMY_HOR - 48;
 
 		SetX(x + inc);
 	}

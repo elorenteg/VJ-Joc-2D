@@ -8,7 +8,9 @@
 #define	DOWN		2
 #define	CENTER_U	3
 
-#define FRAMES_MOVE	20
+#define FRAMES_MOVE	15
+#define TILES_MOVE	3
+#define MAX_MOVES	4
 
 class cEnemyVertical : public cBicho
 {
@@ -21,6 +23,9 @@ public:
 	void Logic(Matrix& map);
 
 private:
-	int state;
+	int num_moves;
 	int time_state;
+
+	int state;
+	int moves[MAX_MOVES] = { UP, CENTER_D, DOWN, CENTER_U };
 };
