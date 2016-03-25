@@ -1,7 +1,8 @@
 #include "cEnemyVertical.h"
 
 cEnemyVertical::cEnemyVertical() {
-	state = CENTER_D;
+	state = UP;
+	//num_moves = rand() % TILES_MOVE;
 	num_moves = TILES_MOVE;
 	time_state = FRAMES_MOVE;
 }
@@ -9,7 +10,6 @@ cEnemyVertical::cEnemyVertical() {
 cEnemyVertical::~cEnemyVertical() {}
 
 void cEnemyVertical::Draw(int tex_id) {
-	//OutputDebugStringA("cEnemyVertical - Draw\n");
 	float xo, yo, xf, yf;
 
 	switch (GetFrame()) {
@@ -46,32 +46,32 @@ void cEnemyVertical::Logic(Matrix& map) {
 	float x = GetX();
 	float y = GetY();
 
-	int tile_x = x / TILE_SIZE;
-	int tile_y = y / TILE_SIZE;
+	int w = GetWidth();
+	int h = GetHeight();
 
 	float inc = 0;
 	switch (moves[state]) {
 		case UP:
 			inc = 1;
 			break;
-		case CENTER_D:
-			inc = -1;
-			break;
 		case DOWN:
 			inc = -1;
 			break;
-		case CENTER_U:
-			inc = 1;
-			break;
 	}
 
-	bool move = false;
-	/*
-	if (y + inc*TILE_SIZE >= 0 && y + inc*TILE_SIZE < GAME_HEIGHT - GAME_MARGIN) {
-		if (inc > 0) move = MapCollidesUp(map, x, y + inc*TILE_SIZE);
-		else move = MapCollidesDown(map, x, y + inc*TILE_SIZE);
+	int tile_x = x / TILE_SIZE;
+	int tile_y = y / TILE_SIZE;
+
+	float aux = y + inc*TILE_SIZE;
+	int tile_y_new = aux / TILE_SIZE;
+	SetMapValue(map, tile_x, tile_y, 0);
+
+	bool move;
+	if (aux >= 0 && aux + h <= GAME_HEIGHT - GAME_MARGIN) {
+		if (inc > 0) move = !MapCollidesUp(map, x, y);
+		else move = !MapCollidesDown(map, x, aux);
 	}
-	*/
+	else move = false;
 
 	if (time_state == 0) {
 		if (num_moves == 0) {
@@ -83,21 +83,16 @@ void cEnemyVertical::Logic(Matrix& map) {
 		time_state = FRAMES_MOVE;
 		move *= true;
 	}
-	else --time_state;
+	else {
+		--time_state;
+		move = false;
+	}
 
 	if (move) {
-		for (int i = tile_x; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
-			for (int j = tile_y; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
-				map[j][i] = 0;
-			}
-		}
-
-		for (int i = tile_x; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
-			for (int j = tile_y + inc; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
-				//map[j][i] = ENEMY_VER - 48;
-			}
-		}
-
-		SetY(y + inc * TILE_SIZE);
+		SetMapValue(map, tile_x, tile_y_new, ENEMY_VER - 48);
+		SetTile(tile_x, tile_y_new);
+	}
+	else {
+		SetMapValue(map, tile_x, tile_y, ENEMY_VER - 48);
 	}
 }

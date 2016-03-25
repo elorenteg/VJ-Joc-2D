@@ -120,51 +120,24 @@ bool cGame::InitEnemies(int level) {
 				cEnemyVertical enemy;
 				enemy.SetTile(i, j);
 				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_VER - 48);
 				EnemiesV.push_back(enemy);
-
-				Matrix map = Scene.GetMap();
-
-				for (int ii = 0; ii < BICHO_WIDTH / TILE_SIZE; ++ii) {
-					for (int jj = 0; jj < BICHO_HEIGHT / TILE_SIZE; ++jj) {
-						map[j + jj][i + ii] = ENEMY_VER - 48;
-					}
-				}
-
-				Scene.SetMap(map);
 			}
 
 			else if (tile == ENEMY_HOR) {
 				cEnemyHorizontal enemy;
 				enemy.SetTile(i, j);
 				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
 				EnemiesH.push_back(enemy);
-
-				Matrix map = Scene.GetMap();
-
-				for (int ii = 0; ii < BICHO_WIDTH / TILE_SIZE; ++ii) {
-					for (int jj = 0; jj < BICHO_HEIGHT / TILE_SIZE; ++jj) {
-						map[j + jj][i + ii] = ENEMY_HOR - 48;
-					}
-				}
-
-				Scene.SetMap(map);
 			}
 
 			else if (tile == ENEMY_CIR) {
 				cEnemyCircle enemy;
 				enemy.SetTile(i, j);
 				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_CIR - 48);
 				EnemiesC.push_back(enemy);
-
-				Matrix map = Scene.GetMap();
-
-				for (int ii = 0; ii < BICHO_WIDTH / TILE_SIZE; ++ii) {
-					for (int jj = 0; jj < BICHO_HEIGHT / TILE_SIZE; ++jj) {
-						map[j + jj][i + ii] = ENEMY_CIR - 48;
-					}
-				}
-
-				Scene.SetMap(map);
 			}
 		}
 		fscanf(fd, "%c", &tile); //pass enter
@@ -248,7 +221,6 @@ bool cGame::Process() {
 		for (int i = 0; i < EnemiesC.size(); ++i) {
 			EnemiesC[i].Logic(map);
 		}
-
 		Scene.SetMap(map);
 
 		isGameOver = Player.isGameOver();

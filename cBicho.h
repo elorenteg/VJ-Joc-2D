@@ -8,7 +8,7 @@
 #define BICHO_HEIGHT	TILE_SIZE*2
 
 #define FRAME_DELAY		12
-#define STEP_LENGTH		TILE_SIZE/4
+#define STEP_LENGTH		TILE_SIZE
 
 #define FRAME_0		0
 #define FRAME_1		1
@@ -36,6 +36,7 @@ public:
 	void SetX(float x);
 	void SetY(float y);
 	void SetXWindow(float xWindow);
+	void SetMapValue(Matrix& map, int tile_x, int tile_y, int value);
 
 	float GetX();
 	float GetY();
@@ -54,6 +55,7 @@ public:
 	void MoveUp(Matrix& map);
 	void MoveDown(Matrix& map);
 
+	bool isEnemy(Matrix& map, int tile_x, int tile_y);
 	virtual void HitEnemy();
 
 	int  GetState();

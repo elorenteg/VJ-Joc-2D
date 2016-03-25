@@ -91,10 +91,17 @@ bool cBicho::MapCollidesUp(Matrix& map, float x, float y) {
 	int i = 0;
 	while ((i < width_tiles) && !collides) {
 		if (map[tile_y][tile_x + i] != 0) {
-			if (fmod(y, TILE_SIZE) != 0) {
-				y = (tile_y + 1) * TILE_SIZE;
-			}
+			//if (fmod(y, TILE_SIZE) != 0) {
+			//	y = (tile_y + 1) * TILE_SIZE;
+			//}
 			collides = true;
+
+			if (isEnemy(map, tile_x + i, tile_y)) {
+				char msgbuf[64];
+				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y, tile_x + i);
+				OutputDebugStringA(msgbuf);
+				HitEnemy();
+			}
 		}
 		i++;
 	}
@@ -115,13 +122,13 @@ bool cBicho::MapCollidesDown(Matrix& map, float x, float y) {
 	int i = 0;
 	while ((i < width_tiles) && !collides) {
 		if (map[tile_y][tile_x + i] != 0) {
-			if (fmod(y, TILE_SIZE) != 0) {
-				y = (tile_y + 1) * TILE_SIZE;
-			}
+			//if (fmod(y, TILE_SIZE) != 0) {
+			//	y = (tile_y + 1) * TILE_SIZE;
+			//}
 			collides = true;
 		}
 
-		if (map[tile_y][tile_x + i] == 8) {
+		if (isEnemy(map,tile_x+i,tile_y)) {
 			char msgbuf[64];
 			sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y, tile_x+i);
 			OutputDebugStringA(msgbuf);
@@ -146,10 +153,17 @@ bool cBicho::MapCollidesLeft(Matrix& map, float x, float y) {
 	int i = 0;
 	while ((i < height_tiles) && !collides) {
 		if (map[tile_y + i][tile_x] != 0) {
-			if (fmod(x, TILE_SIZE) != 0) {
-				x = (tile_x + 1) * TILE_SIZE;
-			}
+			//if (fmod(x, TILE_SIZE) != 0) {
+			//	x = (tile_x + 1) * TILE_SIZE;
+			//}
 			collides = true;
+
+			if (isEnemy(map, tile_x, tile_y+i)) {
+				char msgbuf[64];
+				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y+i, tile_x);
+				OutputDebugStringA(msgbuf);
+				HitEnemy();
+			}
 		}
 		i++;
 	}
@@ -170,10 +184,17 @@ bool cBicho::MapCollidesRight(Matrix& map, float x, float y) {
 	int i = 0;
 	while ((i < height_tiles) && !collides) {
 		if (map[tile_y + i][tile_x] != 0) {
-			if (fmod(x, TILE_SIZE) != 0) {
-				x = (tile_x + 1) * TILE_SIZE;
-			}
+			//if (fmod(x, TILE_SIZE) != 0) {
+			//	x = (tile_x + 1) * TILE_SIZE;
+			//}
 			collides = true;
+
+			if (isEnemy(map, tile_x, tile_y+i)) {
+				char msgbuf[64];
+				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y+i, tile_x);
+				OutputDebugStringA(msgbuf);
+				HitEnemy();
+			}
 		}
 		i++;
 	}
@@ -248,4 +269,19 @@ void cBicho::SetState(int s) {
 
 void cBicho::HitEnemy() {
 	OutputDebugStringA("cBicho - HIT\n");
+}
+
+void cBicho::SetMapValue(Matrix& map, int tile_x, int tile_y, int value) {
+	for (int i = tile_x; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
+		for (int j = tile_y; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
+			map[j][i] = value;
+		}
+	}
+}
+
+bool cBicho::isEnemy(Matrix& map, int tile_x, int tile_y) {
+	if (map[tile_y][tile_x] == ENEMY_VER - 48) return true;
+	if (map[tile_y][tile_x] == ENEMY_HOR - 48) return true;
+	if (map[tile_y][tile_x] == ENEMY_CIR - 48) return true;
+	return false;
 }
