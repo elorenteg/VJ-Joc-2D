@@ -1,7 +1,7 @@
 #include "cEnemyHorizontal.h"
 
 cEnemyHorizontal::cEnemyHorizontal() {
-	state = LEFT;
+	state = rand() % MAX_MOVES;
 	//num_moves = TILES_MOVE;
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
@@ -49,7 +49,7 @@ void cEnemyHorizontal::Draw(int tex_id) {
 	NextFrame(5);
 }
 
-void cEnemyHorizontal::Logic(Matrix& map) {
+void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
 	float x = GetX();
 	float y = GetY();
 
@@ -97,4 +97,6 @@ void cEnemyHorizontal::Logic(Matrix& map) {
 	else {
 		SetMapValue(map, tile_x, tile_y, ENEMY_HOR - 48);
 	}
+
+	SetXWindow(GetXWindow() + cameraXSceneInc);
 }

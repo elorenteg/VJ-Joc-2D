@@ -1,8 +1,8 @@
 #include "cEnemyCircle.h"
 
 cEnemyCircle::cEnemyCircle() {
-	state = CENTER_L;
-	num_moves = TILES_MOVE;
+	state = rand() % MAX_MOVES;
+	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
 }
 
@@ -35,7 +35,7 @@ void cEnemyCircle::Draw(int tex_id) {
 		break;
 	}
 
-	if (state == RIGHT || state == CENTER_R || state == UP) {
+	if (state == RIGHT || state == UP) {
 		float aux = xo;
 		xo = xf;
 		xf = aux;
@@ -49,64 +49,65 @@ void cEnemyCircle::Draw(int tex_id) {
 	NextFrame(5);
 }
 
-void cEnemyCircle::Logic(Matrix& map) {
+void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
 	float x = GetX();
 	float y = GetY();
 
-	int tile_x = x / TILE_SIZE;
-	int tile_y = y / TILE_SIZE;
+	int w = GetWidth();
+	int h = GetHeight();
 
 	float incX = 0;
 	float incY = 0;
 	switch (moves[state]) {
-		case LEFT:
-			incY = -1;
-			break;
 		case UP:
-			incX = 1;
-			break;
-		case CENTER_R:
-			incY = 1;
-			break;
-		case RIGHT:
 			incY = 1;
 			break;
 		case DOWN:
+			incY = -1;
+			break;
+		case LEFT:
 			incX = -1;
 			break;
-		case CENTER_L:
-			incY = -1;
+		case RIGHT:
+			incX = 1;
 			break;
 	}
 
+	int tile_x = x / TILE_SIZE;
+	int tile_y = y / TILE_SIZE;
+	SetMapValue(map, tile_x, tile_y, 0);
+
 	bool move = false;
+	if (incY > 0) move = !MapCollidesUp(map, TILE_SIZE);
+	else if (incY < 0) move = !MapCollidesDown(map, TILE_SIZE);
+	else if (incX > 0) move = !MapCollidesRight(map, TILE_SIZE);
+	else if (incX < 0) move = !MapCollidesLeft(map, TILE_SIZE);
+
 	if (time_state == 0) {
 		if (num_moves == 0) {
 			++state;
 			state = state % MAX_MOVES;
 			num_moves = TILES_MOVE;
 		}
-		else --num_moves;
+		else {
+			--num_moves;
+		}
 		time_state = FRAMES_MOVE;
-		move = true;
 	}
-	else --time_state;
-
-
-	if (move && (x + incX) / TILE_SIZE < SCENE_WIDTH && (y + incY) / TILE_SIZE < SCENE_HEIGHT) {
-		for (int i = tile_x; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
-			for (int j = tile_y; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
-				//map[j][i] = 0;
-			}
-		}
-
-		for (int i = tile_x + incX; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
-			for (int j = tile_y + incY; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
-				//map[j][i] = ENEMY_VER - 48;
-			}
-		}
-
-		SetX(x + incX * TILE_SIZE);
-		SetY(y + incY * TILE_SIZE);
+	else {
+		--time_state;
+		move = false;
 	}
+
+	if (move) {
+		int tile_x_new = (x + incX*TILE_SIZE) / TILE_SIZE;
+		int tile_y_new = (y + incY*TILE_SIZE) / TILE_SIZE;
+		SetMapValue(map, tile_x_new, tile_y_new, ENEMY_CIR - 48);
+		SetTile(tile_x_new, tile_y_new);
+	}
+	else {
+		SetMapValue(map, tile_x, tile_y, ENEMY_CIR - 48);
+	}
+
+	SetXWindow(GetXWindow() + cameraXSceneInc);
 }

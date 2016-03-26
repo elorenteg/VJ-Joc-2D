@@ -145,7 +145,7 @@ bool cGame::initEnemies(int level) {
 				enemy.SetTile(i, j);
 				enemy.SetZ(SCENE_DEPTH);
 				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
+				//enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
 				EnemiesH.push_back(enemy);
 			}
 			else if (tile == ENEMY_CIR) {
@@ -232,13 +232,13 @@ bool cGame::Process() {
 
 		Matrix map = Scene.GetMap();
 		for (int i = 0; i < EnemiesH.size(); ++i) {
-			EnemiesH[i].Logic(map);
+			EnemiesH[i].Logic(map, GAME_SCROLL);
 		}
 		for (int i = 0; i < EnemiesV.size(); ++i) {
-			EnemiesV[i].Logic(map);
+			EnemiesV[i].Logic(map, GAME_SCROLL);
 		}
 		for (int i = 0; i < EnemiesC.size(); ++i) {
-			EnemiesC[i].Logic(map);
+			EnemiesC[i].Logic(map, GAME_SCROLL);
 		}
 		Scene.SetMap(map);
 

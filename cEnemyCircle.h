@@ -5,14 +5,12 @@
 
 #define	LEFT		0
 #define UP			1
-#define CENTER_R	2
-#define	RIGHT		3
-#define	DOWN		4
-#define	CENTER_L	5
+#define	RIGHT		2
+#define	DOWN		3
 
 #define FRAMES_MOVE	15
 #define TILES_MOVE	3
-#define MAX_MOVES	6
+#define MAX_MOVES	4
 
 class cEnemyCircle : public cBicho
 {
@@ -22,12 +20,12 @@ public:
 
 	void Draw(int tex_id);
 
-	void Logic(Matrix& map);
+	void Logic(Matrix& map, float cameraXScene);
 
 private:
 	int num_moves;
 	int time_state;
 
 	int state;
-	int moves[MAX_MOVES] = { LEFT, UP, CENTER_R, RIGHT, DOWN, CENTER_L };
+	int moves[MAX_MOVES] = { LEFT, UP, RIGHT, DOWN };
 };

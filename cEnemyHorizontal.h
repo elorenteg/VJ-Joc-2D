@@ -18,7 +18,7 @@ public:
 
 	void Draw(int tex_id);
 
-	void Logic(Matrix& map);
+	void Logic(Matrix& map, float cameraXScene);
 
 private:
 	int num_moves;
