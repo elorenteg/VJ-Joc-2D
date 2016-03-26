@@ -8,11 +8,25 @@
 
 #define MENU		0
 #define GAME		1
-#define OPTIONS		2
+#define HOW_TO		2
+#define CREDITS		3
 
+#define APP_GAME_TEXT	"NYAN CAT RETURNS!"
 #define PLAY_TEXT		"JUGAR"
-#define OPTIONS_TEXT	"OPCIONS"
+#define HOW_TO_TEXT		"INSTRUCCIONS"
+#define CREDITS_TEXT	"CREDITS"
 #define EXIT_TEXT		"SORTIR"
+
+#define HOW_TO_PLAYER_TEXT_1 "AQUEST ES EL JUGADOR PRINCIPAL:"
+#define HOW_TO_PLAYER_TEXT_2 "AMB LES SEGUENTS TECLES ES POT MOURE EL JUGADOR:"
+
+#define CREDITS_MARC_TEXT	"MARC VILA GOMEZ"
+#define CREDITS_ESTER_TEXT	"ESTER LORENTE GARCIA"
+#define CREDITS_WHERE_TEXT	"VIDEOJOCS  FIB  UPC"
+#define CREDITS_WHEN_TEXT	"QP 2015 2016"
+
+#define PAGE_1 1
+#define PAGE_2 2
 
 class cMenu
 {
@@ -53,19 +67,25 @@ private:
 	int sleep_time = 0;
 	bool game_is_running = true;
 
-	enum Action { gameAction, optionsAction, stopAction };
+	enum Action { gameAction, howtoAction, creditsAction, stopAction };
 	Action actionSelected;
 
+	int internalState;
 	int currentState;
 
 	void moveAction(int moveTo);
 	void executeAction();
-	void drawRectangle(float x, float y, float z, float width, float height);
+	void drawRectangle(float x, float y, float z, float w, float h);
+	void drawImage(int tex_id, float x, float y, float z, float w, float h);
 
 	int maxStars = 50;
 	int time_same_stars = 5;
 	vector<float> starsX;
 	vector<float> starsY;
+
+	void showMenu();
+	void showInstrucctions();
+	void showCredits();
 
 	void calculate_stars();
 };
