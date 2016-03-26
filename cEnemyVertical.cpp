@@ -66,10 +66,10 @@ void cEnemyVertical::Logic(Matrix& map) {
 	int tile_y_new = aux / TILE_SIZE;
 	SetMapValue(map, tile_x, tile_y, 0);
 
-	bool move;
+	bool move = false;
 	if (aux >= 0 && aux + h <= GAME_HEIGHT - GAME_MARGIN) {
-		if (inc > 0) move = !MapCollidesUp(map, x, y);
-		else move = !MapCollidesDown(map, x, aux);
+		//if (inc > 0) move = !MapCollidesUp(map, x, y);
+		//else move = !MapCollidesDown(map, x, aux);
 	}
 	else move = false;
 

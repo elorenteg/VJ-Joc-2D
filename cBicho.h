@@ -45,10 +45,10 @@ public:
 	int GetHeight();
 
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
-	bool MapCollidesUp(Matrix& map, float x, float y);
-	bool MapCollidesDown(Matrix& map, float x, float y);
-	bool MapCollidesLeft(Matrix& map, float x, float y);
-	bool MapCollidesRight(Matrix& map, float x, float y);
+	bool MapCollidesUp(Matrix& map, float step);
+	bool MapCollidesDown(Matrix& map, float step);
+	bool MapCollidesLeft(Matrix& map, float step);
+	bool MapCollidesRight(Matrix& map, float step);
 
 	void MoveRight(Matrix& map);
 	void MoveLeft(Matrix& map);

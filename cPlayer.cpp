@@ -76,8 +76,8 @@ bool cPlayer::isGameOver() {
 }
 
 void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
-	float aux = GetX() + cameraXSceneInc;
-	if (!MapCollidesRight(map, aux, GetY())) SetX(aux);
+	//float aux = GetX() + cameraXSceneInc;
+	if (!MapCollidesRight(map, cameraXSceneInc)) SetX(GetX() + cameraXSceneInc);
 
 	SetXWindow(GetXWindow() + cameraXSceneInc);
 }

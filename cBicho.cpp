@@ -78,171 +78,137 @@ void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-bool cBicho::MapCollidesUp(Matrix& map, float x, float y) {
-	bool collides = false;
-
+bool cBicho::MapCollidesUp(Matrix& map, float step) {
 	// tile al que corresponde
 	int tile_x = x / TILE_SIZE;
-	int tile_y = (y + h) / TILE_SIZE;
+	int tile_y = y / TILE_SIZE;
+	int tile_y_new = tile_y + BICHO_HEIGHT / TILE_SIZE;
 
-	int width_tiles = w / TILE_SIZE;			// cuantos tiles ocupa Bicho
-	if (fmod(x, TILE_SIZE) != 0) width_tiles++;	// si Bicho no esta donde empieza el tile, ocupara uno mas
+	if (tile_y_new >= SCENE_HEIGHT) return true;
+	else {
+		//int width_tiles = w / TILE_SIZE;			// cuantos tiles ocupa Bicho
+		//if (fmod(x, TILE_SIZE) != 0) width_tiles++;	// si Bicho no esta donde empieza el tile, ocupara uno mas
 
-	int i = 0;
-	while ((i < width_tiles) && !collides) {
-		if (map[tile_y][tile_x + i] != 0) {
-			//if (fmod(y, TILE_SIZE) != 0) {
-			//	y = (tile_y + 1) * TILE_SIZE;
-			//}
-			collides = true;
+		for (int tx = tile_x; tx < tile_x + BICHO_WIDTH / TILE_SIZE; ++tx) {
+			if (map[tile_y_new][tx] != 0) return true;
 
-			if (isEnemy(map, tile_x + i, tile_y)) {
+			if (isEnemy(map, tx, tile_y_new)) {
 				char msgbuf[64];
-				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y, tile_x + i);
+				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y_new, tx);
 				OutputDebugStringA(msgbuf);
 				HitEnemy();
 			}
 		}
-		i++;
+		return false;
 	}
-
-	return collides;
 }
 
-bool cBicho::MapCollidesDown(Matrix& map, float x, float y) {
-	bool collides = false;
-
+bool cBicho::MapCollidesDown(Matrix& map, float step) {
 	// tile al que corresponde
 	int tile_x = x / TILE_SIZE;
 	int tile_y = y / TILE_SIZE;
+	int tile_y_new = tile_y - 1;
 
-	int width_tiles = w / TILE_SIZE;			// cuantos tiles ocupa Bicho
-	if (fmod(x, TILE_SIZE) != 0) width_tiles++;	// si Bicho no esta donde empieza el tile, ocupara uno mas
+	if (tile_y_new < 0) return true;
+	else {
+		//int width_tiles = w / TILE_SIZE;			// cuantos tiles ocupa Bicho
+		//if (fmod(x, TILE_SIZE) != 0) width_tiles++;	// si Bicho no esta donde empieza el tile, ocupara uno mas
 
-	int i = 0;
-	while ((i < width_tiles) && !collides) {
-		if (map[tile_y][tile_x + i] != 0) {
-			//if (fmod(y, TILE_SIZE) != 0) {
-			//	y = (tile_y + 1) * TILE_SIZE;
-			//}
-			collides = true;
-		}
+		for (int tx = tile_x; tx < tile_x + BICHO_WIDTH / TILE_SIZE; ++tx) {
+			if (map[tile_y_new][tx] != 0) return true;
 
-		if (isEnemy(map,tile_x+i,tile_y)) {
-			char msgbuf[64];
-			sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y, tile_x+i);
-			OutputDebugStringA(msgbuf);
-			HitEnemy();
-		}
-		i++;
-	}
-
-	return collides;
-}
-
-bool cBicho::MapCollidesLeft(Matrix& map, float x, float y) {
-	bool collides = false;
-
-	// tile al que corresponde
-	int tile_x = x / TILE_SIZE;
-	int tile_y = y / TILE_SIZE;
-
-	int height_tiles = h / TILE_SIZE;			// cuantos tiles ocupa Bicho
-	if (fmod(y, TILE_SIZE) != 0) height_tiles++;	// si Bicho no esta donde empieza el tile, ocupara uno mas
-
-	int i = 0;
-	while ((i < height_tiles) && !collides) {
-		if (map[tile_y + i][tile_x] != 0) {
-			//if (fmod(x, TILE_SIZE) != 0) {
-			//	x = (tile_x + 1) * TILE_SIZE;
-			//}
-			collides = true;
-
-			if (isEnemy(map, tile_x, tile_y+i)) {
+			if (isEnemy(map, tx, tile_y_new)) {
 				char msgbuf[64];
-				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y+i, tile_x);
+				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y_new, tx);
 				OutputDebugStringA(msgbuf);
 				HitEnemy();
 			}
 		}
-		i++;
+		return false;
 	}
-
-	return collides;
 }
 
-bool cBicho::MapCollidesRight(Matrix& map, float x, float y) {
-	bool collides = false;
-
+bool cBicho::MapCollidesLeft(Matrix& map, float step) {
 	// tile al que corresponde
-	int tile_x = (x + w) / TILE_SIZE;
+	int tile_x = x / TILE_SIZE;
 	int tile_y = y / TILE_SIZE;
+	int tile_x_new = tile_x - 1;
 
-	int height_tiles = h / TILE_SIZE;			// cuantos tiles ocupa Bicho
-	if (fmod(y, TILE_SIZE) != 0) height_tiles++;	// si Bicho no esta donde empieza el tile, ocupara uno mas
+	if (x - step < xWindow) return true;
+	else {
+		//int width_tiles = w / TILE_SIZE;			// cuantos tiles ocupa Bicho
+		//if (fmod(x, TILE_SIZE) != 0) width_tiles++;	// si Bicho no esta donde empieza el tile, ocupara uno mas
 
-	int i = 0;
-	while ((i < height_tiles) && !collides) {
-		if (map[tile_y + i][tile_x] != 0) {
-			//if (fmod(x, TILE_SIZE) != 0) {
-			//	x = (tile_x + 1) * TILE_SIZE;
-			//}
-			collides = true;
+		for (int ty = tile_y; ty < tile_y + BICHO_HEIGHT / TILE_SIZE; ++ty) {
+			if (map[ty][tile_x_new] != 0) return true;
 
-			if (isEnemy(map, tile_x, tile_y+i)) {
+			if (isEnemy(map, tile_x_new, ty)) {
 				char msgbuf[64];
-				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y+i, tile_x);
+				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", ty, tile_x_new);
 				OutputDebugStringA(msgbuf);
 				HitEnemy();
 			}
 		}
-		i++;
+		return false;
 	}
+}
 
-	return collides;
+bool cBicho::MapCollidesRight(Matrix& map, float step) {
+	// tile al que corresponde
+	int tile_x = x / TILE_SIZE;
+	int tile_y = y / TILE_SIZE;
+	int tile_x_new = tile_x + BICHO_WIDTH/TILE_SIZE;
+
+	char msgbuf2[64];
+	sprintf(msgbuf2, "Right [tile_x,tile_x_new]=[%d,%d]\n", tile_x, tile_x_new);
+	OutputDebugStringA(msgbuf2);
+
+	if (x + BICHO_WIDTH + step >= xWindow + GAME_WIDTH) return true;
+	else {
+		//int width_tiles = w / TILE_SIZE;			// cuantos tiles ocupa Bicho
+		//if (fmod(x, TILE_SIZE) != 0) width_tiles++;	// si Bicho no esta donde empieza el tile, ocupara uno mas
+
+		for (int ty = tile_y; ty < tile_y + BICHO_HEIGHT / TILE_SIZE; ++ty) {
+			if (map[ty][tile_x_new] != 0) return true;
+
+			if (isEnemy(map, tile_x_new, ty)) {
+				char msgbuf[64];
+				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", ty, tile_x_new);
+				OutputDebugStringA(msgbuf);
+				HitEnemy();
+			}
+		}
+		return false;
+	}
 }
 
 void cBicho::MoveLeft(Matrix& map) {
-	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = x - step_length;
-
-		if (aux - xWindow >= 0 && !MapCollidesLeft(map, aux, y)) {
-			x = aux;
+	for (int step = STEP_LENGTH; step > 0; step -= 0.2f) {
+		if (!MapCollidesLeft(map, step)) {
+			x = x - step;
 			return;
 		}
 	}
 }
 
 void cBicho::MoveRight(Matrix& map) {
-	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = x + step_length;
-
-		if (aux + w - xWindow < GAME_WIDTH && !MapCollidesRight(map, aux, y)) {
-			x = aux;
+	for (int step = STEP_LENGTH; step > 0; step -= 0.2f) {
+		if (!MapCollidesRight(map, step)) {
+			x = x + step;
 			return;
 		}
 	}
 }
 
 void cBicho::MoveUp(Matrix& map) {
-	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = y + step_length;
-
-		if (aux+ h < GAME_HEIGHT-GAME_MARGIN && !MapCollidesUp(map, x, aux)) {
-			y = aux;
-			return;
-		}
+	if (!MapCollidesUp(map, STEP_LENGTH)) {
+		y = y + STEP_LENGTH;
 	}
 }
 
 void cBicho::MoveDown(Matrix& map) {
-	for (int step_length = STEP_LENGTH; step_length > 0; --step_length) {
-		float aux = y - step_length;
-
-		if (aux >= 0 && !MapCollidesDown(map, x, aux)) {
-			y = aux;
-			return;
-		}
+	if (!MapCollidesDown(map, STEP_LENGTH)) {
+		y = y - STEP_LENGTH;
 	}
 }
 
