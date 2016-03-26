@@ -17,7 +17,7 @@ bool cGame::Init() {
 	bool res = true;
 	cameraXScene = 0.0f;
 	isGameOver = false;
-	int level = 10;
+	int level = 1;
 
 	//Graphics initialization
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
