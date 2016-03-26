@@ -1,4 +1,7 @@
 #include "cMenu.h"
+#include "cPlayer.h"
+
+cPlayer Player;
 
 cMenu::cMenu(void)
 {
@@ -34,6 +37,15 @@ bool cMenu::Init()
 	strcat(font_path, "font.png");
 	res = Data.LoadImage(IMG_FONT, font_path, GL_RGBA);
 	if (!res) return false;
+
+	char player_path[64];
+	strcpy(player_path, IMAGES_FOLDER);
+	strcat(player_path, "/");
+	strcat(player_path, "nyancat_alas.png");
+	res = Data.LoadImage(IMG_PLAYER, player_path, GL_RGBA);
+	if (!res) return false;
+
+	Player.SetTile(25, 20);
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 	//Sound.PlayCustomSound(SOUND_NYAN_BASE);
@@ -251,8 +263,21 @@ void cMenu::showMenu() {
 void cMenu::showInstrucctions() {
 	glPushMatrix();
 
+	Player.Draw(Data.GetID(IMG_PLAYER));
+
+	//Instruccions titol
 	glColor3f(1.0f, 1.0f, 1.0f);
-	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 130.0f, MSS_DEPTH, 200.0f, 50.0f, HOW_TO_TEXT);
+	Font.drawText(GAME_WIDTH / 2.0f - 160.0f, GAME_HEIGHT / 2.0f + 160.0f, MSS_DEPTH, 300.0f, 40.0f, HOW_TO_TEXT);
+
+	//Explicacio
+	glColor3f(0.0f, 0.0f, 0.0f);
+	Font.drawText(65.0f, GAME_HEIGHT - 165.0f, MSS_DEPTH, 350.0f, 20.0f, HOW_TO_PLAYER_TEXT_1);
+
+	Font.drawText(65.0f, GAME_HEIGHT - 295.0f, MSS_DEPTH, 500.0f, 20.0f, HOW_TO_PLAYER_TEXT_2);
+
+	//Fons
+	glColor3f(0.8f, 0.8f, 0.85f);
+	drawRectangle(50.0f, 50.0f, MSS_DEPTH - 1, GAME_WIDTH - 100.0f, GAME_HEIGHT - 180.0f);
 
 	glPopMatrix();
 }
@@ -261,7 +286,7 @@ void cMenu::showCredits() {
 	glPushMatrix();
 
 	glColor3f(1.0f, 1.0f, 1.0f);
-	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 130.0f, MSS_DEPTH, 200.0f, 50.0f, CREDITS_TEXT);
+	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 150.0f, MSS_DEPTH, 200.0f, 40.0f, CREDITS_TEXT);
 	
 	glPopMatrix();
 }
