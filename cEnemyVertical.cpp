@@ -1,7 +1,7 @@
 #include "cEnemyVertical.h"
 
 cEnemyVertical::cEnemyVertical() {
-	state = UP;
+	state = rand() % MAX_MOVES;
 	//num_moves = TILES_MOVE;
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
@@ -42,7 +42,7 @@ void cEnemyVertical::Draw(int tex_id) {
 	NextFrame(5);
 }
 
-void cEnemyVertical::Logic(Matrix& map) {
+void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
 	float x = GetX();
 	float y = GetY();
 
@@ -91,4 +91,6 @@ void cEnemyVertical::Logic(Matrix& map) {
 	else {
 		SetMapValue(map, tile_x, tile_y, ENEMY_VER - 48);
 	}
+
+	SetXWindow(GetXWindow() + cameraXSceneInc);
 }

@@ -33,6 +33,7 @@ using namespace std;
 #define CLOUD_INF_CEN	6
 #define CLOUD_INF_DRE	7
 
+#define	RESERVED		'z'
 #define PLAYER			'p'
 #define ENEMY_VER		'v'
 #define	ENEMY_HOR		'h'

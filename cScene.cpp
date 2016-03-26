@@ -35,10 +35,7 @@ bool cScene::LoadLevel(int level) {
 
 		for (i = 0; i<SCENE_WIDTH; i++) {
 			fscanf(fd, "%c", &tile);
-			if (tile == ' ') {
-				map[j][i] = 0;
-			}
-			else if (tile == ENEMY_HOR || tile == ENEMY_VER || tile == ENEMY_CIR || tile == 'z') {
+			if (tile == ' ' || tile == ENEMY_HOR || tile == ENEMY_VER || tile == ENEMY_CIR || tile == RESERVED) {
 				map[j][i] = 0;
 			}
 			else {
