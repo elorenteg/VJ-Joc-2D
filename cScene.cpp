@@ -16,13 +16,16 @@ bool cScene::LoadLevel(int level) {
 
 	res = true;
 
-	string scene_path;
-	if (level == 1) scene_path = LEVELS_FOLDER "/" FILENAME "1" FILENAME_EXT;
-	else if (level == 2) scene_path = LEVELS_FOLDER "/" FILENAME "2" FILENAME_EXT;
-	else if (level == 3) scene_path = LEVELS_FOLDER "/" FILENAME "3" FILENAME_EXT;
-	else if (level == 10) scene_path = LEVELS_FOLDER "/" FILENAME "10" FILENAME_EXT;
+	char scene_path[128];
+	char leveltext[8];
+	strcpy(scene_path, LEVELS_FOLDER);
+	strcat(scene_path, "/");
+	strcat(scene_path, FILENAME);
+	sprintf(leveltext, "%d", level);
+	strcat(scene_path, leveltext);
+	strcat(scene_path, FILENAME_EXT);
 
-	fd = fopen(scene_path.c_str(), "r");
+	fd = fopen(scene_path, "r");
 	if (fd == NULL) return false;
 
 	id_DL = glGenLists(1);

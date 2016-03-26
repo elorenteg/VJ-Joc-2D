@@ -17,7 +17,7 @@ bool cGame::Init() {
 	bool res = true;
 	cameraXScene = 0.0f;
 	isGameOver = false;
-	int level = 1;
+	currentLevel = 1;
 
 	//Graphics initialization
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
@@ -46,17 +46,17 @@ bool cGame::Init() {
 	strcpy(path, concat_path(IMAGES_FOLDER, "escena.png").c_str());
 	res = Data.LoadImage(IMG_SCENE, path, GL_RGBA);
 	if (!res) return false;
-	res = Scene.LoadLevel(level);
+	res = Scene.LoadLevel(currentLevel);
 	if (!res) return false;
 
 	//Player initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_alas.png").c_str());
 	res = Data.LoadImage(IMG_PLAYER, path, GL_RGBA);
 	if (!res) return false;
-	Player.SetTile(2, SCENE_HEIGHT/2);
+	Player.SetTile(2, SCENE_HEIGHT / 2);
 	Player.SetZ(SCENE_DEPTH);
 	Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-	Player.SetMapValue(Scene.GetMap(), 2, SCENE_HEIGHT/2, PLAYER - 48);
+	Player.SetMapValue(Scene.GetMap(), 2, SCENE_HEIGHT / 2, PLAYER - 48);
 
 	//Font initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "font.png").c_str());
@@ -89,18 +89,24 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_SHOOT, path, GL_RGBA);
 	if (!res) return false;
 
-	//Enemies initialization
-	res = InitEnemies(level);
-	if (!res) return false;
-
 	GameInfoLayer.Init();
-
-	firstRender = true;
+	loadLevel(currentLevel);
 
 	return res;
 }
 
-bool cGame::InitEnemies(int level) {
+bool cGame::loadLevel(int level) {
+	bool res = true;
+	firstRender = true;
+
+	//Enemies initialization
+	res = initEnemies(level);
+	if (!res) return false;
+
+	return res;
+}
+
+bool cGame::initEnemies(int level) {
 	bool res;
 	FILE *fd;
 	int i, j, px, py;
@@ -108,20 +114,23 @@ bool cGame::InitEnemies(int level) {
 
 	res = true;
 
-	string scene_path;
-	if (level == 1) scene_path = LEVELS_FOLDER "/" FILENAME "1" FILENAME_EXT;
-	else if (level == 2) scene_path = LEVELS_FOLDER "/" FILENAME "2" FILENAME_EXT;
-	else if (level == 3) scene_path = LEVELS_FOLDER "/" FILENAME "3" FILENAME_EXT;
-	else if (level == 10) scene_path = LEVELS_FOLDER "/" FILENAME "10" FILENAME_EXT;
+	char scene_path[128];
+	char leveltext[8];
+	strcpy(scene_path, LEVELS_FOLDER);
+	strcat(scene_path, "/");
+	strcat(scene_path, FILENAME);
+	sprintf(leveltext, "%d", level);
+	strcat(scene_path, leveltext);
+	strcat(scene_path, FILENAME_EXT);
 
-	fd = fopen(scene_path.c_str(), "r");
+	fd = fopen(scene_path, "r");
 	if (fd == NULL) return false;
 
 	for (j = SCENE_HEIGHT - 1; j >= 0; j--) {
 		px = 0;
 		py = j*TILE_SIZE;
 
-		for (i = 0; i<SCENE_WIDTH; i++) {
+		for (i = 0; i < SCENE_WIDTH; i++) {
 			fscanf(fd, "%c", &tile);
 			if (tile == ENEMY_VER) {
 				cEnemyVertical enemy;
@@ -131,7 +140,6 @@ bool cGame::InitEnemies(int level) {
 				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_VER - 48);
 				EnemiesV.push_back(enemy);
 			}
-
 			else if (tile == ENEMY_HOR) {
 				cEnemyHorizontal enemy;
 				enemy.SetTile(i, j);
@@ -140,7 +148,6 @@ bool cGame::InitEnemies(int level) {
 				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
 				EnemiesH.push_back(enemy);
 			}
-
 			else if (tile == ENEMY_CIR) {
 				cEnemyCircle enemy;
 				enemy.SetTile(i, j);
@@ -174,9 +181,6 @@ bool cGame::Loop() {
 	if (sleep_time >= 0) {
 		Sleep(sleep_time);
 	}
-	else {
-		// Shit, we are running behind!
-	}
 
 	return res;
 }
@@ -199,7 +203,7 @@ bool cGame::Process() {
 	//Process Input
 	if (keys[27]) res = false;
 
-	if (!isEndOfGame()) {
+	if (!isGameStandBy()) {
 		if (keys[GLUT_KEY_UP]) {
 			Player.MoveUp(Scene.GetMap());
 			//keys[GLUT_KEY_UP] = false;
@@ -244,8 +248,16 @@ bool cGame::Process() {
 	return res;
 }
 
-bool cGame::isEndOfGame() {
-	return Player.isGameOver() || Scene.endOfMap(cameraXScene + GAME_SCROLL);
+bool cGame::isGameStandBy() {
+	return isPlayerDead() || isEndOfLevel();
+}
+
+bool cGame::isPlayerDead() {
+	return Player.isGameOver();
+}
+
+bool cGame::isEndOfLevel() {
+	return Scene.endOfMap(cameraXScene + GAME_SCROLL);
 }
 
 //Output
@@ -253,10 +265,22 @@ void cGame::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1.0f, 1.0f, 1.0f);
 
-	// If end of game, map do not scroll
-	if (isEndOfGame()) {
+	// Do not scroll if level is finished
+	if (isGameStandBy()) {
 		SkyLayer.endOfGame();
 		MountainLayer.endOfGame();
+
+		if (isEndOfLevel()) {
+			if (currentLevel == TOTAL_LEVELS) {
+				RenderMessage(END_OF_GAME);
+			}
+			else {
+				RenderMessage(END_OF_LEVEL);
+			}
+		}
+		else if (isPlayerDead()) {
+			RenderMessage(END_GAME_OVER);
+		}
 	}
 
 	SkyLayer.Draw(Data.GetID(IMG_BACKGROUND));
@@ -283,33 +307,35 @@ void cGame::Render() {
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
 	RestartCameraScene();
 
-	if (isEndOfGame()) RenderMessage();
-
 	GameInfoLayer.Draw();
 
 	glutSwapBuffers();
 }
 
-void cGame::RenderMessage() {
+void cGame::RenderMessage(int message) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, Data.GetID(IMG_MARCO));
 
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(GAME_WIDTH/2 - 200.0f, GAME_HEIGHT/2 - 100.0f, MSS_DEPTH-1);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(GAME_WIDTH/2 + 200.0f, GAME_HEIGHT/2 - 100.0f, MSS_DEPTH-1);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(GAME_WIDTH/2 + 200.0f, GAME_HEIGHT/2 + 100.0f, MSS_DEPTH-1);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(GAME_WIDTH/2 - 200.0f, GAME_HEIGHT/2 + 100.0f, MSS_DEPTH-1);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(GAME_WIDTH / 2 - 200.0f, GAME_HEIGHT / 2 - 100.0f, MSS_DEPTH - 1);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(GAME_WIDTH / 2 + 200.0f, GAME_HEIGHT / 2 - 100.0f, MSS_DEPTH - 1);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(GAME_WIDTH / 2 + 200.0f, GAME_HEIGHT / 2 + 100.0f, MSS_DEPTH - 1);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(GAME_WIDTH / 2 - 200.0f, GAME_HEIGHT / 2 + 100.0f, MSS_DEPTH - 1);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
 
-	if (isGameOver) {
+	if (message == END_GAME_OVER) {
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, "GAME OVER");
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, GAME_OVER_MESSAGE);
 	}
-	else {
+	else if (message == END_OF_LEVEL) {
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, "THE END");
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, END_OF_LEVEL_MESSAGE);
+	}
+	else if (message == END_OF_GAME) {
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, END_OF_GAME_MESSAGE);
 	}
 }
 
@@ -319,8 +345,10 @@ void cGame::UpdateCameraScene() {
 	glOrtho(cameraXScene, cameraXScene + GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
 	glMatrixMode(GL_MODELVIEW);
 
-	// If not end of game, map can continue scrolling
-	if (!isEndOfGame()) cameraXScene += GAME_SCROLL;
+	// If not end of level, map can continue scrolling
+	if (!isGameStandBy()) {
+		cameraXScene += GAME_SCROLL;
+	}
 }
 
 void cGame::RestartCameraScene() {

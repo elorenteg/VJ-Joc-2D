@@ -71,9 +71,6 @@ bool cMenu::Loop()
 	if (sleep_time >= 0) {
 		Sleep(sleep_time);
 	}
-	else {
-		// Shit, we are running behind!
-	}
 
 	--time_same_stars;
 	if (time_same_stars == 0) {
