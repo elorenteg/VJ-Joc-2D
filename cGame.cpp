@@ -84,6 +84,11 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_RAINBOW, path, GL_RGBA);
 	if (!res) return false;
 
+	//Projectile initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "projectiles.png").c_str());
+	res = Data.LoadImage(IMG_SHOOT, path, GL_RGBA);
+	if (!res) return false;
+
 	//Enemies initialization
 	res = InitEnemies(level);
 	if (!res) return false;
@@ -213,6 +218,11 @@ bool cGame::Process() {
 			//keys[GLUT_KEY_RIGHT] = false;
 		}
 
+		if (keys[32]) { // SPACE = 32
+			Player.Shoot(Scene.GetMap());
+			keys[32] = false;
+		}
+
 		//Game Logic
 		Player.Logic(Scene.GetMap(), GAME_SCROLL);
 
@@ -258,6 +268,7 @@ void cGame::Render() {
 	glColor3f(1.0f, 1.0f, 1.0f);
 
 	Player.Draw(Data.GetID(IMG_PLAYER));
+	Player.DrawProjectiles(Data.GetID(IMG_SHOOT));
 
 	for (int i = 0; i < EnemiesH.size(); ++i) {
 		EnemiesH[i].Draw(Data.GetID(IMG_NINJA));

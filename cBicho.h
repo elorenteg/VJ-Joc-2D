@@ -10,12 +10,20 @@
 #define FRAME_DELAY		12
 #define STEP_LENGTH		TILE_SIZE
 
+#define MAX_FRAMES	5
 #define FRAME_0		0
 #define FRAME_1		1
 #define FRAME_2		2
 #define FRAME_3		3
 #define FRAME_4		4
-#define FRAME_5		5
+
+
+typedef struct Projectile {
+	float x;
+	float y;
+	int state_color;
+	int time_color;
+};
 
 class cRect
 {
@@ -58,6 +66,9 @@ public:
 
 	bool isEnemy(Matrix& map, int tile_x, int tile_y);
 	virtual void HitEnemy();
+	virtual void Shoot(Matrix& map);
+	void DrawProjectiles(int tex_id);
+	void MoveProjectiles(int dir);
 
 	int  GetState();
 	void SetState(int s);
@@ -70,6 +81,8 @@ private:
 	int w, h;
 	int state;
 	float xWindow;
+
+	vector<Projectile> projectiles;
 
 	int seq, delay;
 };

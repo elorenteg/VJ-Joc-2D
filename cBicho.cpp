@@ -6,6 +6,7 @@ cBicho::cBicho(void) {
 	seq = 0;
 	delay = 0;
 	xWindow = 0;
+	projectiles = vector<Projectile>(0);
 }
 
 cBicho::~cBicho(void) {}
@@ -70,14 +71,63 @@ int cBicho::GetHeight() {
 
 void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
 	glEnable(GL_TEXTURE_2D);
-
 	glBindTexture(GL_TEXTURE_2D, tex_id);
+
 	glBegin(GL_QUADS);
-		glTexCoord2f(xo, yo);	glVertex3f(x, y, z);
-		glTexCoord2f(xf, yo);	glVertex3f(x + w, y, z);
-		glTexCoord2f(xf, yf);	glVertex3f(x + w, y + h, z);
-		glTexCoord2f(xo, yf);	glVertex3f(x, y + h, z);
+	glTexCoord2f(xo, yo);	glVertex3f(x, y, z);
+	glTexCoord2f(xf, yo);	glVertex3f(x + w, y, z);
+	glTexCoord2f(xf, yf);	glVertex3f(x + w, y + h, z);
+	glTexCoord2f(xo, yf);	glVertex3f(x, y + h, z);
 	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
+void cBicho::DrawProjectiles(int tex_id) {
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, tex_id);
+
+	int w = 30;
+	int h = 10;
+
+	float xo = 0.0f;
+	float xf = 1.0f;
+	float yo, yf;
+
+	for (int i = 0; i < projectiles.size(); ++i) {
+		float posx = projectiles[i].x;
+		float posy = projectiles[i].y;
+
+		switch (projectiles[i].state_color) {
+			case FRAME_0:
+				yo = 0.0f;
+				yf = 0.2f;
+				break;
+			case FRAME_1:
+				yo = 0.2f;
+				yf = 0.4f;
+				break;
+			case FRAME_2:
+				yo = 0.4f;
+				yf = 0.6f;
+				break;
+			case FRAME_3:
+				yo = 0.6f;
+				yf = 0.8f;
+				break;
+			case FRAME_4:
+				yo = 0.8f;
+				yf = 1.0f;
+				break;
+			}
+
+		glBegin(GL_QUADS);
+		glTexCoord2f(xo, yo);	glVertex3f(posx, posy, z);
+		glTexCoord2f(xf, yo);	glVertex3f(posx + w, posy, z);
+		glTexCoord2f(xf, yf);	glVertex3f(posx + w, posy + h, z);
+		glTexCoord2f(xo, yf);	glVertex3f(posx, posy + h, z);
+		glEnd();
+	}
 
 	glDisable(GL_TEXTURE_2D);
 }
@@ -242,4 +292,29 @@ bool cBicho::isEnemy(Matrix& map, int tile_x, int tile_y) {
 	if (map[tile_y][tile_x] == ENEMY_HOR - 48) return true;
 	if (map[tile_y][tile_x] == ENEMY_CIR - 48) return true;
 	return false;
+}
+
+void cBicho::Shoot(Matrix& map) {
+	float px = x + 50;
+	float py = y + BICHO_HEIGHT / 2;
+
+	Projectile proj;
+	proj.x = px;
+	proj.y = py;
+	proj.state_color = FRAME_0;
+	proj.time_color = MAX_FRAMES*5;
+
+	projectiles.push_back(proj);
+}
+
+void cBicho::MoveProjectiles(int dir) {
+	for (int i = 0; i < projectiles.size(); ++i) {
+		projectiles[i].x += dir*TILE_SIZE/2;
+
+		projectiles[i].time_color = (projectiles[i].time_color - 1);
+		if (projectiles[i].time_color == 0) {
+			projectiles[i].time_color = MAX_FRAMES*5;
+			projectiles[i].state_color = (projectiles[i].state_color + 1) % MAX_FRAMES;
+		}
+	}
 }
