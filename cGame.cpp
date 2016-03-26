@@ -15,7 +15,7 @@ cGame::~cGame(void) {
 
 bool cGame::Init() {
 	bool res = true;
-	cameraXScene = 0;
+	cameraXScene = 0.0f;
 	isGameOver = false;
 	int level = 10;
 
@@ -54,7 +54,9 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PLAYER, path, GL_RGBA);
 	if (!res) return false;
 	Player.SetTile(2, SCENE_HEIGHT/2);
+	Player.SetZ(SCENE_DEPTH);
 	Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+	Player.SetMapValue(Scene.GetMap(), 2, SCENE_HEIGHT/2, PLAYER - 48);
 
 	//Font initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "font.png").c_str());
@@ -119,6 +121,7 @@ bool cGame::InitEnemies(int level) {
 			if (tile == ENEMY_VER) {
 				cEnemyVertical enemy;
 				enemy.SetTile(i, j);
+				enemy.SetZ(SCENE_DEPTH);
 				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_VER - 48);
 				EnemiesV.push_back(enemy);
@@ -127,6 +130,7 @@ bool cGame::InitEnemies(int level) {
 			else if (tile == ENEMY_HOR) {
 				cEnemyHorizontal enemy;
 				enemy.SetTile(i, j);
+				enemy.SetZ(SCENE_DEPTH);
 				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
 				EnemiesH.push_back(enemy);
@@ -135,6 +139,7 @@ bool cGame::InitEnemies(int level) {
 			else if (tile == ENEMY_CIR) {
 				cEnemyCircle enemy;
 				enemy.SetTile(i, j);
+				enemy.SetZ(SCENE_DEPTH);
 				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_CIR - 48);
 				EnemiesC.push_back(enemy);
