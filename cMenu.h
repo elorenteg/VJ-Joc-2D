@@ -11,6 +11,7 @@
 #define HOW_TO		2
 #define CREDITS		3
 
+#define APP_GAME_TEXT	"NYAN CAT RETURNS!"
 #define PLAY_TEXT		"JUGAR"
 #define HOW_TO_TEXT		"INSTRUCCIONS"
 #define CREDITS_TEXT	"CREDITS"
@@ -18,6 +19,11 @@
 
 #define HOW_TO_PLAYER_TEXT_1 "AQUEST ES EL JUGADOR PRINCIPAL:"
 #define HOW_TO_PLAYER_TEXT_2 "AMB LES SEGUENTS TECLES ES POT MOURE EL JUGADOR:"
+
+#define CREDITS_MARC_TEXT	"MARC VILA GOMEZ"
+#define CREDITS_ESTER_TEXT	"ESTER LORENTE GARCIA"
+#define CREDITS_WHERE_TEXT	"VIDEOJOCS  FIB  UPC"
+#define CREDITS_WHEN_TEXT	"QP 2015 2016"
 
 #define PAGE_1 1
 #define PAGE_2 2
@@ -69,7 +75,8 @@ private:
 
 	void moveAction(int moveTo);
 	void executeAction();
-	void drawRectangle(float x, float y, float z, float width, float height);
+	void drawRectangle(float x, float y, float z, float w, float h);
+	void drawImage(int tex_id, float x, float y, float z, float w, float h);
 
 	int maxStars = 50;
 	int time_same_stars = 5;
