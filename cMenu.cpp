@@ -16,6 +16,7 @@ bool cMenu::Init()
 	actionSelected = gameAction;
 	processingKey = false;
 	currentState = MENU;
+	internalState = MENU;
 
 	//Graphics initialization
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
@@ -35,7 +36,7 @@ bool cMenu::Init()
 	if (!res) return false;
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
-	Sound.PlayCustomSound(SOUND_NYAN_BASE);
+	//Sound.PlayCustomSound(SOUND_NYAN_BASE);
 	calculate_stars();
 
 	return res;
@@ -93,7 +94,19 @@ bool cMenu::Process()
 
 		//Process Input
 		if (keys[27]) {
-			res = false;
+			switch (internalState) {
+			case MENU:
+				res = false;
+				break;
+			case HOW_TO:
+				showMenu();
+				internalState = MENU;
+				break;
+			case CREDITS:
+				showMenu();
+				internalState = MENU;
+				break;
+			}
 		}
 
 		if (keys[GLUT_KEY_UP]) {
@@ -130,35 +143,17 @@ void cMenu::Render()
 		glEnd();
 	}
 
-	glPushMatrix();
-		glColor3f(1.0f, 1.0f, 1.0f);
-		Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 88.0f, MSS_DEPTH, 200.0f, 50.0f, PLAY_TEXT);
-
-		glColor3f(1.0f, 1.0f, 1.0f);
-		Font.drawText(GAME_WIDTH / 2.0f - 100.0f, GAME_HEIGHT / 2.0f - 12.0f, MSS_DEPTH, 200.0f, 50.0f, OPTIONS_TEXT);
-
-		glColor3f(1.0f, 01.0f, 1.0f);
-		Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f - 112.0f, MSS_DEPTH, 200.0f, 50.0f, EXIT_TEXT);
-	glPopMatrix();
-	
-	glPushMatrix();
-		if (actionSelected == gameAction)
-			glColor3f(1.0f, 0.0f, 0.0f);
-		else
-			glColor3f(0.5f, 0.5f, 0.5f);
-		drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 75.0f, MSS_DEPTH-1, 300.0f, 75.0f);
-
-		if (actionSelected == optionsAction)
-			glColor3f(0.0f, 1.0f, 0.0f);
-		else
-			glColor3f(0.5f, 0.5f, 0.5f);
-		drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 25.0f, MSS_DEPTH-1, 300.0f, 75.0f);
-
-	if (actionSelected == stopAction)
-		glColor3f(0.0f, 0.0f, 1.0f);
-	else
-		glColor3f(0.5f, 0.5f, 0.5f);
-	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 125.0f, MSS_DEPTH-1, 300.0f, 75.0f);
+	switch (internalState) {
+	case MENU:
+		showMenu();
+		break;
+	case HOW_TO:
+		showInstrucctions();
+		break;
+	case CREDITS:
+		showCredits();
+		break;
+	}
 
 	glutSwapBuffers();
 }
@@ -172,8 +167,12 @@ void cMenu::executeAction() {
 	if (actionSelected == gameAction) {
 		currentState = GAME;
 	}
-	else if (actionSelected == optionsAction) {
-		Sound.StopCustomSound(); //TODO only to test
+	else if (actionSelected == howtoAction) {
+		//Sound.StopCustomSound(); //TODO only to test
+		internalState = HOW_TO;
+	}
+	else if (actionSelected == creditsAction) {
+		internalState = CREDITS;
 	}
 	else if (actionSelected == stopAction) {
 		exit(0);
@@ -183,22 +182,88 @@ void cMenu::executeAction() {
 void cMenu::moveAction(int moveTo) {
 	if (actionSelected == gameAction) {
 		if (moveTo == 1) {
-			actionSelected = optionsAction;
+			actionSelected = howtoAction;
 		}
 	}
-	else if (actionSelected == optionsAction) {
+	else if (actionSelected == howtoAction) {
 		if (moveTo == 1) {
-			actionSelected = stopAction;
+			actionSelected = creditsAction;
 		}
 		else if (moveTo == -1) {
 			actionSelected = gameAction;
 		}
 	}
-	else if (actionSelected == stopAction) {
-		if (moveTo == -1) {
-			actionSelected = optionsAction;
+	else if (actionSelected == creditsAction) {
+		if (moveTo == 1) {
+			actionSelected = stopAction;
+		}
+		else if (moveTo == -1) {
+			actionSelected = howtoAction;
 		}
 	}
+	else if (actionSelected == stopAction) {
+		if (moveTo == -1) {
+			actionSelected = creditsAction;
+		}
+	}
+}
+
+void cMenu::showMenu() {
+	glPushMatrix();
+	glColor3f(1.0f, 1.0f, 1.0f);
+	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 130.0f, MSS_DEPTH, 200.0f, 50.0f, PLAY_TEXT);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	Font.drawText(GAME_WIDTH / 2.0f - 100.0f, GAME_HEIGHT / 2.0f + 30.0f, MSS_DEPTH, 200.0f, 50.0f, HOW_TO_TEXT);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	Font.drawText(GAME_WIDTH / 2.0f - 100.0f, GAME_HEIGHT / 2.0f - 70.0f, MSS_DEPTH, 200.0f, 50.0f, CREDITS_TEXT);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f - 170.0f, MSS_DEPTH, 200.0f, 50.0f, EXIT_TEXT);
+	glPopMatrix();
+
+	if (actionSelected == gameAction)
+		glColor3f(1.0f, 0.0f, 0.0f);
+	else
+		glColor3f(0.5f, 0.5f, 0.5f);
+	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 115.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
+
+	if (actionSelected == howtoAction)
+		glColor3f(0.0f, 1.0f, 0.0f);
+	else
+		glColor3f(0.5f, 0.5f, 0.5f);
+	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 15.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
+
+	if (actionSelected == creditsAction)
+		glColor3f(1.0f, 1.0f, 0.0f);
+	else
+		glColor3f(0.5f, 0.5f, 0.5f);
+	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 85.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
+
+	if (actionSelected == stopAction)
+		glColor3f(0.0f, 0.0f, 1.0f);
+	else
+		glColor3f(0.5f, 0.5f, 0.5f);
+	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 185.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
+}
+
+void cMenu::showInstrucctions() {
+	glPushMatrix();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 130.0f, MSS_DEPTH, 200.0f, 50.0f, HOW_TO_TEXT);
+
+	glPopMatrix();
+}
+
+void cMenu::showCredits() {
+	glPushMatrix();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 130.0f, MSS_DEPTH, 200.0f, 50.0f, CREDITS_TEXT);
+	
+	glPopMatrix();
 }
 
 // Draw the rectangle

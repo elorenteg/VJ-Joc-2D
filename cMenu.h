@@ -8,10 +8,12 @@
 
 #define MENU		0
 #define GAME		1
-#define OPTIONS		2
+#define HOW_TO		2
+#define CREDITS		3
 
 #define PLAY_TEXT		"JUGAR"
-#define OPTIONS_TEXT	"OPCIONS"
+#define HOW_TO_TEXT		"INSTRUCCIONS"
+#define CREDITS_TEXT	"CREDITS"
 #define EXIT_TEXT		"SORTIR"
 
 class cMenu
@@ -53,9 +55,10 @@ private:
 	int sleep_time = 0;
 	bool game_is_running = true;
 
-	enum Action { gameAction, optionsAction, stopAction };
+	enum Action { gameAction, howtoAction, creditsAction, stopAction };
 	Action actionSelected;
 
+	int internalState;
 	int currentState;
 
 	void moveAction(int moveTo);
@@ -66,6 +69,10 @@ private:
 	int time_same_stars = 5;
 	vector<float> starsX;
 	vector<float> starsY;
+
+	void showMenu();
+	void showInstrucctions();
+	void showCredits();
 
 	void calculate_stars();
 };
