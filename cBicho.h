@@ -35,6 +35,7 @@ public:
 	void SetWidthHeight(int w, int h);
 	void SetX(float x);
 	void SetY(float y);
+	void SetZ(float z);
 	void SetXWindow(float xWindow);
 	void SetMapValue(Matrix& map, int tile_x, int tile_y, int value);
 
@@ -65,7 +66,7 @@ public:
 	int  GetFrame();
 
 private:
-	float x, y;
+	float x, y, z;
 	int w, h;
 	int state;
 	float xWindow;

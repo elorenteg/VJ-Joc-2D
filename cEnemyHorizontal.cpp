@@ -1,15 +1,15 @@
 #include "cEnemyHorizontal.h"
 
 cEnemyHorizontal::cEnemyHorizontal() {
-	state = 0;
-	num_moves = TILES_MOVE;
+	state = LEFT;
+	//num_moves = TILES_MOVE;
+	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
 }
 
 cEnemyHorizontal::~cEnemyHorizontal() {}
 
 void cEnemyHorizontal::Draw(int tex_id) {
-	//OutputDebugStringA("cEnemyHorizontal - Draw\n");
 	float xo, yo, xf, yf;
 
 	switch (GetFrame()) {
@@ -35,7 +35,7 @@ void cEnemyHorizontal::Draw(int tex_id) {
 		break;
 	}
 
-	if (moves[state] == RIGHT || moves[state] == CENTER_L) {
+	if (moves[state] == RIGHT) {
 		float aux = xo;
 		xo = xf;
 		xf = aux;
@@ -53,26 +53,27 @@ void cEnemyHorizontal::Logic(Matrix& map) {
 	float x = GetX();
 	float y = GetY();
 
-	int tile_x = x / TILE_SIZE;
-	int tile_y = y / TILE_SIZE;
+	int w = GetWidth();
+	int h = GetHeight();
 
 	float inc = 0;
 	switch (moves[state]) {
-		case LEFT:
-			inc = -1;
-			break;
-		case CENTER_R:
-			inc = -1;
-			break;
-		case RIGHT:
-			inc = 1;
-			break;
-		case CENTER_L:
-			inc = 1;
-			break;
+	case RIGHT:
+		inc = 1;
+		break;
+	case LEFT:
+		inc = -1;
+		break;
 	}
 
-	bool move = false;
+	int tile_x = x / TILE_SIZE;
+	int tile_y = y / TILE_SIZE;
+	SetMapValue(map, tile_x, tile_y, 0);
+
+	bool move;
+	if (inc > 0) move = !MapCollidesRight(map, TILE_SIZE);
+	else move = !MapCollidesLeft(map, TILE_SIZE);
+
 	if (time_state == 0) {
 		if (num_moves == 0) {
 			++state;
@@ -81,23 +82,19 @@ void cEnemyHorizontal::Logic(Matrix& map) {
 		}
 		else --num_moves;
 		time_state = FRAMES_MOVE;
-		move = true;
+		move *= true;
 	}
-	else --time_state;
+	else {
+		--time_state;
+		move = false;
+	}
 
-	if (move && (x + inc) / TILE_SIZE < SCENE_WIDTH) {
-		for (int i = tile_x; i < tile_x+BICHO_WIDTH/TILE_SIZE; ++i) {
-			for (int j = tile_y; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
-				map[j][i] = 0;
-			}
-		}
-
-		for (int i = tile_x + inc; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
-			for (int j = tile_y; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
-				//map[j][i] = ENEMY_VER - 48;
-			}
-		}
-
-		SetX(x + inc * TILE_SIZE);
+	if (move) {
+		int tile_x_new = (x + inc*TILE_SIZE) / TILE_SIZE;
+		SetMapValue(map, tile_x_new, tile_y, ENEMY_HOR - 48);
+		SetTile(tile_x_new, tile_y);
+	}
+	else {
+		SetMapValue(map, tile_x, tile_y, ENEMY_HOR - 48);
 	}
 }

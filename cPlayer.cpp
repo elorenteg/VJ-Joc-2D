@@ -76,9 +76,14 @@ bool cPlayer::isGameOver() {
 }
 
 void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
-	//float aux = GetX() + cameraXSceneInc;
+	int tile_x = GetX() / TILE_SIZE;
+	int tile_y = GetY() / TILE_SIZE;
+	SetMapValue(map, tile_x, tile_y, 0);
+
 	if (!MapCollidesRight(map, cameraXSceneInc)) SetX(GetX() + cameraXSceneInc);
 
+	int tile_x_new = GetX() / TILE_SIZE;
+	SetMapValue(map, tile_x_new, tile_y, PLAYER - 48);
 	SetXWindow(GetXWindow() + cameraXSceneInc);
 }
 

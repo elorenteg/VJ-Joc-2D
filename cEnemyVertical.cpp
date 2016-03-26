@@ -2,8 +2,8 @@
 
 cEnemyVertical::cEnemyVertical() {
 	state = UP;
-	//num_moves = rand() % TILES_MOVE;
-	num_moves = TILES_MOVE;
+	//num_moves = TILES_MOVE;
+	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
 }
 
@@ -61,17 +61,11 @@ void cEnemyVertical::Logic(Matrix& map) {
 
 	int tile_x = x / TILE_SIZE;
 	int tile_y = y / TILE_SIZE;
-
-	float aux = y + inc*TILE_SIZE;
-	int tile_y_new = aux / TILE_SIZE;
 	SetMapValue(map, tile_x, tile_y, 0);
 
-	bool move = false;
-	if (aux >= 0 && aux + h <= GAME_HEIGHT - GAME_MARGIN) {
-		//if (inc > 0) move = !MapCollidesUp(map, x, y);
-		//else move = !MapCollidesDown(map, x, aux);
-	}
-	else move = false;
+	bool move;
+	if (inc > 0) move = !MapCollidesUp(map, TILE_SIZE);
+	else move = !MapCollidesDown(map, TILE_SIZE);
 
 	if (time_state == 0) {
 		if (num_moves == 0) {
@@ -79,9 +73,10 @@ void cEnemyVertical::Logic(Matrix& map) {
 			state = state % MAX_MOVES;
 			num_moves = TILES_MOVE;
 		}
-		else --num_moves;
+		else {
+			--num_moves;
+		}
 		time_state = FRAMES_MOVE;
-		move *= true;
 	}
 	else {
 		--time_state;
@@ -89,6 +84,7 @@ void cEnemyVertical::Logic(Matrix& map) {
 	}
 
 	if (move) {
+		int tile_y_new = (y + inc*TILE_SIZE) / TILE_SIZE;
 		SetMapValue(map, tile_x, tile_y_new, ENEMY_VER - 48);
 		SetTile(tile_x, tile_y_new);
 	}
