@@ -57,7 +57,7 @@ public:
 	float GetXWindow();
 	int GetWidth();
 	int GetHeight();
-	vector<Projectile> GetProjectiles();
+	vector<Projectile> GetProjectiles(int dir);
 
 	void MoveRight(Matrix& map);
 	void MoveLeft(Matrix& map);
@@ -79,9 +79,12 @@ protected:
 	int w, h;
 	int state;
 	float xWindow;
-	vector<Projectile> projectiles;
+	int state_lookat;
+	vector<Projectile> projsLeft;
+	vector<Projectile> projsRight;
 
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
+	void DrawProjectiles(int tex_id, vector<Projectile>& projectiles);
 
 	bool MapCollidesUp(Matrix& map, float step);
 	bool MapCollidesDown(Matrix& map, float step);
@@ -92,8 +95,13 @@ protected:
 	virtual void HitEnemy();
 
 	virtual Projectile InitShoot();
-	void MoveProjectiles(int dirX, int dirY);
+	void MoveProjectiles();
+
+	virtual bool lookAtRight();
+	bool isInScene();
 
 private:
 	int seq, delay;
+
+	vector<Projectile> MoveProjectiles(vector<Projectile>& projs, int dirX);
 };

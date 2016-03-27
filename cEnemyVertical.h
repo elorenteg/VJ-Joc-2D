@@ -10,6 +10,8 @@
 #define TILES_MOVE	4
 #define MAX_MOVES	2
 
+#define FREQ_SHOOTS 25
+
 class cEnemyVertical : public cBicho
 {
 public:
@@ -23,6 +25,7 @@ public:
 private:
 	int num_moves;
 	int time_state;
+	int freq_shoots;
 
 	int state;
 	int moves[MAX_MOVES] = { UP, DOWN };
