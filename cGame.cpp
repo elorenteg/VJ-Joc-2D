@@ -226,6 +226,10 @@ bool cGame::Process() {
 				loadLevel(currentLevel);
 			}
 		}
+		if (keys['p']) {
+			gamePaused = false;
+			keys['p'] = false;
+		}
 	}
 	else {
 		if (keys[GLUT_KEY_UP]) {
@@ -251,6 +255,11 @@ bool cGame::Process() {
 			keys[32] = false;
 		}
 
+		if (keys['p']) {
+			gamePaused = true;
+			keys['p'] = false;
+		}
+
 		//Game Logic
 		Player.Logic(Scene.GetMap(), GAME_SCROLL);
 
@@ -273,7 +282,7 @@ bool cGame::Process() {
 }
 
 bool cGame::isGameStandBy() {
-	return isPlayerDead() || isEndOfLevel();
+	return isPlayerDead() || isEndOfLevel() || isGamePaused();
 }
 
 bool cGame::isPlayerDead() {
@@ -282,6 +291,10 @@ bool cGame::isPlayerDead() {
 
 bool cGame::isEndOfLevel() {
 	return Scene.endOfMap(cameraXScene + GAME_SCROLL);
+}
+
+bool cGame::isGamePaused() {
+	return gamePaused;
 }
 
 //Output
@@ -304,6 +317,9 @@ void cGame::Render() {
 		}
 		else if (isPlayerDead()) {
 			RenderMessage(END_GAME_OVER);
+		}
+		else if (isGamePaused()) {
+			RenderMessage(GAME_PAUSED);
 		}
 	}
 
@@ -361,6 +377,11 @@ void cGame::RenderMessage(int message) {
 	else if (message == END_OF_GAME) {
 		glColor3f(0.0f, 0.0f, 0.0f);
 		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, END_OF_GAME_MESSAGE);
+	}
+	else if (message == GAME_PAUSED) {
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 5.0f, MSS_DEPTH, 200.0f, 50.0f, GAME_PAUSED_MESSAGE);
+		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 45.0f, MSS_DEPTH, 300.0f, 25.0f, GAME_PAUSED_MESSAGE_NEXT);
 	}
 }
 

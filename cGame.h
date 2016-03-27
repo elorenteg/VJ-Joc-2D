@@ -17,11 +17,14 @@
 #define END_GAME_OVER	0
 #define END_OF_GAME		1
 #define END_OF_LEVEL	2	
+#define GAME_PAUSED		3	
 
 #define GAME_OVER_MESSAGE	 "GAME OVER"
 #define END_OF_GAME_MESSAGE	 "END OF GAME"
 #define END_OF_LEVEL_MESSAGE "END OF LEVEL"
 #define END_OF_LEVEL_MESSAGE_NEXT "PREM ENTER PER A PASSAR DE NIVELL"
+#define GAME_PAUSED_MESSAGE "PAUSA"
+#define GAME_PAUSED_MESSAGE_NEXT "PREM P PER A CONTINUAR JUGANT"
 
 class cGame
 {
@@ -61,6 +64,7 @@ private:
 	
 	float cameraXScene;
 	int currentLevel;
+	bool gamePaused;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;
@@ -77,4 +81,5 @@ private:
 	bool isGameStandBy();
 	bool isEndOfLevel();
 	bool isPlayerDead();
+	bool isGamePaused();
 };
