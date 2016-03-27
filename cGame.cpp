@@ -89,6 +89,8 @@ void cGame::startGame() {
 	currentLevel = 1;
 	GameInfoLayer.Init();
 
+	//Reiniciar puntuacion de Player
+
 	loadLevel(currentLevel);
 }
 
@@ -96,6 +98,8 @@ bool cGame::loadLevel(int level) {
 	bool res = true;
 	firstRender = true;
 	cameraXScene = 0.0f;
+
+	GameInfoLayer.SetCurrentLevel(level);
 
 	// Load level
 	res = Scene.LoadLevel(level);
