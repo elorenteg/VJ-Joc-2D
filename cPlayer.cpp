@@ -86,7 +86,7 @@ void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
 	SetMapValue(map, tile_x_new, tile_y, PLAYER - 48);
 	SetXWindow(GetXWindow() + cameraXSceneInc);
 
-	MoveProjectiles(1);
+	//MoveProjectiles(1);
 }
 
 void cPlayer::HitEnemy() {
@@ -94,4 +94,35 @@ void cPlayer::HitEnemy() {
 	sprintf(msgbuf, "cPlayer - HIT %d lifes\n", lifes);
 	OutputDebugStringA(msgbuf);
 	lifes -= 1;
+}
+
+void cPlayer::LogicProjectiles(Matrix& map, vector<cEnemyVertical>& vers, vector<cEnemyHorizontal>& hors, vector<cEnemyCircle>& cirs) {
+	MoveProjectiles(1);
+
+	HitProjectile(map, vers);
+}
+
+void cPlayer::HitProjectile(Matrix& map, vector<cEnemyVertical>& vers) {
+	vector<Projectile> projs = GetProjectiles();
+	for (int i = 0; i < projs.size(); ++i) {
+		int tx = projs[i].x / TILE_SIZE;
+		int ty = projs[i].y / TILE_SIZE;
+		int tx2 = tx + 1;
+
+		if (isEnemy(map, tx, ty) || (projs[i].x + PROJ_WIDTH >= GetXWindow() + GAME_WIDTH && isEnemy(map, tx2, ty))) {
+			bool found = false;
+			for (int v = 0; v < vers.size() && !found; ++v) {
+				int v_tx = vers[v].GetX() / TILE_SIZE;
+				int v_ty = vers[v].GetY() / TILE_SIZE;
+				int v_tx2 = (vers[v].GetX() + vers[v].GetWidth()) / TILE_SIZE;
+				int v_ty2 = (vers[v].GetY() + vers[v].GetHeight()) / TILE_SIZE;
+
+				if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
+					found = true;
+					vers.erase(vers.begin() + v);
+					SetMapValue(map, v_tx, v_ty, 0);
+				}
+			}
+		}
+	}
 }
