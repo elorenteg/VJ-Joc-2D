@@ -312,10 +312,10 @@ void cBicho::Shoot(Matrix& map) {
 }
 
 void cBicho::MoveProjectiles(int dir) {
-	for (int i = 0; i < projectiles.size(); ++i) {
-		projectiles[i].x += dir*TILE_SIZE/2;
-		if (projectiles[i].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
-			projectiles.erase(projectiles.begin() + i);
+	for (int p = 0; p < projectiles.size(); ++p) {
+		projectiles[p].x += dir*TILE_SIZE/2;
+		if (projectiles[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
+			projectiles.erase(projectiles.begin() + p);
 		}
 		else {
 			projectiles[i].time_color = (projectiles[i].time_color - 1);
