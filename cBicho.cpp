@@ -311,12 +311,14 @@ bool cBicho::isEnemy(Matrix& map, int tile_x, int tile_y) {
 }
 
 void cBicho::Shoot(Matrix& map) {
-	Projectile proj = InitShoot();
-	proj.state_color = FRAME_0;
-	proj.time_color = MAX_FRAMES*3;
+	if (isInScene()) {
+		Projectile proj = InitShoot();
+		proj.state_color = FRAME_0;
+		proj.time_color = MAX_FRAMES * 3;
 
-	if (lookAtRight()) projsRight.push_back(proj);
-	else projsLeft.push_back(proj);
+		if (lookAtRight()) projsRight.push_back(proj);
+		else projsLeft.push_back(proj);
+	}
 }
 
 Projectile cBicho::InitShoot() {
@@ -330,6 +332,13 @@ Projectile cBicho::InitShoot() {
 
 bool cBicho::lookAtRight() {
 	return state_lookat == DIR_RIGHT;
+}
+
+bool cBicho::isInScene() {
+	bool isInside = true;
+	if (x < xWindow || x + BICHO_WIDTH >= xWindow + GAME_WIDTH) isInside = false;
+
+	return isInside;
 }
 
 void cBicho::MoveProjectiles() {

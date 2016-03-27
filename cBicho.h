@@ -98,6 +98,7 @@ protected:
 	void MoveProjectiles();
 
 	virtual bool lookAtRight();
+	bool isInScene();
 
 private:
 	int seq, delay;
