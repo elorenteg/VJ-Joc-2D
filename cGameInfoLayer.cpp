@@ -97,6 +97,12 @@ int cGameInfoLayer::GetCurrentLevel() {
 	return current_level;
 }
 
+void cGameInfoLayer::SetHighScore(int score) {
+	high_score = score;
+
+	SaveHighScore(high_score);
+}
+
 int cGameInfoLayer::GetHighScore() {
 	return high_score;
 }
@@ -107,14 +113,7 @@ void cGameInfoLayer::SetCurrentScore(int score) {
 	if (current_score > high_score) {
 		high_score = current_score;
 
-		char high_score_value[8];
-		sprintf(high_score_value, "%d", high_score);
-		DataManager.saveMaxScore(high_score_value);
-
-		char msgbuf[128];
-		strcpy(msgbuf, "GUARDANDO: ");
-		strcat(msgbuf, high_score_value);
-		OutputDebugStringA(msgbuf);
+		SaveHighScore(high_score);
 	}
 }
 
@@ -128,6 +127,12 @@ void cGameInfoLayer::SetCurrentLife(int life) {
 
 int cGameInfoLayer::GetCurrentLife() {
 	return current_life;
+}
+
+void cGameInfoLayer::SaveHighScore(int high_score) {
+	char high_score_value[8];
+	sprintf(high_score_value, "%d", high_score);
+	DataManager.saveMaxScore(high_score_value);
 }
 
 // Draw the rectangle

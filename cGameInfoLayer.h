@@ -21,11 +21,14 @@ public:
 
 	void SetCurrentLevel(int level);
 	int GetCurrentLevel();
+	void SetHighScore(int score);
 	int GetHighScore();
 	void SetCurrentScore(int score);
 	int GetCurrentScore();
 	void SetCurrentLife(int life);
 	int GetCurrentLife();
+
+	void SaveHighScore(int high_score);
 
 private:
 	cFont Font;

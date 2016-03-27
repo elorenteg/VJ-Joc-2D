@@ -383,7 +383,29 @@ void cGame::RenderMessage(int message) {
 	}
 	else if (message == END_OF_GAME) {
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, END_OF_GAME_MESSAGE);
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 + 25.0f, MSS_DEPTH, 200.0f, 40.0f, END_OF_GAME_MESSAGE);
+
+		char msgbuf[128];
+		char intbuf[8];
+		sprintf(intbuf, "%d", GameInfoLayer.GetCurrentScore());
+		strcpy(msgbuf, END_SCORE_MESSAGE);
+		strcat(msgbuf, ":   ");
+		strcat(msgbuf, intbuf);
+		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 300.0f, 20.0f, msgbuf);
+
+		sprintf(intbuf, "%d", GameInfoLayer.GetCurrentLife());
+		strcpy(msgbuf, END_LIFE_REM_MESSAGE);
+		strcat(msgbuf, ":   ");
+		strcat(msgbuf, intbuf);
+		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 45.0f, MSS_DEPTH, 300.0f, 20.0f, msgbuf);
+
+		sprintf(intbuf, "%d", GameInfoLayer.GetCurrentScore() * GameInfoLayer.GetCurrentLife());
+		strcpy(msgbuf, END_TOTAL_SCORE_MESSAGE);
+		strcat(msgbuf, ":   ");
+		strcat(msgbuf, intbuf);
+		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 70.0f, MSS_DEPTH, 300.0f, 20.0f, msgbuf);
+
+		GameInfoLayer.SaveHighScore(GameInfoLayer.GetCurrentScore() * GameInfoLayer.GetCurrentLife());
 	}
 	else if (message == GAME_PAUSED) {
 		glColor3f(0.0f, 0.0f, 0.0f);
