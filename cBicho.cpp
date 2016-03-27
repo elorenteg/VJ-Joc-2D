@@ -132,12 +132,15 @@ bool cBicho::MapCollidesUp(Matrix& map, float step) {
 	// tile al que corresponde
 	int tile_x = x / TILE_SIZE;
 	int tile_y = y / TILE_SIZE;
-	int tile_y_new = (y + step + BICHO_HEIGHT) / TILE_SIZE;
+	int tile_y_new = (y + BICHO_HEIGHT) / TILE_SIZE;
 
 	bool collides = false;
 	if (tile_y_new >= SCENE_HEIGHT) collides = true;
 	else {
-		for (int tx = tile_x; tx < tile_x + BICHO_WIDTH / TILE_SIZE && !collides; ++tx) {
+		int width_tiles = w / TILE_SIZE;
+		if (fmod(x, TILE_SIZE) != 0) width_tiles++;
+
+		for (int tx = tile_x; tx < tile_x + width_tiles && !collides; ++tx) {
 			if (map[tile_y_new][tx] != 0) collides = true;
 
 			if (isEnemy(map, tx, tile_y_new)) {
@@ -160,7 +163,10 @@ bool cBicho::MapCollidesDown(Matrix& map, float step) {
 	bool collides = false;
 	if (tile_y_new < 0) collides = true;
 	else {
-		for (int tx = tile_x; tx < tile_x + BICHO_WIDTH / TILE_SIZE && !collides; ++tx) {
+		int width_tiles = w / TILE_SIZE;
+		if (fmod(x, TILE_SIZE) != 0) width_tiles++;
+
+		for (int tx = tile_x; tx < tile_x + width_tiles && !collides; ++tx) {
 			if (map[tile_y_new][tx] != 0) collides = true;
 
 			if (isEnemy(map, tx, tile_y_new)) {
@@ -183,7 +189,10 @@ bool cBicho::MapCollidesLeft(Matrix& map, float step) {
 	bool collides = false;
 	if (x - step < xWindow) collides = true;
 	else {
-		for (int ty = tile_y; ty < tile_y + BICHO_HEIGHT / TILE_SIZE && !collides; ++ty) {
+		int height_tiles = h / TILE_SIZE;
+		if (fmod(y, TILE_SIZE) != 0) height_tiles++;
+
+		for (int ty = tile_y; ty < tile_y + height_tiles && !collides; ++ty) {
 			if (map[ty][tile_x_new] != 0) collides = true;
 
 			if (isEnemy(map, tile_x_new, ty)) {
@@ -206,7 +215,10 @@ bool cBicho::MapCollidesRight(Matrix& map, float step) {
 	bool collides = false;
 	if (x + BICHO_WIDTH + step >= xWindow + GAME_WIDTH) collides = true;
 	else {
-		for (int ty = tile_y; ty < tile_y + BICHO_HEIGHT / TILE_SIZE && !collides; ++ty) {
+		int height_tiles = h / TILE_SIZE;
+		if (fmod(y, TILE_SIZE) != 0) height_tiles++;
+
+		for (int ty = tile_y; ty < tile_y + height_tiles && !collides; ++ty) {
 			if (map[ty][tile_x_new] != 0) collides = true;
 
 			if (isEnemy(map, tile_x_new, ty)) {
