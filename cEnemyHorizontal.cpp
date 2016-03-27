@@ -4,9 +4,15 @@ cEnemyHorizontal::cEnemyHorizontal() {
 	state = rand() % MAX_MOVES;
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
+	state_lookat = DIR_LEFT;
 }
 
 cEnemyHorizontal::~cEnemyHorizontal() {}
+
+bool cEnemyHorizontal::lookAtRight() {
+	if (state == RIGHT) return true;
+	else return false;
+}
 
 void cEnemyHorizontal::Draw(int tex_id) {
 	float xo, yo, xf, yf;
@@ -93,9 +99,3 @@ void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
 
 	xWindow+= cameraXSceneInc;
 }
-
-/*
-void cEnemyHorizontal::LogicProjectiles2(Matrix& map, cPlayer player) {
-	MoveProjectiles(DIR_LEFT, DIR_NONE);
-}
-*/

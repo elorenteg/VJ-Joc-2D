@@ -4,6 +4,7 @@ cEnemyVertical::cEnemyVertical() {
 	state = rand() % MAX_MOVES;
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
+	state_lookat = DIR_LEFT;
 }
 
 cEnemyVertical::~cEnemyVertical() {}
@@ -88,9 +89,3 @@ void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
 
 	xWindow += cameraXSceneInc;
 }
-
-/*
-void cEnemyVertical::LogicProjectiles2(Matrix& map, cPlayer player) {
-	MoveProjectiles(DIR_LEFT, DIR_NONE);
-}
-*/

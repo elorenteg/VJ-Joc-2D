@@ -6,7 +6,8 @@ cBicho::cBicho(void) {
 	seq = 0;
 	delay = 0;
 	xWindow = 0;
-	projectiles = vector<Projectile>(0);
+	projsLeft = vector<Projectile>(0);
+	projsRight = vector<Projectile>(0);
 }
 
 cBicho::~cBicho(void) {}
@@ -61,8 +62,9 @@ int cBicho::GetHeight() {
 	return h;
 }
 
-vector<Projectile> cBicho::GetProjectiles() {
-	return projectiles;
+vector<Projectile> cBicho::GetProjectiles(int dir) {
+	if (dir == DIR_LEFT) return projsLeft;
+	if (dir == DIR_RIGHT) return projsRight;
 }
 
 void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
@@ -83,6 +85,14 @@ void cBicho::DrawProjectiles(int tex_id) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 
+	DrawProjectiles(tex_id, projsLeft);
+	DrawProjectiles(tex_id, projsRight);
+
+	glDisable(GL_TEXTURE_2D);
+}
+
+
+void cBicho::DrawProjectiles(int tex_id, vector<Projectile>& projectiles) {
 	int w = PROJ_WIDTH;
 	int h = PROJ_HEIGHT;
 
@@ -115,17 +125,15 @@ void cBicho::DrawProjectiles(int tex_id) {
 				yo = 0.8f;
 				yf = 1.0f;
 				break;
-			}
+		}
 
 		glBegin(GL_QUADS);
-		glTexCoord2f(xo, yo);	glVertex3f(posx, posy, z);
-		glTexCoord2f(xf, yo);	glVertex3f(posx + w, posy, z);
-		glTexCoord2f(xf, yf);	glVertex3f(posx + w, posy + h, z);
-		glTexCoord2f(xo, yf);	glVertex3f(posx, posy + h, z);
+			glTexCoord2f(xo, yo);	glVertex3f(posx, posy, z);
+			glTexCoord2f(xf, yo);	glVertex3f(posx + w, posy, z);
+			glTexCoord2f(xf, yf);	glVertex3f(posx + w, posy + h, z);
+			glTexCoord2f(xo, yf);	glVertex3f(posx, posy + h, z);
 		glEnd();
 	}
-
-	glDisable(GL_TEXTURE_2D);
 }
 
 bool cBicho::MapCollidesUp(Matrix& map, float step) {
@@ -307,38 +315,48 @@ void cBicho::Shoot(Matrix& map) {
 	proj.state_color = FRAME_0;
 	proj.time_color = MAX_FRAMES*3;
 
-	projectiles.push_back(proj);
+	if (lookAtRight()) projsRight.push_back(proj);
+	else projsLeft.push_back(proj);
 }
 
 Projectile cBicho::InitShoot() {
 	Projectile proj;
-	proj.x = x - 50;
+	if (lookAtRight()) proj.x = x + 50;
+	else proj.x = x - 50;
 	proj.y = y + BICHO_HEIGHT / 2;
 
 	return proj;
 }
 
-void cBicho::MoveProjectiles(int dirX, int dirY) {
-	for (int p = 0; p < projectiles.size(); ++p) {
-		if (dirX != DIR_NONE) projectiles[p].x += dirX*TILE_SIZE / 2;
-		if (dirY != DIR_NONE) projectiles[p].y += dirY*TILE_SIZE / 2;
+bool cBicho::lookAtRight() {
+	return state_lookat == DIR_RIGHT;
+}
 
-		if (projectiles[p].x < 0 || projectiles[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
-			projectiles.erase(projectiles.begin() + p);
-		}
-		else if (projectiles[p].y < 0 || projectiles[p].y / TILE_SIZE >= SCENE_HEIGHT) {
-			projectiles.erase(projectiles.begin() + p);
+void cBicho::MoveProjectiles() {
+	projsLeft = MoveProjectiles(projsLeft, DIR_LEFT);
+	projsRight = MoveProjectiles(projsRight, DIR_RIGHT);
+}
+
+vector<Projectile> cBicho::MoveProjectiles(vector<Projectile>& projs, int dirX) {
+	for (int p = 0; p < projs.size(); ++p) {
+		projs[p].x += dirX*TILE_SIZE / 2;
+
+		if (projs[p].x < 0 || projs[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
+			// proyectiles fuera de escena se eliminan
+			projs.erase(projs.begin() + p);
 		}
 		else {
-			projectiles[p].time_color = (projectiles[p].time_color - 1);
-			if (projectiles[p].time_color == 0) {
-				projectiles[p].time_color = MAX_FRAMES * 3;
-				projectiles[p].state_color = (projectiles[p].state_color + 1) % MAX_FRAMES;
+			projs[p].time_color = (projs[p].time_color - 1);
+			if (projs[p].time_color == 0) {
+				// cambio de color de gradiente
+				projs[p].time_color = MAX_FRAMES * 3;
+				projs[p].state_color = (projs[p].state_color + 1) % MAX_FRAMES;
 			}
 		}
 	}
+	return projs;
 }
 
 void cBicho::LogicProjectiles(Matrix& map) {
-	MoveProjectiles(DIR_LEFT, DIR_NONE);
+	MoveProjectiles();
 }

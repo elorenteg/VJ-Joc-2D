@@ -3,6 +3,7 @@
 cPlayer::cPlayer() {
 	lifes = 3;
 	score = 0;
+	state_lookat = DIR_RIGHT;
 }
 
 cPlayer::~cPlayer() {}
@@ -15,7 +16,8 @@ void cPlayer::Reset() {
 }
 
 void cPlayer::ResetLife() {
-	projectiles = vector<Projectile>(0);
+	projsLeft = vector<Projectile>(0);
+	projsRight = vector<Projectile>(0);
 	xWindow = 0.0f;
 }
 
@@ -124,7 +126,7 @@ Projectile cPlayer::InitShoot() {
 }
 
 void cPlayer::LogicProjectiles(Matrix& map, vector<cEnemyVertical>& vers, vector<cEnemyHorizontal>& hors, vector<cEnemyCircle>& cirs) {
-	MoveProjectiles(DIR_RIGHT, DIR_NONE);
+	MoveProjectiles();
 
 	HitProjectile(map, vers);
 	HitProjectile(map, hors);
@@ -132,12 +134,12 @@ void cPlayer::LogicProjectiles(Matrix& map, vector<cEnemyVertical>& vers, vector
 }
 
 void cPlayer::HitProjectile(Matrix& map, vector<cEnemyVertical>& vers) {
-	for (int p = 0; p < projectiles.size(); ++p) {
-		int tx = projectiles[p].x / TILE_SIZE;
-		int ty = projectiles[p].y / TILE_SIZE;
+	for (int p = 0; p < projsRight.size(); ++p) {
+		int tx = projsRight[p].x / TILE_SIZE;
+		int ty = projsRight[p].y / TILE_SIZE;
 		int tx2 = tx + 1;
 
-		if (isEnemy(map, tx, ty) || (projectiles[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH && isEnemy(map, tx2, ty))) {
+		if (isEnemy(map, tx, ty) || (projsRight[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH && isEnemy(map, tx2, ty))) {
 			bool found = false;
 			for (int v = 0; v < vers.size() && !found; ++v) {
 				int v_tx = vers[v].GetX() / TILE_SIZE;
@@ -148,7 +150,7 @@ void cPlayer::HitProjectile(Matrix& map, vector<cEnemyVertical>& vers) {
 				if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
 					found = true;
 					vers.erase(vers.begin() + v);
-					projectiles.erase(projectiles.begin() + p);
+					projsRight.erase(projsRight.begin() + p);
 					SetMapValue(map, v_tx, v_ty, 0);
 					++score;
 				}
@@ -158,12 +160,12 @@ void cPlayer::HitProjectile(Matrix& map, vector<cEnemyVertical>& vers) {
 }
 
 void cPlayer::HitProjectile(Matrix& map, vector<cEnemyHorizontal>& hors) {
-	for (int p = 0; p < projectiles.size(); ++p) {
-		int tx = projectiles[p].x / TILE_SIZE;
-		int ty = projectiles[p].y / TILE_SIZE;
+	for (int p = 0; p < projsRight.size(); ++p) {
+		int tx = projsRight[p].x / TILE_SIZE;
+		int ty = projsRight[p].y / TILE_SIZE;
 		int tx2 = tx + 1;
 
-		if (isEnemy(map, tx, ty) || (projectiles[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH && isEnemy(map, tx2, ty))) {
+		if (isEnemy(map, tx, ty) || (projsRight[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH && isEnemy(map, tx2, ty))) {
 			bool found = false;
 			for (int v = 0; v < hors.size() && !found; ++v) {
 				int v_tx = hors[v].GetX() / TILE_SIZE;
@@ -174,7 +176,7 @@ void cPlayer::HitProjectile(Matrix& map, vector<cEnemyHorizontal>& hors) {
 				if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
 					found = true;
 					hors.erase(hors.begin() + v);
-					projectiles.erase(projectiles.begin() + p);
+					projsRight.erase(projsRight.begin() + p);
 					SetMapValue(map, v_tx, v_ty, 0);
 					++score;
 				}
@@ -184,12 +186,12 @@ void cPlayer::HitProjectile(Matrix& map, vector<cEnemyHorizontal>& hors) {
 }
 
 void cPlayer::HitProjectile(Matrix& map, vector<cEnemyCircle>& cirs) {
-	for (int p = 0; p < projectiles.size(); ++p) {
-		int tx = projectiles[p].x / TILE_SIZE;
-		int ty = projectiles[p].y / TILE_SIZE;
+	for (int p = 0; p < projsRight.size(); ++p) {
+		int tx = projsRight[p].x / TILE_SIZE;
+		int ty = projsRight[p].y / TILE_SIZE;
 		int tx2 = tx + 1;
 
-		if (isEnemy(map, tx, ty) || (projectiles[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH && isEnemy(map, tx2, ty))) {
+		if (isEnemy(map, tx, ty) || (projsRight[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH && isEnemy(map, tx2, ty))) {
 			bool found = false;
 			for (int v = 0; v < cirs.size() && !found; ++v) {
 				int v_tx = cirs[v].GetX() / TILE_SIZE;
@@ -200,7 +202,7 @@ void cPlayer::HitProjectile(Matrix& map, vector<cEnemyCircle>& cirs) {
 				if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
 					found = true;
 					cirs.erase(cirs.begin() + v);
-					projectiles.erase(projectiles.begin() + p);
+					projsRight.erase(projsRight.begin() + p);
 					SetMapValue(map, v_tx, v_ty, 0);
 					++score;
 				}

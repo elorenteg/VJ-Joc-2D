@@ -4,6 +4,7 @@ cEnemyCircle::cEnemyCircle() {
 	state = rand() % MAX_MOVES;
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
+	state_lookat = DIR_LEFT;
 }
 
 cEnemyCircle::~cEnemyCircle() {}
@@ -45,6 +46,11 @@ void cEnemyCircle::Draw(int tex_id) {
 	DrawRect(tex_id, xo, yo, xf, yf);
 
 	NextFrame(5);
+}
+
+bool cEnemyCircle::lookAtRight() {
+	if (state == RIGHT || state == UP) return true;
+	else return false;
 }
 
 void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {

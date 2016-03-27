@@ -22,6 +22,9 @@ public:
 
 	void Logic(Matrix& map, float cameraXScene);
 
+protected:
+	bool lookAtRight();
+
 private:
 	int num_moves;
 	int time_state;
