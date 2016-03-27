@@ -21,6 +21,7 @@
 #define GAME_OVER_MESSAGE	 "GAME OVER"
 #define END_OF_GAME_MESSAGE	 "END OF GAME"
 #define END_OF_LEVEL_MESSAGE "END OF LEVEL"
+#define END_OF_LEVEL_MESSAGE_NEXT "PREM ENTER PER A PASSAR DE NIVELL"
 
 class cGame
 {
@@ -60,7 +61,6 @@ private:
 	
 	float cameraXScene;
 	int currentLevel;
-	bool isGameOver;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;
@@ -73,6 +73,7 @@ private:
 	bool loadLevel(int level);
 	bool initEnemies(int level);
 
+	void startGame();
 	bool isGameStandBy();
 	bool isEndOfLevel();
 	bool isPlayerDead();

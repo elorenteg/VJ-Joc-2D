@@ -15,9 +15,6 @@ cGame::~cGame(void) {
 
 bool cGame::Init() {
 	bool res = true;
-	cameraXScene = 0.0f;
-	isGameOver = false;
-	currentLevel = 1;
 
 	//Graphics initialization
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
@@ -46,17 +43,11 @@ bool cGame::Init() {
 	strcpy(path, concat_path(IMAGES_FOLDER, "escena.png").c_str());
 	res = Data.LoadImage(IMG_SCENE, path, GL_RGBA);
 	if (!res) return false;
-	res = Scene.LoadLevel(currentLevel);
-	if (!res) return false;
 
 	//Player initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_alas.png").c_str());
 	res = Data.LoadImage(IMG_PLAYER, path, GL_RGBA);
 	if (!res) return false;
-	Player.SetTile(2, SCENE_HEIGHT / 2);
-	Player.SetZ(SCENE_DEPTH);
-	Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-	Player.SetMapValue(Scene.GetMap(), 2, SCENE_HEIGHT / 2, PLAYER - 48);
 
 	//Font initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "font.png").c_str());
@@ -89,17 +80,39 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_SHOOT, path, GL_RGBA);
 	if (!res) return false;
 
-	GameInfoLayer.Init();
-	loadLevel(currentLevel);
+	startGame();
 
 	return res;
+}
+
+void cGame::startGame() {
+	currentLevel = 1;
+	GameInfoLayer.Init();
+
+	loadLevel(currentLevel);
 }
 
 bool cGame::loadLevel(int level) {
 	bool res = true;
 	firstRender = true;
+	cameraXScene = 0.0f;
 
-	//Enemies initialization
+	// Player initialization
+	Player.SetTile(2, SCENE_HEIGHT / 2);
+	Player.SetZ(SCENE_DEPTH);
+	Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+	Player.SetMapValue(Scene.GetMap(), 2, SCENE_HEIGHT / 2, PLAYER - 48);
+	Player.SetXWindow(0.0f);
+	//Player.SetProjectiles
+
+	// Load level
+	res = Scene.LoadLevel(level);
+	if (!res) return false;
+
+	// Enemies initialization
+	EnemiesV = vector<cEnemyVertical>(0);
+	EnemiesH = vector<cEnemyHorizontal>(0);
+	EnemiesC = vector<cEnemyCircle>(0);
 	res = initEnemies(level);
 	if (!res) return false;
 
@@ -145,7 +158,7 @@ bool cGame::initEnemies(int level) {
 				enemy.SetTile(i, j);
 				enemy.SetZ(SCENE_DEPTH);
 				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-				//enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
+				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
 				EnemiesH.push_back(enemy);
 			}
 			else if (tile == ENEMY_CIR) {
@@ -203,7 +216,18 @@ bool cGame::Process() {
 	//Process Input
 	if (keys[27]) res = false;
 
-	if (!isGameStandBy()) {
+	if (isGameStandBy()) {
+		if (keys[13]) {
+			if (isPlayerDead()) {
+				startGame();
+			}
+			else if (isEndOfLevel() && currentLevel < TOTAL_LEVELS) {
+				currentLevel++;
+				loadLevel(currentLevel);
+			}
+		}
+	}
+	else {
 		if (keys[GLUT_KEY_UP]) {
 			Player.MoveUp(Scene.GetMap());
 			//keys[GLUT_KEY_UP] = false;
@@ -241,8 +265,6 @@ bool cGame::Process() {
 			EnemiesC[i].Logic(map, GAME_SCROLL);
 		}
 		Scene.SetMap(map);
-
-		isGameOver = Player.isGameOver();
 	}
 
 	return res;
@@ -331,7 +353,8 @@ void cGame::RenderMessage(int message) {
 	}
 	else if (message == END_OF_LEVEL) {
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, END_OF_LEVEL_MESSAGE);
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 5.0f, MSS_DEPTH, 200.0f, 50.0f, END_OF_LEVEL_MESSAGE);
+		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 45.0f, MSS_DEPTH, 300.0f, 25.0f, END_OF_LEVEL_MESSAGE_NEXT);
 	}
 	else if (message == END_OF_GAME) {
 		glColor3f(0.0f, 0.0f, 0.0f);
