@@ -17,7 +17,8 @@
 #define END_GAME_OVER	0
 #define END_OF_GAME		1
 #define END_OF_LEVEL	2
-#define GAME_PAUSED		3
+#define LIFE_LOST		3
+#define GAME_PAUSED		4
 
 #define GAME_OVER_MESSAGE			"GAME OVER"
 #define END_OF_GAME_MESSAGE			"FI DEL JOC"
@@ -25,6 +26,8 @@
 #define END_OF_LEVEL_MESSAGE_NEXT	"PREM ENTER PER A PASSAR DE NIVELL"
 #define GAME_PAUSED_MESSAGE			"PAUSA"
 #define GAME_PAUSED_MESSAGE_NEXT	"PREM P PER A CONTINUAR JUGANT"
+#define PLAYER_LOSES_LIFE_MESSAGE	"OH! VIDA PERDUDA"
+#define PLAYER_LOSES_LIFE_MESSAGE_NEXT	"PREM ENTER PER A CONTINUAR JUGANT"
 
 #define END_SCORE_MESSAGE			"PUNTUACIO"
 #define END_LIFE_REM_MESSAGE		"VIDES REST"
@@ -84,6 +87,7 @@ private:
 	void startGame();
 	bool isGameStandBy();
 	bool isEndOfLevel();
+	bool isPlayerOutsideWindow();
 	bool isPlayerDead();
 	bool isGamePaused();
 };

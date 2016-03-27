@@ -221,7 +221,7 @@ bool cGame::Process() {
 
 	if (isGameStandBy()) {
 		if (keys[13]) {
-			if (isPlayerDead()) {
+			if (isPlayerDead() || isPlayerOutsideWindow()) {
 				startGame();
 			}
 			else if (isEndOfLevel() && currentLevel < TOTAL_LEVELS) {
@@ -279,6 +279,12 @@ bool cGame::Process() {
 		}
 		Scene.SetMap(map);
 
+		if (isPlayerOutsideWindow()) {
+			int lifes = Player.GetLifes();
+			if (lifes > 0)
+				Player.SetLifes(lifes - 1);
+		}
+
 		GameInfoLayer.SetCurrentScore(Player.GetScore());
 		GameInfoLayer.SetCurrentLife(Player.GetLifes());
 	}
@@ -287,7 +293,11 @@ bool cGame::Process() {
 }
 
 bool cGame::isGameStandBy() {
-	return isPlayerDead() || isEndOfLevel() || isGamePaused();
+	return isPlayerDead() || isEndOfLevel() || isGamePaused() || isPlayerOutsideWindow();
+}
+
+bool cGame::isPlayerOutsideWindow() {
+	return Player.isOutsideWindow();
 }
 
 bool cGame::isPlayerDead() {
@@ -325,6 +335,9 @@ void cGame::Render() {
 		}
 		else if (isGamePaused()) {
 			RenderMessage(GAME_PAUSED);
+		}
+		else if (isPlayerOutsideWindow()) {
+			RenderMessage(LIFE_LOST);
 		}
 	}
 
@@ -373,18 +386,37 @@ void cGame::RenderMessage(int message) {
 
 	glDisable(GL_TEXTURE_2D);
 
-	if (message == END_GAME_OVER) {
+	if (message == END_OF_LEVEL || message == GAME_PAUSED || message == LIFE_LOST) {
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 20.0f, MSS_DEPTH, 200.0f, 50.0f, GAME_OVER_MESSAGE);
+		char message_main[64];
+		char message_second[64];
+		if (message == END_OF_LEVEL) {
+			strcpy(message_main, END_OF_LEVEL_MESSAGE);
+			strcpy(message_second, END_OF_LEVEL_MESSAGE_NEXT);
+		}
+		else if (message == GAME_PAUSED) {
+			strcpy(message_main, GAME_PAUSED_MESSAGE);
+			strcpy(message_second, GAME_PAUSED_MESSAGE_NEXT);
+		}
+		else if (message == LIFE_LOST) {
+			strcpy(message_main, PLAYER_LOSES_LIFE_MESSAGE);
+			strcpy(message_second, PLAYER_LOSES_LIFE_MESSAGE_NEXT);
+		}
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 5.0f, MSS_DEPTH, 200.0f, 50.0f, message_main);
+		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 45.0f, MSS_DEPTH, 300.0f, 25.0f, message_second);
 	}
-	else if (message == END_OF_LEVEL) {
+	else {
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 5.0f, MSS_DEPTH, 200.0f, 50.0f, END_OF_LEVEL_MESSAGE);
-		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 45.0f, MSS_DEPTH, 300.0f, 25.0f, END_OF_LEVEL_MESSAGE_NEXT);
-	}
-	else if (message == END_OF_GAME) {
-		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 + 25.0f, MSS_DEPTH, 200.0f, 40.0f, END_OF_GAME_MESSAGE);
+		
+		char message_main[64];
+		if (message == END_OF_GAME) {
+			strcpy(message_main, END_OF_GAME_MESSAGE);
+		}
+		if (message == END_GAME_OVER) {
+			strcpy(message_main, GAME_OVER_MESSAGE);
+		}
+
+		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 + 25.0f, MSS_DEPTH, 200.0f, 40.0f, message_main);
 
 		char msgbuf[128];
 		char intbuf[8];
@@ -407,11 +439,6 @@ void cGame::RenderMessage(int message) {
 		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 70.0f, MSS_DEPTH, 300.0f, 20.0f, msgbuf);
 
 		GameInfoLayer.SaveHighScore(GameInfoLayer.GetCurrentScore() * GameInfoLayer.GetCurrentLife());
-	}
-	else if (message == GAME_PAUSED) {
-		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 5.0f, MSS_DEPTH, 200.0f, 50.0f, GAME_PAUSED_MESSAGE);
-		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 45.0f, MSS_DEPTH, 300.0f, 25.0f, GAME_PAUSED_MESSAGE_NEXT);
 	}
 }
 

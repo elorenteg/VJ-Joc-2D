@@ -16,10 +16,13 @@ public:
 	void ResetLife();
 
 	int GetScore();
+	void SetLifes(int new_life);
 	int GetLifes();
 
 	void Draw(int tex_id);
 	void DrawRainbow(int tex_id, float xWindow);
+
+	bool isOutsideWindow();
 	bool isGameOver();
 	
 	void Logic(Matrix& map, float cameraXScene);

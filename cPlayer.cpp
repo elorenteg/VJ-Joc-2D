@@ -23,8 +23,24 @@ int cPlayer::GetScore() {
 	return score;
 }
 
+void cPlayer::SetLifes(int new_life) {
+	lifes = new_life;
+}
+
 int cPlayer::GetLifes() {
 	return lifes;
+}
+
+bool cPlayer::isOutsideWindow() {
+	if (x + w - xWindow < 20) return true;
+
+	return false;
+}
+
+bool cPlayer::isGameOver() {
+	if (lifes <= 0) return true;
+
+	return false;
 }
 
 void cPlayer::Draw(int tex_id) {
@@ -86,14 +102,6 @@ void cPlayer::DrawRainbow(int tex_id, float xWindow) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-bool cPlayer::isGameOver() {
-	if (x + w - xWindow < 20) return true;
-
-	if (lifes <= 0) return true;
-
-	return false;
-}
-
 void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
 	int tile_x = x / TILE_SIZE;
 	int tile_y = y / TILE_SIZE;
@@ -105,7 +113,7 @@ void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
 	SetMapValue(map, tile_x_new, tile_y, PLAYER - 48);
 	xWindow += cameraXSceneInc;
 
-	if (x + w - xWindow < 20) --lifes;
+	//if (x + w - xWindow < 20) --lifes;
 }
 
 void cPlayer::HitEnemy() {
