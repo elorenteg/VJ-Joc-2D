@@ -48,3 +48,9 @@ typedef vector<vector<int>> Matrix;
 //char msgbuf[128];
 //strcpy(msgbuf, str_aux.c_str());
 //OutputDebugStringA(msgbuf);
+
+//char msgbuf[128];
+//char aux_int[8];
+//sprintf(aux_int, "%d", high_score);
+//strcpy(msgbuf, aux_int);
+//OutputDebugStringA(msgbuf);

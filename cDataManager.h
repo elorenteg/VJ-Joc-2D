@@ -12,8 +12,9 @@ public:
 	cDataManager(void);
 	~cDataManager(void);
 
+	bool userDataExists();
 	bool prepareUserData();
-	char* readMaxScore();
+	int readMaxScore();
 	bool saveMaxScore(char* text);
 
 private:
