@@ -23,7 +23,7 @@ bool cGameInfoLayer::Init() {
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 
 	current_level = 1;
-	high_score = 2;
+	high_score = DataManager.readMaxScore();
 	current_score = 0;
 	current_life = 3;
 
@@ -31,21 +31,19 @@ bool cGameInfoLayer::Init() {
 }
 
 void cGameInfoLayer::Draw() {
-	//glPushMatrix();
-
 	// Background
 	glColor3f(0.9f, 0.9f, 1.0f);
-	
+
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, Data.GetID(IMG_SCENE));
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.8f); glVertex3f(0, GAME_HEIGHT-GAME_MARGIN, SCENE_DEPTH);
-		glTexCoord2f(9.0f, 0.8f); glVertex3f(GAME_WIDTH, GAME_HEIGHT - GAME_MARGIN, SCENE_DEPTH);
-		glTexCoord2f(9.0f, 1.2f); glVertex3f(GAME_WIDTH, GAME_HEIGHT, SCENE_DEPTH);
-		glTexCoord2f(0.0f, 1.2f); glVertex3f(0, GAME_HEIGHT, SCENE_DEPTH);
+	glTexCoord2f(0.0f, 0.8f); glVertex3f(0, GAME_HEIGHT - GAME_MARGIN, SCENE_DEPTH);
+	glTexCoord2f(9.0f, 0.8f); glVertex3f(GAME_WIDTH, GAME_HEIGHT - GAME_MARGIN, SCENE_DEPTH);
+	glTexCoord2f(9.0f, 1.2f); glVertex3f(GAME_WIDTH, GAME_HEIGHT, SCENE_DEPTH);
+	glTexCoord2f(0.0f, 1.2f); glVertex3f(0, GAME_HEIGHT, SCENE_DEPTH);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
@@ -59,7 +57,7 @@ void cGameInfoLayer::Draw() {
 	sprintf(level_value, "%d", current_level);
 	strcat(level_text, level_value);
 	Font.drawText(5.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 90.0f, 25.0f, level_text);
-	
+
 	// Vides
 	glColor3f(0.0f, 0.0f, 0.0f);
 	char life_text[32];
@@ -69,7 +67,7 @@ void cGameInfoLayer::Draw() {
 	sprintf(life_value, "%d", current_life);
 	strcat(life_text, life_value);
 	Font.drawText(110.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 75.0f, 25.0f, life_text);
-	
+
 	// Puntuacio
 	glColor3f(0.0f, 0.0f, 0.0f);
 	char score_text[32];
@@ -79,7 +77,7 @@ void cGameInfoLayer::Draw() {
 	sprintf(score_value, "%d", current_score);
 	strcat(score_text, score_value);
 	Font.drawText(GAME_WIDTH - 275.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 135.0f, 25.0f, score_text);
-	
+
 	// Maxima Puntuacio
 	glColor3f(0.0f, 0.0f, 0.0f);
 	char high_score_text[32];
@@ -89,8 +87,6 @@ void cGameInfoLayer::Draw() {
 	sprintf(high_score_value, "%d", high_score);
 	strcat(high_score_text, high_score_value);
 	Font.drawText(GAME_WIDTH - 125.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 120.0f, 25.0f, high_score_text);
-	
-	//glPopMatrix();
 }
 
 void cGameInfoLayer::SetCurrentLevel(int level) {
@@ -114,6 +110,11 @@ void cGameInfoLayer::SetCurrentScore(int score) {
 		char high_score_value[8];
 		sprintf(high_score_value, "%d", high_score);
 		DataManager.saveMaxScore(high_score_value);
+
+		char msgbuf[128];
+		strcpy(msgbuf, "GUARDANDO: ");
+		strcat(msgbuf, high_score_value);
+		OutputDebugStringA(msgbuf);
 	}
 }
 
