@@ -126,7 +126,7 @@ Projectile cPlayer::InitShoot() {
 }
 
 void cPlayer::LogicProjectiles(Matrix& map, vector<cEnemyVertical>& vers, vector<cEnemyHorizontal>& hors, vector<cEnemyCircle>& cirs) {
-	MoveProjectiles();
+	MoveProjectiles(map);
 
 	HitProjectile(map, vers);
 	HitProjectile(map, hors);

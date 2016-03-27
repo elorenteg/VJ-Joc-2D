@@ -92,10 +92,12 @@ protected:
 	bool MapCollidesRight(Matrix& map, float step);
 
 	bool isEnemy(Matrix& map, int tile_x, int tile_y);
+	bool isScene(Matrix& map, int tile_x, int tile_y);
+
 	virtual void HitEnemy();
 
 	virtual Projectile InitShoot();
-	void MoveProjectiles();
+	void MoveProjectiles(Matrix& map);
 
 	virtual bool lookAtRight();
 	bool isInScene();
@@ -103,5 +105,5 @@ protected:
 private:
 	int seq, delay;
 
-	vector<Projectile> MoveProjectiles(vector<Projectile>& projs, int dirX);
+	vector<Projectile> MoveProjectiles(Matrix& map, vector<Projectile>& projs, int dirX);
 };

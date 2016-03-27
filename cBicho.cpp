@@ -310,6 +310,17 @@ bool cBicho::isEnemy(Matrix& map, int tile_x, int tile_y) {
 	return false;
 }
 
+bool cBicho::isScene(Matrix& map, int tile_x, int tile_y) {
+	if (map[tile_y][tile_x] == GROUND) return true;
+	if (map[tile_y][tile_x] == CLOUD_SUP_ESQ) return true;
+	if (map[tile_y][tile_x] == CLOUD_SUP_CEN) return true;
+	if (map[tile_y][tile_x] == CLOUD_SUP_DRE) return true;
+	if (map[tile_y][tile_x] == CLOUD_INF_ESQ) return true;
+	if (map[tile_y][tile_x] == CLOUD_INF_CEN) return true;
+	if (map[tile_y][tile_x] == CLOUD_INF_DRE) return true;
+	return false;
+}
+
 void cBicho::Shoot(Matrix& map) {
 	if (isInScene()) {
 		Projectile proj = InitShoot();
@@ -341,12 +352,12 @@ bool cBicho::isInScene() {
 	return isInside;
 }
 
-void cBicho::MoveProjectiles() {
-	projsLeft = MoveProjectiles(projsLeft, DIR_LEFT);
-	projsRight = MoveProjectiles(projsRight, DIR_RIGHT);
+void cBicho::MoveProjectiles(Matrix& map) {
+	projsLeft = MoveProjectiles(map, projsLeft, DIR_LEFT);
+	projsRight = MoveProjectiles(map, projsRight, DIR_RIGHT);
 }
 
-vector<Projectile> cBicho::MoveProjectiles(vector<Projectile>& projs, int dirX) {
+vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& projs, int dirX) {
 	for (int p = 0; p < projs.size(); ++p) {
 		projs[p].x += dirX*TILE_SIZE / 2;
 
@@ -355,11 +366,24 @@ vector<Projectile> cBicho::MoveProjectiles(vector<Projectile>& projs, int dirX) 
 			projs.erase(projs.begin() + p);
 		}
 		else {
-			projs[p].time_color = (projs[p].time_color - 1);
-			if (projs[p].time_color == 0) {
-				// cambio de color de gradiente
-				projs[p].time_color = MAX_FRAMES * 3;
-				projs[p].state_color = (projs[p].state_color + 1) % MAX_FRAMES;
+			// proyectiles dentro de escena
+			int tile_x = projs[p].x / TILE_SIZE;
+			int tile_y = projs[p].y / TILE_SIZE;
+			int width_tiles = PROJ_WIDTH / TILE_SIZE;
+
+			bool hitScene = false;
+			for (int tx = tile_x; tx < tile_x + width_tiles; ++tx) {
+				if (isScene(map, tx, tile_y)) hitScene = true;
+			}
+
+			if (hitScene) projs.erase(projs.begin() + p);
+			else {
+				projs[p].time_color = (projs[p].time_color - 1);
+				if (projs[p].time_color == 0) {
+					// cambio de color de gradiente
+					projs[p].time_color = MAX_FRAMES * 3;
+					projs[p].state_color = (projs[p].state_color + 1) % MAX_FRAMES;
+				}
 			}
 		}
 	}
@@ -367,5 +391,5 @@ vector<Projectile> cBicho::MoveProjectiles(vector<Projectile>& projs, int dirX) 
 }
 
 void cBicho::LogicProjectiles(Matrix& map) {
-	MoveProjectiles();
+	MoveProjectiles(map);
 }
