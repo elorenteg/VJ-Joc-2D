@@ -12,6 +12,9 @@ public:
 	cPlayer();
 	~cPlayer();
 
+	void Reset();
+	void ResetLife();
+
 	int GetScore();
 	int GetLifes();
 
@@ -26,8 +29,8 @@ public:
 	void LogicProjectiles(Matrix& map, vector<cEnemyVertical>& vers, vector<cEnemyHorizontal>& hors, vector<cEnemyCircle>& cirs);
 
 private:
-	int lifes = 3;
-	int score = 0;
+	int lifes;
+	int score;
 
 	void HitProjectile(Matrix& map, vector<cEnemyVertical>& vers);
 	void HitProjectile(Matrix& map, vector<cEnemyHorizontal>& vers);
