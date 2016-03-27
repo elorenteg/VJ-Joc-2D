@@ -245,7 +245,7 @@ bool cGame::Process() {
 			Player.MoveRight(Scene.GetMap());
 		}
 
-		if (keys[' ']) { // SPACE = 32
+		if (keys[' ']) {
 			Player.Shoot(Scene.GetMap());
 			keys[' '] = false;
 		}
@@ -263,12 +263,15 @@ bool cGame::Process() {
 
 		for (int i = 0; i < EnemiesH.size(); ++i) {
 			EnemiesH[i].Logic(map, GAME_SCROLL);
+			EnemiesH[i].LogicProjectiles(map);
 		}
 		for (int i = 0; i < EnemiesV.size(); ++i) {
 			EnemiesV[i].Logic(map, GAME_SCROLL);
+			EnemiesV[i].LogicProjectiles(map);
 		}
 		for (int i = 0; i < EnemiesC.size(); ++i) {
 			EnemiesC[i].Logic(map, GAME_SCROLL);
+			EnemiesC[i].LogicProjectiles(map);
 		}
 		Scene.SetMap(map);
 
@@ -333,12 +336,15 @@ void cGame::Render() {
 
 	for (int i = 0; i < EnemiesH.size(); ++i) {
 		EnemiesH[i].Draw(Data.GetID(IMG_NINJA));
+		EnemiesH[i].DrawProjectiles(Data.GetID(IMG_SHOOT));
 	}
 	for (int i = 0; i < EnemiesV.size(); ++i) {
 		EnemiesV[i].Draw(Data.GetID(IMG_NINJA));
+		EnemiesV[i].DrawProjectiles(Data.GetID(IMG_SHOOT));
 	}
 	for (int i = 0; i < EnemiesC.size(); ++i) {
 		EnemiesC[i].Draw(Data.GetID(IMG_NINJA));
+		EnemiesC[i].DrawProjectiles(Data.GetID(IMG_SHOOT));
 	}
 
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);

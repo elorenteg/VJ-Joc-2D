@@ -312,7 +312,7 @@ void cBicho::Shoot(Matrix& map) {
 
 Projectile cBicho::InitShoot() {
 	Projectile proj;
-	proj.x = x + 50;
+	proj.x = x - 50;
 	proj.y = y + BICHO_HEIGHT / 2;
 
 	return proj;
@@ -337,4 +337,8 @@ void cBicho::MoveProjectiles(int dirX, int dirY) {
 			}
 		}
 	}
+}
+
+void cBicho::LogicProjectiles(Matrix& map) {
+	MoveProjectiles(DIR_LEFT, DIR_NONE);
 }

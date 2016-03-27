@@ -85,6 +85,7 @@ void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
 			--num_moves;
 		}
 		time_state = FRAMES_MOVE;
+		Shoot(map);
 	}
 	else {
 		--time_state;
