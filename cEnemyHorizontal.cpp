@@ -5,6 +5,7 @@ cEnemyHorizontal::cEnemyHorizontal() {
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
 	state_lookat = DIR_LEFT;
+	freq_shoots = FREQ_SHOOTS;
 }
 
 cEnemyHorizontal::~cEnemyHorizontal() {}
@@ -80,7 +81,6 @@ void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
 			num_moves = TILES_MOVE;
 		}
 		else --num_moves;
-		Shoot(map);
 		time_state = FRAMES_MOVE;
 	}
 	else {
@@ -98,4 +98,10 @@ void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
 	}
 
 	xWindow+= cameraXSceneInc;
+
+	--freq_shoots;
+	if (freq_shoots == 0) {
+		freq_shoots = FREQ_SHOOTS;
+		Shoot(map);
+	}
 }

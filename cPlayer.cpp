@@ -89,7 +89,7 @@ void cPlayer::DrawRainbow(int tex_id, float xWindow) {
 }
 
 bool cPlayer::isGameOver() {
-	if (x + w - xWindow < 20) return true;
+	//if (x + w - xWindow < 20) return true;
 
 	if (lifes <= 0) return true;
 

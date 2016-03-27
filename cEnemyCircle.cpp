@@ -5,6 +5,7 @@ cEnemyCircle::cEnemyCircle() {
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
 	state_lookat = DIR_LEFT;
+	freq_shoots = FREQ_SHOOTS;
 }
 
 cEnemyCircle::~cEnemyCircle() {}
@@ -87,11 +88,8 @@ void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
 			state = state % MAX_MOVES;
 			num_moves = TILES_MOVE;
 		}
-		else {
-			--num_moves;
-		}
+		else --num_moves;
 		time_state = FRAMES_MOVE;
-		Shoot(map);
 	}
 	else {
 		--time_state;
@@ -109,4 +107,10 @@ void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
 	}
 
 	xWindow += cameraXSceneInc;
+
+	--freq_shoots;
+	if (freq_shoots == 0) {
+		freq_shoots = FREQ_SHOOTS;
+		Shoot(map);
+	}
 }

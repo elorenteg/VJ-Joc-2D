@@ -12,6 +12,8 @@
 #define TILES_MOVE	3
 #define MAX_MOVES	4
 
+#define FREQ_SHOOTS 25
+
 class cEnemyCircle : public cBicho
 {
 public:
@@ -28,6 +30,7 @@ protected:
 private:
 	int num_moves;
 	int time_state;
+	int freq_shoots;
 
 	int state;
 	int moves[MAX_MOVES] = { LEFT, UP, RIGHT, DOWN };
