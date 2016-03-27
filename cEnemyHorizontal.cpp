@@ -2,7 +2,6 @@
 
 cEnemyHorizontal::cEnemyHorizontal() {
 	state = rand() % MAX_MOVES;
-	//num_moves = TILES_MOVE;
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
 }
@@ -50,12 +49,6 @@ void cEnemyHorizontal::Draw(int tex_id) {
 }
 
 void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
-	float x = GetX();
-	float y = GetY();
-
-	int w = GetWidth();
-	int h = GetHeight();
-
 	float inc = 0;
 	switch (moves[state]) {
 	case RIGHT:
@@ -98,5 +91,5 @@ void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
 		SetMapValue(map, tile_x, tile_y, ENEMY_HOR - 48);
 	}
 
-	SetXWindow(GetXWindow() + cameraXSceneInc);
+	xWindow+= cameraXSceneInc;
 }

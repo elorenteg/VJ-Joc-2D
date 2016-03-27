@@ -33,14 +33,6 @@ void cBicho::SetWidthHeight(int width, int height) {
 	h = height;
 }
 
-void cBicho::SetX(float posX) {
-	x = posX;
-}
-
-void cBicho::SetY(float posY) {
-	y = posY;
-}
-
 void cBicho::SetZ(float posZ) {
 	z = posZ;
 }
@@ -299,29 +291,37 @@ bool cBicho::isEnemy(Matrix& map, int tile_x, int tile_y) {
 }
 
 void cBicho::Shoot(Matrix& map) {
-	float px = x + 50;
-	float py = y + BICHO_HEIGHT / 2;
-
-	Projectile proj;
-	proj.x = px;
-	proj.y = py;
+	Projectile proj = InitShoot();
 	proj.state_color = FRAME_0;
 	proj.time_color = MAX_FRAMES*3;
 
 	projectiles.push_back(proj);
 }
 
-void cBicho::MoveProjectiles(int dir) {
-	for (int i = 0; i < projectiles.size(); ++i) {
-		projectiles[i].x += dir*TILE_SIZE/2;
-		if (projectiles[i].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
-			projectiles.erase(projectiles.begin() + i);
+Projectile cBicho::InitShoot() {
+	Projectile proj;
+	proj.x = x + 50;
+	proj.y = y + BICHO_HEIGHT / 2;
+
+	return proj;
+}
+
+void cBicho::MoveProjectiles(int dirX, int dirY) {
+	for (int p = 0; p < projectiles.size(); ++p) {
+		if (dirX != DIR_NONE) projectiles[p].x += dirX*TILE_SIZE / 2;
+		if (dirY != DIR_NONE) projectiles[p].y += dirY*TILE_SIZE / 2;
+
+		if (projectiles[p].x < 0 || projectiles[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
+			projectiles.erase(projectiles.begin() + p);
+		}
+		else if (projectiles[p].y < 0 || projectiles[p].y / TILE_SIZE >= SCENE_HEIGHT) {
+			projectiles.erase(projectiles.begin() + p);
 		}
 		else {
-			projectiles[i].time_color = (projectiles[i].time_color - 1);
-			if (projectiles[i].time_color == 0) {
-				projectiles[i].time_color = MAX_FRAMES * 3;
-				projectiles[i].state_color = (projectiles[i].state_color + 1) % MAX_FRAMES;
+			projectiles[p].time_color = (projectiles[p].time_color - 1);
+			if (projectiles[p].time_color == 0) {
+				projectiles[p].time_color = MAX_FRAMES * 3;
+				projectiles[p].state_color = (projectiles[p].state_color + 1) % MAX_FRAMES;
 			}
 		}
 	}

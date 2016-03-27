@@ -272,6 +272,8 @@ bool cGame::Process() {
 			EnemiesC[i].Logic(map, GAME_SCROLL);
 		}
 		Scene.SetMap(map);
+
+		GameInfoLayer.SetCurrentScore(Player.GetScore());
 	}
 
 	return res;
