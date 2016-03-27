@@ -9,6 +9,11 @@
 
 #define PROJ_WIDTH		TILE_SIZE*2
 #define	PROJ_HEIGHT		TILE_SIZE/2
+#define DIR_NONE		0
+#define	DIR_UP			1
+#define DIR_DOWN		-1
+#define	DIR_LEFT		-1
+#define DIR_RIGHT		1
 
 #define FRAME_DELAY		12
 #define STEP_LENGTH		TILE_SIZE
@@ -44,8 +49,6 @@ public:
 	void SetPosition(float x, float y);
 	void SetTile(int tx, int ty);
 	void SetWidthHeight(int w, int h);
-	void SetX(float x);
-	void SetY(float y);
 	void SetZ(float z);
 	void SetXWindow(float xWindow);
 	void SetMapValue(Matrix& map, int tile_x, int tile_y, int value);
@@ -57,22 +60,13 @@ public:
 	int GetHeight();
 	vector<Projectile> GetProjectiles();
 
-	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
-	bool MapCollidesUp(Matrix& map, float step);
-	bool MapCollidesDown(Matrix& map, float step);
-	bool MapCollidesLeft(Matrix& map, float step);
-	bool MapCollidesRight(Matrix& map, float step);
-
 	void MoveRight(Matrix& map);
 	void MoveLeft(Matrix& map);
 	void MoveUp(Matrix& map);
 	void MoveDown(Matrix& map);
 
-	bool isEnemy(Matrix& map, int tile_x, int tile_y);
-	virtual void HitEnemy();
-	virtual void Shoot(Matrix& map);
+	void Shoot(Matrix& map);
 	void DrawProjectiles(int tex_id);
-	void MoveProjectiles(int dir);
 
 	int  GetState();
 	void SetState(int s);
@@ -86,6 +80,19 @@ protected:
 	int state;
 	float xWindow;
 	vector<Projectile> projectiles;
+
+	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
+
+	bool MapCollidesUp(Matrix& map, float step);
+	bool MapCollidesDown(Matrix& map, float step);
+	bool MapCollidesLeft(Matrix& map, float step);
+	bool MapCollidesRight(Matrix& map, float step);
+
+	bool isEnemy(Matrix& map, int tile_x, int tile_y);
+	virtual void HitEnemy();
+
+	virtual Projectile InitShoot();
+	void MoveProjectiles(int dirX, int dirY);
 
 private:
 	int seq, delay;

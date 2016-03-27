@@ -98,8 +98,16 @@ void cPlayer::HitEnemy() {
 	lifes -= 1;
 }
 
+Projectile cPlayer::InitShoot() {
+	Projectile proj;
+	proj.x = x + 50;
+	proj.y = y + BICHO_HEIGHT / 2;
+
+	return proj;
+}
+
 void cPlayer::LogicProjectiles(Matrix& map, vector<cEnemyVertical>& vers, vector<cEnemyHorizontal>& hors, vector<cEnemyCircle>& cirs) {
-	MoveProjectiles(1);
+	MoveProjectiles(DIR_RIGHT, DIR_NONE);
 
 	HitProjectile(map, vers);
 	HitProjectile(map, hors);
