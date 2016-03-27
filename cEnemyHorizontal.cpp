@@ -74,8 +74,8 @@ void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
 			num_moves = TILES_MOVE;
 		}
 		else --num_moves;
+		Shoot(map);
 		time_state = FRAMES_MOVE;
-		move *= true;
 	}
 	else {
 		--time_state;
@@ -93,3 +93,9 @@ void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
 
 	xWindow+= cameraXSceneInc;
 }
+
+/*
+void cEnemyHorizontal::LogicProjectiles2(Matrix& map, cPlayer player) {
+	MoveProjectiles(DIR_LEFT, DIR_NONE);
+}
+*/

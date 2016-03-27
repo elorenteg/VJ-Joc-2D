@@ -66,6 +66,7 @@ public:
 
 	void Shoot(Matrix& map);
 	void DrawProjectiles(int tex_id);
+	void LogicProjectiles(Matrix& map);
 
 	int  GetState();
 	void SetState(int s);

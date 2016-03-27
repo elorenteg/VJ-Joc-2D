@@ -70,6 +70,7 @@ void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
 			--num_moves;
 		}
 		time_state = FRAMES_MOVE;
+		Shoot(map);
 	}
 	else {
 		--time_state;
@@ -87,3 +88,9 @@ void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
 
 	xWindow += cameraXSceneInc;
 }
+
+/*
+void cEnemyVertical::LogicProjectiles2(Matrix& map, cPlayer player) {
+	MoveProjectiles(DIR_LEFT, DIR_NONE);
+}
+*/
