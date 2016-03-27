@@ -7,6 +7,9 @@
 #define BICHO_WIDTH		TILE_SIZE*3
 #define BICHO_HEIGHT	TILE_SIZE*2
 
+#define PROJ_WIDTH		TILE_SIZE*2
+#define	PROJ_HEIGHT		TILE_SIZE/2
+
 #define FRAME_DELAY		12
 #define STEP_LENGTH		TILE_SIZE
 
@@ -52,6 +55,7 @@ public:
 	float GetXWindow();
 	int GetWidth();
 	int GetHeight();
+	vector<Projectile> GetProjectiles();
 
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
 	bool MapCollidesUp(Matrix& map, float step);

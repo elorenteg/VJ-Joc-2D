@@ -69,6 +69,10 @@ int cBicho::GetHeight() {
 	return h;
 }
 
+vector<Projectile> cBicho::GetProjectiles() {
+	return projectiles;
+}
+
 void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
@@ -87,8 +91,8 @@ void cBicho::DrawProjectiles(int tex_id) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 
-	int w = 30;
-	int h = 10;
+	int w = PROJ_WIDTH;
+	int h = PROJ_HEIGHT;
 
 	float xo = 0.0f;
 	float xf = 1.0f;
@@ -302,7 +306,7 @@ void cBicho::Shoot(Matrix& map) {
 	proj.x = px;
 	proj.y = py;
 	proj.state_color = FRAME_0;
-	proj.time_color = MAX_FRAMES*5;
+	proj.time_color = MAX_FRAMES*3;
 
 	projectiles.push_back(proj);
 }
@@ -310,11 +314,15 @@ void cBicho::Shoot(Matrix& map) {
 void cBicho::MoveProjectiles(int dir) {
 	for (int i = 0; i < projectiles.size(); ++i) {
 		projectiles[i].x += dir*TILE_SIZE/2;
-
-		projectiles[i].time_color = (projectiles[i].time_color - 1);
-		if (projectiles[i].time_color == 0) {
-			projectiles[i].time_color = MAX_FRAMES*5;
-			projectiles[i].state_color = (projectiles[i].state_color + 1) % MAX_FRAMES;
+		if (projectiles[i].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
+			projectiles.erase(projectiles.begin() + i);
+		}
+		else {
+			projectiles[i].time_color = (projectiles[i].time_color - 1);
+			if (projectiles[i].time_color == 0) {
+				projectiles[i].time_color = MAX_FRAMES * 3;
+				projectiles[i].state_color = (projectiles[i].state_color + 1) % MAX_FRAMES;
+			}
 		}
 	}
 }

@@ -229,6 +229,7 @@ bool cGame::Process() {
 
 		//Game Logic
 		Player.Logic(Scene.GetMap(), GAME_SCROLL);
+		Player.LogicProjectiles(Scene.GetMap(), EnemiesV, EnemiesH, EnemiesC);
 
 		Matrix map = Scene.GetMap();
 		for (int i = 0; i < EnemiesH.size(); ++i) {
