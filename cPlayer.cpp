@@ -89,7 +89,7 @@ void cPlayer::DrawRainbow(int tex_id, float xWindow) {
 bool cPlayer::isGameOver() {
 	if (x + w - xWindow < 20) return true;
 
-	//if (lifes <= 0) return true;
+	if (lifes <= 0) return true;
 
 	return false;
 }
@@ -104,13 +104,15 @@ void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
 	int tile_x_new = x / TILE_SIZE;
 	SetMapValue(map, tile_x_new, tile_y, PLAYER - 48);
 	xWindow += cameraXSceneInc;
+
+	if (x + w - xWindow < 20) --lifes;
 }
 
 void cPlayer::HitEnemy() {
 	char msgbuf[64];
 	sprintf(msgbuf, "cPlayer - HIT %d lifes\n", lifes);
 	OutputDebugStringA(msgbuf);
-	lifes -= 1;
+	//lifes -= 1;
 }
 
 Projectile cPlayer::InitShoot() {
