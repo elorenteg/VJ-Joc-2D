@@ -245,9 +245,9 @@ bool cGame::Process() {
 			Player.MoveRight(Scene.GetMap());
 		}
 
-		if (keys[32]) { // SPACE = 32
+		if (keys[' ']) { // SPACE = 32
 			Player.Shoot(Scene.GetMap());
-			keys[32] = false;
+			keys[' '] = false;
 		}
 
 		if (keys['p']) {
