@@ -97,17 +97,16 @@ bool cGame::loadLevel(int level) {
 	firstRender = true;
 	cameraXScene = 0.0f;
 
+	// Load level
+	res = Scene.LoadLevel(level);
+	if (!res) return false;
+
 	// Player initialization
 	Player.SetTile(2, SCENE_HEIGHT / 2);
 	Player.SetZ(SCENE_DEPTH);
 	Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 	Player.SetMapValue(Scene.GetMap(), 2, SCENE_HEIGHT / 2, PLAYER - 48);
-	Player.SetXWindow(0.0f);
-	//Player.SetProjectiles
-
-	// Load level
-	res = Scene.LoadLevel(level);
-	if (!res) return false;
+	Player.ResetLife();
 
 	// Enemies initialization
 	EnemiesV = vector<cEnemyVertical>(0);
@@ -246,9 +245,9 @@ bool cGame::Process() {
 			Player.MoveRight(Scene.GetMap());
 		}
 
-		if (keys[32]) { // SPACE = 32
+		if (keys[' ']) { // SPACE = 32
 			Player.Shoot(Scene.GetMap());
-			keys[32] = false;
+			keys[' '] = false;
 		}
 
 		if (keys['p']) {

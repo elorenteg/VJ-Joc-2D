@@ -1,8 +1,23 @@
 #include "cPlayer.h"
 
-cPlayer::cPlayer() {}
+cPlayer::cPlayer() {
+	lifes = 3;
+	score = 0;
+}
 
 cPlayer::~cPlayer() {}
+
+void cPlayer::Reset() {
+	lifes = 3;
+	score = 0;
+
+	ResetLife();
+}
+
+void cPlayer::ResetLife() {
+	projectiles = vector<Projectile>(0);
+	xWindow = 0.0f;
+}
 
 int cPlayer::GetScore() {
 	return score;

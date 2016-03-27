@@ -132,7 +132,7 @@ bool cBicho::MapCollidesUp(Matrix& map, float step) {
 	// tile al que corresponde
 	int tile_x = x / TILE_SIZE;
 	int tile_y = y / TILE_SIZE;
-	int tile_y_new = tile_y + BICHO_HEIGHT / TILE_SIZE;
+	int tile_y_new = (y + step + BICHO_HEIGHT) / TILE_SIZE;
 
 	bool collides = false;
 	if (tile_y_new >= SCENE_HEIGHT) collides = true;
@@ -155,7 +155,7 @@ bool cBicho::MapCollidesDown(Matrix& map, float step) {
 	// tile al que corresponde
 	int tile_x = x / TILE_SIZE;
 	int tile_y = y / TILE_SIZE;
-	int tile_y_new = tile_y - 1;
+	int tile_y_new = (y - step) / TILE_SIZE;
 
 	bool collides = false;
 	if (tile_y_new < 0) collides = true;
