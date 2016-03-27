@@ -234,20 +234,16 @@ bool cGame::Process() {
 	else {
 		if (keys[GLUT_KEY_UP]) {
 			Player.MoveUp(Scene.GetMap());
-			//keys[GLUT_KEY_UP] = false;
 		}
 		else if (keys[GLUT_KEY_DOWN]) {
 			Player.MoveDown(Scene.GetMap());
-			//keys[GLUT_KEY_DOWN] = false;
 		}
 
 		if (keys[GLUT_KEY_LEFT]) {
 			Player.MoveLeft(Scene.GetMap());
-			//keys[GLUT_KEY_LEFT] = false;
 		}
 		else if (keys[GLUT_KEY_RIGHT]) {
 			Player.MoveRight(Scene.GetMap());
-			//keys[GLUT_KEY_RIGHT] = false;
 		}
 
 		if (keys[32]) { // SPACE = 32
