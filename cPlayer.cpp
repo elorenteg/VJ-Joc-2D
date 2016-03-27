@@ -4,6 +4,14 @@ cPlayer::cPlayer() {}
 
 cPlayer::~cPlayer() {}
 
+int cPlayer::GetScore() {
+	return score;
+}
+
+int cPlayer::GetLifes() {
+	return lifes;
+}
+
 void cPlayer::Draw(int tex_id) {
 	float xo, yo, xf, yf;
 
@@ -41,16 +49,12 @@ void cPlayer::DrawRainbow(int tex_id, float xWindow) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 
-	float x = GetX();
-	float y = GetY();
-	int h = GetHeight();
-
 	float xo = 0.0f;
 	float xf = 1.0f;
 	float yo = 1.0f;
 	float yf = 0.0f;
 
-	int size_quad = 20;
+	int size_quad = TILE_SIZE;
 	int count = 0;
 	for (float i = xWindow; i < x + 15; i = i + size_quad) {
 		glBegin(GL_QUADS);
@@ -68,7 +72,7 @@ void cPlayer::DrawRainbow(int tex_id, float xWindow) {
 }
 
 bool cPlayer::isGameOver() {
-	if (GetX() + GetWidth() - GetXWindow() < 20) return true;
+	if (x + w - xWindow < 20) return true;
 
 	//if (lifes <= 0) return true;
 
@@ -76,17 +80,15 @@ bool cPlayer::isGameOver() {
 }
 
 void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
-	int tile_x = GetX() / TILE_SIZE;
-	int tile_y = GetY() / TILE_SIZE;
+	int tile_x = x / TILE_SIZE;
+	int tile_y = y / TILE_SIZE;
 	SetMapValue(map, tile_x, tile_y, 0);
 
-	if (!MapCollidesRight(map, cameraXSceneInc)) SetX(GetX() + cameraXSceneInc);
+	if (!MapCollidesRight(map, cameraXSceneInc)) x += cameraXSceneInc;
 
-	int tile_x_new = GetX() / TILE_SIZE;
+	int tile_x_new = x / TILE_SIZE;
 	SetMapValue(map, tile_x_new, tile_y, PLAYER - 48);
-	SetXWindow(GetXWindow() + cameraXSceneInc);
-
-	//MoveProjectiles(1);
+	xWindow += cameraXSceneInc;
 }
 
 void cPlayer::HitEnemy() {
@@ -100,16 +102,17 @@ void cPlayer::LogicProjectiles(Matrix& map, vector<cEnemyVertical>& vers, vector
 	MoveProjectiles(1);
 
 	HitProjectile(map, vers);
+	HitProjectile(map, hors);
+	HitProjectile(map, cirs);
 }
 
 void cPlayer::HitProjectile(Matrix& map, vector<cEnemyVertical>& vers) {
-	vector<Projectile> projs = GetProjectiles();
-	for (int i = 0; i < projs.size(); ++i) {
-		int tx = projs[i].x / TILE_SIZE;
-		int ty = projs[i].y / TILE_SIZE;
+	for (int i = 0; i < projectiles.size(); ++i) {
+		int tx = projectiles[i].x / TILE_SIZE;
+		int ty = projectiles[i].y / TILE_SIZE;
 		int tx2 = tx + 1;
 
-		if (isEnemy(map, tx, ty) || (projs[i].x + PROJ_WIDTH >= GetXWindow() + GAME_WIDTH && isEnemy(map, tx2, ty))) {
+		if (isEnemy(map, tx, ty) || (projectiles[i].x + PROJ_WIDTH >= GetXWindow() + GAME_WIDTH && isEnemy(map, tx2, ty))) {
 			bool found = false;
 			for (int v = 0; v < vers.size() && !found; ++v) {
 				int v_tx = vers[v].GetX() / TILE_SIZE;
@@ -121,6 +124,57 @@ void cPlayer::HitProjectile(Matrix& map, vector<cEnemyVertical>& vers) {
 					found = true;
 					vers.erase(vers.begin() + v);
 					SetMapValue(map, v_tx, v_ty, 0);
+					++score;
+				}
+			}
+		}
+	}
+}
+
+void cPlayer::HitProjectile(Matrix& map, vector<cEnemyHorizontal>& hors) {
+	for (int i = 0; i < projectiles.size(); ++i) {
+		int tx = projectiles[i].x / TILE_SIZE;
+		int ty = projectiles[i].y / TILE_SIZE;
+		int tx2 = tx + 1;
+
+		if (isEnemy(map, tx, ty) || (projectiles[i].x + PROJ_WIDTH >= GetXWindow() + GAME_WIDTH && isEnemy(map, tx2, ty))) {
+			bool found = false;
+			for (int v = 0; v < hors.size() && !found; ++v) {
+				int v_tx = hors[v].GetX() / TILE_SIZE;
+				int v_ty = hors[v].GetY() / TILE_SIZE;
+				int v_tx2 = (hors[v].GetX() + hors[v].GetWidth()) / TILE_SIZE;
+				int v_ty2 = (hors[v].GetY() + hors[v].GetHeight()) / TILE_SIZE;
+
+				if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
+					found = true;
+					hors.erase(hors.begin() + v);
+					SetMapValue(map, v_tx, v_ty, 0);
+					++score;
+				}
+			}
+		}
+	}
+}
+
+void cPlayer::HitProjectile(Matrix& map, vector<cEnemyCircle>& cirs) {
+	for (int i = 0; i < projectiles.size(); ++i) {
+		int tx = projectiles[i].x / TILE_SIZE;
+		int ty = projectiles[i].y / TILE_SIZE;
+		int tx2 = tx + 1;
+
+		if (isEnemy(map, tx, ty) || (projectiles[i].x + PROJ_WIDTH >= GetXWindow() + GAME_WIDTH && isEnemy(map, tx2, ty))) {
+			bool found = false;
+			for (int v = 0; v < cirs.size() && !found; ++v) {
+				int v_tx = cirs[v].GetX() / TILE_SIZE;
+				int v_ty = cirs[v].GetY() / TILE_SIZE;
+				int v_tx2 = (cirs[v].GetX() + cirs[v].GetWidth()) / TILE_SIZE;
+				int v_ty2 = (cirs[v].GetY() + cirs[v].GetHeight()) / TILE_SIZE;
+
+				if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
+					found = true;
+					cirs.erase(cirs.begin() + v);
+					SetMapValue(map, v_tx, v_ty, 0);
+					++score;
 				}
 			}
 		}

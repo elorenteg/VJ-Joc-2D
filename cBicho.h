@@ -80,13 +80,13 @@ public:
 	void NextFrame(int max);
 	int  GetFrame();
 
-private:
+protected:
 	float x, y, z;
 	int w, h;
 	int state;
 	float xWindow;
-
 	vector<Projectile> projectiles;
 
+private:
 	int seq, delay;
 };

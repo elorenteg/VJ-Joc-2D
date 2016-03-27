@@ -9,7 +9,6 @@ cEnemyCircle::cEnemyCircle() {
 cEnemyCircle::~cEnemyCircle() {}
 
 void cEnemyCircle::Draw(int tex_id) {
-	//OutputDebugStringA("cEnemyHorizontal - Draw\n");
 	float xo, yo, xf, yf;
 
 	switch (GetFrame()) {
@@ -40,7 +39,6 @@ void cEnemyCircle::Draw(int tex_id) {
 		xo = xf;
 		xf = aux;
 	}
-
 	yo = 1.0f;
 	yf = 0.0f;
 
@@ -50,12 +48,6 @@ void cEnemyCircle::Draw(int tex_id) {
 }
 
 void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
-	float x = GetX();
-	float y = GetY();
-
-	int w = GetWidth();
-	int h = GetHeight();
-
 	float incX = 0;
 	float incY = 0;
 	switch (moves[state]) {
@@ -109,5 +101,5 @@ void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
 		SetMapValue(map, tile_x, tile_y, ENEMY_CIR - 48);
 	}
 
-	SetXWindow(GetXWindow() + cameraXSceneInc);
+	xWindow += cameraXSceneInc;
 }

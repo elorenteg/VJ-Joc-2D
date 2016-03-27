@@ -2,7 +2,6 @@
 
 cEnemyVertical::cEnemyVertical() {
 	state = rand() % MAX_MOVES;
-	//num_moves = TILES_MOVE;
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
 }
@@ -43,12 +42,6 @@ void cEnemyVertical::Draw(int tex_id) {
 }
 
 void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
-	float x = GetX();
-	float y = GetY();
-
-	int w = GetWidth();
-	int h = GetHeight();
-
 	float inc = 0;
 	switch (moves[state]) {
 		case UP:
@@ -92,5 +85,5 @@ void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
 		SetMapValue(map, tile_x, tile_y, ENEMY_VER - 48);
 	}
 
-	SetXWindow(GetXWindow() + cameraXSceneInc);
+	xWindow += cameraXSceneInc;
 }
