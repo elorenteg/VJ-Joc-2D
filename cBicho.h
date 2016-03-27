@@ -16,7 +16,7 @@
 #define DIR_RIGHT		1
 
 #define FRAME_DELAY		12
-#define STEP_LENGTH		TILE_SIZE
+#define STEP_LENGTH		TILE_SIZE/4
 
 #define MAX_FRAMES	5
 #define FRAME_0		0
@@ -24,7 +24,6 @@
 #define FRAME_2		2
 #define FRAME_3		3
 #define FRAME_4		4
-
 
 typedef struct Projectile {
 	float x;
