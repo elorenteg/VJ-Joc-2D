@@ -280,6 +280,7 @@ bool cGame::Process() {
 		Scene.SetMap(map);
 
 		GameInfoLayer.SetCurrentScore(Player.GetScore());
+		GameInfoLayer.SetCurrentLife(Player.GetLifes());
 	}
 
 	return res;
