@@ -11,22 +11,25 @@
 #define HOW_TO		2
 #define CREDITS		3
 
+#define PAGE_1 1
+#define PAGE_2 2
+
 #define APP_GAME_TEXT	"NYAN CAT RETURNS!"
 #define PLAY_TEXT		"JUGAR"
 #define HOW_TO_TEXT		"INSTRUCCIONS"
 #define CREDITS_TEXT	"CREDITS"
 #define EXIT_TEXT		"SORTIR"
 
-#define HOW_TO_PLAYER_TEXT_1 "AQUEST ES EL JUGADOR PRINCIPAL:"
-#define HOW_TO_PLAYER_TEXT_2 "AMB LES SEGUENTS TECLES ES POT MOURE EL JUGADOR:"
+#define HOW_TO_PLAYER_TEXT_1_1 "AQUEST ES EL JUGADOR PRINCIPAL:"
+#define HOW_TO_PLAYER_TEXT_1_2 "AMB LES SEGUENTS TECLES ES POT MOURE EL JUGADOR:"
+
+#define HOW_TO_PLAYER_TEXT_2_1 "DISPARAR: ESPAI"
+#define HOW_TO_PLAYER_TEXT_2_2 "PAUSA:    P    "
 
 #define CREDITS_MARC_TEXT	"MARC VILA GOMEZ"
 #define CREDITS_ESTER_TEXT	"ESTER LORENTE GARCIA"
 #define CREDITS_WHERE_TEXT	"VIDEOJOCS  FIB  UPC"
 #define CREDITS_WHEN_TEXT	"QP 2015 2016"
-
-#define PAGE_1 1
-#define PAGE_2 2
 
 class cMenu
 {
@@ -60,7 +63,7 @@ private:
 	bool processingKey;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/
-	const int FRAMES_PER_SECOND = 70;
+	const int FRAMES_PER_SECOND = 60;
 	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 	// Returns the current number of ms elapsed since the system was started
 	DWORD next_game_tick = GetTickCount();
@@ -72,6 +75,7 @@ private:
 
 	int internalState;
 	int currentState;
+	int page;
 
 	void moveAction(int moveTo);
 	void executeAction();
@@ -87,5 +91,6 @@ private:
 	void showInstrucctions();
 	void showCredits();
 
+	void render_stars();
 	void calculate_stars();
 };

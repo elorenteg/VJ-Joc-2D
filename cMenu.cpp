@@ -87,7 +87,7 @@ void cMenu::Finalize()
 
 //Input
 void cMenu::ReadKeyboard(unsigned char key, int x, int y, bool press)
-{		
+{
 	keys[key] = press;
 
 	processingKey = press;
@@ -113,12 +113,12 @@ bool cMenu::Process()
 				res = false;
 				break;
 			case HOW_TO:
-				showMenu();
 				internalState = MENU;
+				page = PAGE_1;
 				break;
 			case CREDITS:
-				showMenu();
 				internalState = MENU;
+				page = PAGE_1;
 				break;
 			}
 		}
@@ -128,6 +128,20 @@ bool cMenu::Process()
 		}
 		else if (keys[GLUT_KEY_DOWN]) {
 			moveAction(1);
+		}
+		else if (keys[GLUT_KEY_LEFT]) {
+			if (internalState == HOW_TO) {
+				if (page == PAGE_2) {
+					page = PAGE_1;
+				}
+			}
+		}
+		else if (keys[GLUT_KEY_RIGHT]) {
+			if (internalState == HOW_TO) {
+				if (page == PAGE_1) {
+					page = PAGE_2;
+				}
+			}
 		}
 
 		if (keys[13]) {
@@ -145,17 +159,7 @@ void cMenu::Render()
 	glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 	glLoadIdentity();
 
-	for (int i = 0; i < starsX.size(); ++i) {
-		float x = starsX[i];
-		float y = starsY[i];
-		glColor3f(1.0f, 1.0f, 0.0f);
-		glBegin(GL_QUADS);
-			glVertex3f(x, y, MSS_DEPTH-3);
-			glVertex3f(x+3.5f, y, MSS_DEPTH-3);
-			glVertex3f(x+3.5f, y+3.5f, MSS_DEPTH-3);
-			glVertex3f(x, y+3.5f, MSS_DEPTH-3);
-		glEnd();
-	}
+	render_stars();
 
 	switch (internalState) {
 	case MENU:
@@ -183,9 +187,11 @@ void cMenu::executeAction() {
 	}
 	else if (actionSelected == howtoAction) {
 		//Sound.StopCustomSound(); //TODO only to test
+		page = PAGE_1;
 		internalState = HOW_TO;
 	}
 	else if (actionSelected == creditsAction) {
+		page = PAGE_1;
 		internalState = CREDITS;
 	}
 	else if (actionSelected == stopAction) {
@@ -267,27 +273,37 @@ void cMenu::showInstrucctions() {
 
 	//Instruccions titol
 	glColor3f(1.0f, 1.0f, 1.0f);
-	Font.drawText(GAME_WIDTH / 2.0f - 160.0f, GAME_HEIGHT / 2.0f + 160.0f, MSS_DEPTH-1, 300.0f, 40.0f, HOW_TO_TEXT);
+	Font.drawText(GAME_WIDTH / 2.0f - 160.0f, GAME_HEIGHT / 2.0f + 160.0f, MSS_DEPTH - 1, 300.0f, 40.0f, HOW_TO_TEXT);
 
-	//Explicacio 1
-	glColor3f(0.0f, 0.0f, 0.0f);
-	Font.drawText(65.0f, GAME_HEIGHT - 165.0f, MSS_DEPTH-1, 350.0f, 20.0f, HOW_TO_PLAYER_TEXT_1);
+	if (page == PAGE_1) {
+		//Explicacio 1
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(65.0f, GAME_HEIGHT - 165.0f, MSS_DEPTH - 1, 350.0f, 20.0f, HOW_TO_PLAYER_TEXT_1_1);
 
-	//Nyan Image
-	glColor3f(1.0f, 1.0f, 1.0f);
-	Player.SetPosition(GAME_WIDTH / 2.0f - 40.0f, GAME_HEIGHT - 235.0f);
-	Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
-	Player.SetZ(MSS_DEPTH-1);
-	Player.Draw(Data.GetID(IMG_PLAYER));
+		//Nyan Image
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Player.SetPosition(GAME_WIDTH / 2.0f - 40.0f, GAME_HEIGHT - 235.0f);
+		Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
+		Player.SetZ(MSS_DEPTH - 1);
+		Player.Draw(Data.GetID(IMG_PLAYER));
 
-	//Explicacio 2
-	glColor3f(0.0f, 0.0f, 0.0f);
-	Font.drawText(65.0f, GAME_HEIGHT - 300.0f, MSS_DEPTH-1, 500.0f, 20.0f, HOW_TO_PLAYER_TEXT_2);
+		//Explicacio 2
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(65.0f, GAME_HEIGHT - 300.0f, MSS_DEPTH - 1, 500.0f, 20.0f, HOW_TO_PLAYER_TEXT_1_2);
 
-	//Keyboard Image
-	glColor3f(1.0f, 1.0f, 1.0f);
-	drawImage(Data.GetID(IMG_KEYBOARD), GAME_WIDTH / 2.0f - 105.0f, 60.0f, MSS_DEPTH-1, 200.0f, 120.0f);
+		//Keyboard Image
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawImage(Data.GetID(IMG_KEYBOARD), GAME_WIDTH / 2.0f - 105.0f, 60.0f, MSS_DEPTH - 1, 200.0f, 120.0f);
+	}
+	else if (page == 2) {
+		//Explicacio 1
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(65.0f, GAME_HEIGHT - 165.0f, MSS_DEPTH - 1, 350.0f, 20.0f, HOW_TO_PLAYER_TEXT_2_1);
 
+		//Explicacio 2
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(64.0f, GAME_HEIGHT - 200.0f, MSS_DEPTH - 1, 350.0f, 20.0f, HOW_TO_PLAYER_TEXT_2_2);
+	}
 	//Fons
 	glColor3f(0.8f, 0.8f, 0.85f);
 	drawRectangle(50.0f, 50.0f, MSS_DEPTH - 2, GAME_WIDTH - 100.0f, GAME_HEIGHT - 180.0f);
@@ -359,6 +375,19 @@ void cMenu::drawImage(int tex_id, float x, float y, float z, float w, float h) {
 	glDisable(GL_TEXTURE_2D);
 }
 
+void cMenu::render_stars() {
+	for (int i = 0; i < starsX.size(); ++i) {
+		float x = starsX[i];
+		float y = starsY[i];
+		glColor3f(1.0f, 1.0f, 0.0f);
+		glBegin(GL_QUADS);
+		glVertex3f(x, y, MSS_DEPTH - 3);
+		glVertex3f(x + 3.5f, y, MSS_DEPTH - 3);
+		glVertex3f(x + 3.5f, y + 3.5f, MSS_DEPTH - 3);
+		glVertex3f(x, y + 3.5f, MSS_DEPTH - 3);
+		glEnd();
+	}
+}
 
 void cMenu::calculate_stars() {
 	for (int i = 0; i < maxStars; ++i) {
