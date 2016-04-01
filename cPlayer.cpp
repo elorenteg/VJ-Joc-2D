@@ -174,14 +174,6 @@ Projectile cPlayer::InitShoot() {
 	return proj;
 }
 
-void cPlayer::LogicProjectiles(Matrix& map, vector<cEnemyVertical>& vers, vector<cEnemyHorizontal>& hors, vector<cEnemyCircle>& cirs) {
-	MoveProjectiles(map);
-
-	HitProjectile(map, vers);
-	HitProjectile(map, hors);
-	HitProjectile(map, cirs);
-}
-
 void cPlayer::HitProjectile(Matrix& map, vector<cEnemyVertical>& vers) {
 	for (int p = 0; p < projsRight.size(); ++p) {
 		int tx = projsRight[p].x / TILE_SIZE;

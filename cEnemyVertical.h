@@ -10,7 +10,7 @@
 #define TILES_MOVE	4
 #define MAX_MOVES	2
 
-#define FREQ_SHOOTS 25
+#define FREQ_SHOOTS 35
 
 class cEnemyVertical : public cBicho
 {

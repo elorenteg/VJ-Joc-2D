@@ -4,6 +4,7 @@
 #include "cSkyLayer.h"
 #include "cMountainLayer.h"
 #include "cGameInfoLayer.h"
+#include "cBicho.h"
 #include "cPlayer.h"
 #include "cData.h"
 #include "cFont.h"
@@ -65,9 +66,7 @@ private:
 	cPlayer Player;
 	cData Data;
 	cFont Font;
-	vector<cEnemyVertical> EnemiesV;
-	vector<cEnemyHorizontal> EnemiesH;
-	vector<cEnemyCircle> EnemiesC;
+	vector<cBicho*> Enemies;
 	
 	float cameraXScene;
 	int currentLevel;
@@ -83,6 +82,10 @@ private:
 
 	bool loadLevel(int level);
 	bool initEnemies(int level);
+
+	void checkCollisionsPlayer();
+	bool checkCollisionsEnemies();
+	bool checkProjectilesEnemy(vector<Projectile>& projs);
 
 	void startGame();
 	bool isGameStandBy();
