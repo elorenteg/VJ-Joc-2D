@@ -12,7 +12,7 @@
 #define TILES_MOVE	3
 #define MAX_MOVES	4
 
-#define FREQ_SHOOTS 25
+#define FREQ_SHOOTS 35
 
 class cEnemyCircle : public cBicho
 {

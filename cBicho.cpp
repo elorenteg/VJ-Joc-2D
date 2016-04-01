@@ -43,6 +43,15 @@ void cBicho::SetXWindow(float xWind) {
 	xWindow = xWind;
 }
 
+void cBicho::SetProjectiles(vector<Projectile>& projs, int dir) {
+	if (dir == DIR_RIGHT) {
+		projsRight = projs;
+	}
+	else {
+		projsLeft = projs;
+	}
+}
+
 float cBicho::GetX() {
 	return x;
 }
@@ -391,6 +400,15 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 	return projs;
 }
 
-void cBicho::LogicProjectiles(Matrix& map, cPlayer player) {
+void cBicho::LogicProjectiles(Matrix& map) {
 	MoveProjectiles(map);
+}
+
+void cBicho::Logic(Matrix& map, float cameraXScene) {
+	OutputDebugStringA("NO :(");
+}
+
+
+void cBicho::Draw(int tex_id) {
+	OutputDebugStringA("NO :(");
 }

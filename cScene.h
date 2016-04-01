@@ -26,6 +26,10 @@ public:
 
 	bool endOfMap(float cameraX);
 
+	bool isEnemy(int tile_x, int tile_y);
+	bool isScene(int tile_x, int tile_y);
+	void SetMapValue(int tile_x, int tile_y, int width, int heihgt, int value);
+
 private:
 	Matrix map;
 	int id_DL;								//actual level display list

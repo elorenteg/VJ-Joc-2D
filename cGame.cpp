@@ -113,9 +113,10 @@ bool cGame::loadLevel(int level) {
 	Player.ResetLife();
 
 	// Enemies initialization
-	EnemiesV = vector<cEnemyVertical>(0);
-	EnemiesH = vector<cEnemyHorizontal>(0);
-	EnemiesC = vector<cEnemyCircle>(0);
+	Enemies = vector<cBicho*>(0);
+	//EnemiesV = vector<cEnemyVertical*>(0);
+	//EnemiesH = vector<cEnemyHorizontal*>(0);
+	//EnemiesC = vector<cEnemyCircle*>(0);
 	res = initEnemies(level);
 	if (!res) return false;
 
@@ -149,28 +150,28 @@ bool cGame::initEnemies(int level) {
 		for (i = 0; i < SCENE_WIDTH; i++) {
 			fscanf(fd, "%c", &tile);
 			if (tile == ENEMY_VER) {
-				cEnemyVertical enemy;
-				enemy.SetTile(i, j);
-				enemy.SetZ(SCENE_DEPTH);
-				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_VER - 48);
-				EnemiesV.push_back(enemy);
+				cEnemyVertical* enemy = new cEnemyVertical();
+				enemy->SetTile(i, j);
+				enemy->SetZ(SCENE_DEPTH);
+				enemy->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+				enemy->SetMapValue(Scene.GetMap(), i, j, ENEMY_VER - 48);
+				Enemies.push_back(enemy);
 			}
 			else if (tile == ENEMY_HOR) {
-				cEnemyHorizontal enemy;
-				enemy.SetTile(i, j);
-				enemy.SetZ(SCENE_DEPTH);
-				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
-				EnemiesH.push_back(enemy);
+				cEnemyHorizontal* enemy = new cEnemyHorizontal();
+				enemy->SetTile(i, j);
+				enemy->SetZ(SCENE_DEPTH);
+				enemy->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+				enemy->SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
+				Enemies.push_back(enemy);
 			}
 			else if (tile == ENEMY_CIR) {
-				cEnemyCircle enemy;
-				enemy.SetTile(i, j);
-				enemy.SetZ(SCENE_DEPTH);
-				enemy.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-				enemy.SetMapValue(Scene.GetMap(), i, j, ENEMY_CIR - 48);
-				EnemiesC.push_back(enemy);
+				cEnemyCircle* enemy = new cEnemyCircle();
+				enemy->SetTile(i, j);
+				enemy->SetZ(SCENE_DEPTH);
+				enemy->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+				enemy->SetMapValue(Scene.GetMap(), i, j, ENEMY_CIR - 48);
+				Enemies.push_back(enemy);
 			}
 		}
 		fscanf(fd, "%c", &tile); //pass enter
@@ -235,6 +236,8 @@ bool cGame::Process() {
 		}
 	}
 	else {
+		bool playerDead = false;
+
 		if (keys[GLUT_KEY_UP]) {
 			Player.MoveUp(Scene.GetMap());
 		}
@@ -262,31 +265,28 @@ bool cGame::Process() {
 		//Game Logic
 		Player.Logic(Scene.GetMap(), GAME_SCROLL);
 
-		Matrix map = Scene.GetMap();
-		Player.LogicProjectiles(map, EnemiesV, EnemiesH, EnemiesC);
+		if (isPlayerOutsideWindow()) {
+			playerDead = true;
+		}
 
-		for (int i = 0; i < EnemiesH.size(); ++i) {
-			EnemiesH[i].Logic(map, GAME_SCROLL);
-			EnemiesH[i].LogicProjectiles(map, Player);
+		Matrix map = Scene.GetMap();
+		Player.LogicProjectiles(map);
+
+		for (int i = 0; i < Enemies.size(); ++i) {
+			Enemies[i]->Logic(map, GAME_SCROLL);
+			Enemies[i]->LogicProjectiles(map);
 		}
-		for (int i = 0; i < EnemiesV.size(); ++i) {
-			EnemiesV[i].Logic(map, GAME_SCROLL);
-			EnemiesV[i].LogicProjectiles(map, Player);
-		}
-		for (int i = 0; i < EnemiesC.size(); ++i) {
-			EnemiesC[i].Logic(map, GAME_SCROLL);
-			EnemiesC[i].LogicProjectiles(map, Player);
-		}
+
 		Scene.SetMap(map);
 
-		if (isPlayerOutsideWindow()) {
-			int lifes = Player.GetLifes();
-			if (lifes > 0)
-				Player.SetLifes(lifes - 1);
-		}
+		checkCollisionsPlayer();
+		playerDead = playerDead || checkCollisionsEnemies();
 
-		GameInfoLayer.SetCurrentScore(Player.GetScore());
-		GameInfoLayer.SetCurrentLife(Player.GetLifes());
+		if (playerDead) {
+			GameInfoLayer.SetCurrentLife(GameInfoLayer.GetCurrentLife() - 1);
+			loadLevel(currentLevel);
+			return res;
+		}
 	}
 
 	return res;
@@ -301,7 +301,8 @@ bool cGame::isPlayerOutsideWindow() {
 }
 
 bool cGame::isPlayerDead() {
-	return Player.isGameOver();
+	//return Player.isGameOver();
+	return GameInfoLayer.GetCurrentLife() == 0;
 }
 
 bool cGame::isEndOfLevel() {
@@ -352,17 +353,9 @@ void cGame::Render() {
 	Player.Draw(Data.GetID(IMG_PLAYER));
 	Player.DrawProjectiles(Data.GetID(IMG_SHOOT));
 
-	for (int i = 0; i < EnemiesH.size(); ++i) {
-		EnemiesH[i].Draw(Data.GetID(IMG_NINJA));
-		EnemiesH[i].DrawProjectiles(Data.GetID(IMG_SHOOT));
-	}
-	for (int i = 0; i < EnemiesV.size(); ++i) {
-		EnemiesV[i].Draw(Data.GetID(IMG_NINJA));
-		EnemiesV[i].DrawProjectiles(Data.GetID(IMG_SHOOT));
-	}
-	for (int i = 0; i < EnemiesC.size(); ++i) {
-		EnemiesC[i].Draw(Data.GetID(IMG_NINJA));
-		EnemiesC[i].DrawProjectiles(Data.GetID(IMG_SHOOT));
+	for (int i = 0; i < Enemies.size(); ++i) {
+		Enemies[i]->Draw(Data.GetID(IMG_NINJA));
+		Enemies[i]->DrawProjectiles(Data.GetID(IMG_SHOOT));
 	}
 
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
@@ -459,4 +452,59 @@ void cGame::RestartCameraScene() {
 	glLoadIdentity();
 	glOrtho(0, 0 + GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void cGame::checkCollisionsPlayer() {
+	vector<Projectile> projsRight = Player.GetProjectiles(DIR_RIGHT);
+
+	for (int p = 0; p < projsRight.size(); ++p) {
+		int tx = projsRight[p].x / TILE_SIZE;
+		int ty = projsRight[p].y / TILE_SIZE;
+		int tx2 = tx + 1;
+
+		if (Scene.isEnemy(tx, ty) || Scene.isEnemy(tx2, ty)) {
+			bool found = false;
+			for (int v = 0; v < Enemies.size() && !found; ++v) {
+				int v_tx = Enemies[v]->GetX() / TILE_SIZE;
+				int v_ty = Enemies[v]->GetY() / TILE_SIZE;
+				int v_tx2 = (Enemies[v]->GetX() + Enemies[v]->GetWidth()) / TILE_SIZE;
+				int v_ty2 = (Enemies[v]->GetY() + Enemies[v]->GetHeight()) / TILE_SIZE;
+
+				if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
+					found = true;
+					Enemies.erase(Enemies.begin() + v);
+					projsRight.erase(projsRight.begin() + p);
+					Scene.SetMapValue(v_tx, v_ty, BICHO_WIDTH, BICHO_HEIGHT, 0);
+
+					GameInfoLayer.SetCurrentScore(GameInfoLayer.GetCurrentScore() + 1);
+				}
+			}
+		}
+	}
+
+	Player.SetProjectiles(projsRight, DIR_RIGHT);
+}
+
+bool cGame::checkCollisionsEnemies() {
+	bool collides = false;
+	for (int i = 0; i < Enemies.size() && !collides; ++i) {
+		collides = checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_RIGHT));
+		collides = collides || checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_LEFT));
+	}
+
+	return collides;
+}
+
+bool cGame::checkProjectilesEnemy(vector<Projectile>& projs) {
+	for (int p = 0; p < projs.size(); ++p) {
+		float projX = projs[p].x;
+		float projY = projs[p].y;
+
+		if (projX >= Player.GetX() && projX + PROJ_WIDTH <= Player.GetX() + Player.GetWidth() &&
+			projY >= Player.GetY() && projY + PROJ_HEIGHT <= Player.GetY() + Player.GetHeight()) {
+			// Proyectile hit Player
+			return true;
+		}
+	}
+	return false;
 }
