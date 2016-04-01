@@ -1,4 +1,5 @@
 #include "cBicho.h"
+#include "cPlayer.h"
 #include "cScene.h"
 #include "Globals.h"
 
@@ -390,6 +391,6 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 	return projs;
 }
 
-void cBicho::LogicProjectiles(Matrix& map) {
+void cBicho::LogicProjectiles(Matrix& map, cPlayer player) {
 	MoveProjectiles(map);
 }

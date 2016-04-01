@@ -4,6 +4,7 @@
 #include "cScene.h"
 #include "Globals.h"
 
+
 #define BICHO_WIDTH		TILE_SIZE*3
 #define BICHO_HEIGHT	TILE_SIZE*2
 
@@ -38,6 +39,8 @@ public:
 	int left, top, right, bottom;
 };
 
+class cPlayer;
+
 class cBicho
 {
 public:
@@ -66,7 +69,7 @@ public:
 
 	void Shoot(Matrix& map);
 	void DrawProjectiles(int tex_id);
-	void LogicProjectiles(Matrix& map);
+	void LogicProjectiles(Matrix& map, cPlayer player);
 
 	int  GetState();
 	void SetState(int s);

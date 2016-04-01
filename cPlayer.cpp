@@ -4,6 +4,8 @@ cPlayer::cPlayer() {
 	lifes = 3;
 	score = 0;
 	state_lookat = DIR_RIGHT;
+	Rainbow = vector<Position>(0);
+	state_rainbow = SIZE_RAINBOW;
 }
 
 cPlayer::~cPlayer() {}
@@ -19,6 +21,9 @@ void cPlayer::ResetLife() {
 	projsLeft = vector<Projectile>(0);
 	projsRight = vector<Projectile>(0);
 	xWindow = 0.0f;
+
+	Rainbow = vector<Position>(0);
+	state_rainbow = SIZE_RAINBOW;
 }
 
 int cPlayer::GetScore() {
@@ -89,16 +94,31 @@ void cPlayer::DrawRainbow(int tex_id, float xWindow) {
 
 	int size_quad = TILE_SIZE;
 	int count = 0;
-	for (float i = xWindow; i < x + 15; i = i + size_quad) {
+	int num = 0;
+	float yAnt = 0;
+	for (int i = 0; i < Rainbow.size(); ++i) {
+		float x = Rainbow[i].x;
+		float y = Rainbow[i].y;
 		glBegin(GL_QUADS);
-		glTexCoord2f(xo, yo);	glVertex3f(i, y + count * 5, SCENE_DEPTH);
-		glTexCoord2f(xf, yo);	glVertex3f(i + size_quad, y + count * 5, SCENE_DEPTH);
-		glTexCoord2f(xf, yf);	glVertex3f(i + size_quad, y + h + count * 5, SCENE_DEPTH);
-		glTexCoord2f(xo, yf);	glVertex3f(i, y + h + count * 5, SCENE_DEPTH);
+		glTexCoord2f(xo, yo);	glVertex3f(x, y + count * 5, SCENE_DEPTH);
+		glTexCoord2f(xf, yo);	glVertex3f(x + SIZE_RAINBOW, y + count * 5, SCENE_DEPTH);
+		glTexCoord2f(xf, yf);	glVertex3f(x + SIZE_RAINBOW, y + h + count * 5, SCENE_DEPTH);
+		glTexCoord2f(xo, yf);	glVertex3f(x, y + h + count * 5, SCENE_DEPTH);
 		glEnd();
 
-		++count;
-		count = count % 2;
+		if (yAnt == y) {
+			++num;
+			if (num == 6) {
+				++count;
+				num = 0;
+			}
+			count = count % 2;
+		}
+		else {
+			yAnt = y;
+			count = 0;
+			num = 0;
+		}
 	}
 
 	glDisable(GL_TEXTURE_2D);
@@ -114,6 +134,27 @@ void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
 	int tile_x_new = x / TILE_SIZE;
 	SetMapValue(map, tile_x_new, tile_y, PLAYER - 48);
 	xWindow += cameraXSceneInc;
+
+	--state_rainbow;
+	if (state_rainbow == 0) {
+		state_rainbow = SIZE_RAINBOW;
+
+		Position pos;
+		if (Rainbow.size() == 0) {
+			pos.x = GetX();
+			pos.y = GetY();
+			Rainbow.push_back(pos);
+		}
+		else {
+			Position posAnt = Rainbow[Rainbow.size() - 1];
+			while (posAnt.x + SIZE_RAINBOW < GetX() + 12) {
+				pos.x = posAnt.x + SIZE_RAINBOW;
+				pos.y = GetY();
+				Rainbow.push_back(pos);
+				posAnt = pos;
+			}
+		}
+	}
 
 	//if (x + w - xWindow < 20) --lifes;
 }
