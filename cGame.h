@@ -83,6 +83,8 @@ private:
 	bool loadLevel(int level);
 	bool initEnemies(int level);
 
+	bool checkPlayerPosition();
+	bool isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer);
 	void checkCollisionsPlayer();
 	bool checkCollisionsEnemies();
 	bool checkProjectilesEnemy(vector<Projectile>& projs);

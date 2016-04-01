@@ -269,6 +269,8 @@ bool cGame::Process() {
 			playerDead = true;
 		}
 
+		playerDead = playerDead || checkPlayerPosition();
+
 		Matrix map = Scene.GetMap();
 		Player.LogicProjectiles(map);
 
@@ -280,7 +282,7 @@ bool cGame::Process() {
 		Scene.SetMap(map);
 
 		checkCollisionsPlayer();
-		playerDead = playerDead || checkCollisionsEnemies();
+		//playerDead = playerDead || checkCollisionsEnemies();
 
 		if (playerDead) {
 			GameInfoLayer.SetCurrentLife(GameInfoLayer.GetCurrentLife() - 1);
@@ -452,6 +454,38 @@ void cGame::RestartCameraScene() {
 	glLoadIdentity();
 	glOrtho(0, 0 + GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
 	glMatrixMode(GL_MODELVIEW);
+}
+
+bool cGame::checkPlayerPosition() {
+	bool collides = false;
+	float xPlayer = Player.GetX();
+	float yPlayer = Player.GetY();
+	int wPlayer = Player.GetWidth();
+	int hPlayer = Player.GetHeight();
+
+	for (int i = 0; i < Enemies.size() && !collides; ++i) {
+		float enX = Enemies[i]->GetX();
+		float enY = Enemies[i]->GetY();
+		float enW = Enemies[i]->GetWidth();
+		float enH = Enemies[i]->GetHeight();
+		if (isPositionInside(enX, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
+			isPositionInside(enX + enW, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
+			isPositionInside(enX + enW, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
+			isPositionInside(enX, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer)) {
+			collides = true;
+		}
+	}
+
+	return collides;
+}
+
+bool cGame::isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer) {
+	if (xPlayer <= x && x <= xPlayer + wPlayer &&
+		yPlayer <= y && y <= yPlayer + yPlayer) {
+		return true;
+	}
+
+	return false;
 }
 
 void cGame::checkCollisionsPlayer() {
