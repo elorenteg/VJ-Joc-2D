@@ -267,15 +267,15 @@ bool cGame::Process() {
 
 		for (int i = 0; i < EnemiesH.size(); ++i) {
 			EnemiesH[i].Logic(map, GAME_SCROLL);
-			EnemiesH[i].LogicProjectiles(map);
+			EnemiesH[i].LogicProjectiles(map, Player);
 		}
 		for (int i = 0; i < EnemiesV.size(); ++i) {
 			EnemiesV[i].Logic(map, GAME_SCROLL);
-			EnemiesV[i].LogicProjectiles(map);
+			EnemiesV[i].LogicProjectiles(map, Player);
 		}
 		for (int i = 0; i < EnemiesC.size(); ++i) {
 			EnemiesC[i].Logic(map, GAME_SCROLL);
-			EnemiesC[i].LogicProjectiles(map);
+			EnemiesC[i].LogicProjectiles(map, Player);
 		}
 		Scene.SetMap(map);
 

@@ -6,6 +6,13 @@
 #include "cEnemyCircle.h"
 #include "Globals.h"
 
+#define SIZE_RAINBOW	3
+
+typedef struct Position {
+	float x;
+	float y;
+};
+
 class cPlayer : public cBicho
 {
 public:
@@ -34,6 +41,9 @@ public:
 private:
 	int lifes;
 	int score;
+
+	int state_rainbow;
+	vector<Position> Rainbow;
 
 	void HitProjectile(Matrix& map, vector<cEnemyVertical>& vers);
 	void HitProjectile(Matrix& map, vector<cEnemyHorizontal>& vers);
