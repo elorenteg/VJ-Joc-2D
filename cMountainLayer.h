@@ -11,10 +11,11 @@ public:
 	cMountainLayer(void);
 	virtual ~cMountainLayer(void);
 
-	void Draw(int tex_id);
-	void endOfGame();
+	void Draw(int tex_id, int level);
+	void endOfLevel();
+	void restartLevel();
 
 private:
 	float texX = 0.0f;
-	bool isEndOfGame;
+	bool isEndOfLevel;
 };
