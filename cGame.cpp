@@ -292,7 +292,6 @@ bool cGame::Process() {
 		if (playerDead) {
 			GameInfoLayer.SetCurrentLife(GameInfoLayer.GetCurrentLife() - 1);
 			playerLostLife = true;
-			//loadLevel(currentLevel);
 			return res;
 		}
 	}
@@ -490,8 +489,8 @@ bool cGame::checkPlayerPosition() {
 }
 
 bool cGame::isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer) {
-	if (xPlayer <= x && x <= xPlayer + wPlayer &&
-		yPlayer <= y && y <= yPlayer + yPlayer) {
+	if (xPlayer < x && x < xPlayer + wPlayer &&
+		yPlayer < y && y < yPlayer + hPlayer) {
 		return true;
 	}
 
