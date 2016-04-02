@@ -59,8 +59,18 @@ bool cGame::Init() {
 	if (!res) return false;
 
 	//Ninja-nyancat initialization
-	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_ninja.png").c_str());
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_enemy_ninja.png").c_str());
 	res = Data.LoadImage(IMG_NINJA, path, GL_RGBA);
+	if (!res) return false;
+
+	//Zombie-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_enemy_zombie.png").c_str());
+	res = Data.LoadImage(IMG_ZOMBIE, path, GL_RGBA);
+	if (!res) return false;
+
+	//Pirate-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_pirate.png").c_str());
+	res = Data.LoadImage(IMG_PIRATE, path, GL_RGBA);
 	if (!res) return false;
 
 	//Gradient-nyancat initialization
