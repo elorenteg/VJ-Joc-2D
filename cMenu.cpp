@@ -67,7 +67,7 @@ bool cMenu::Loop()
 	res = Process();
 	if (res) Render();
 
-	next_game_tick += SKIP_TICKS;
+	next_game_tick = GetTickCount() + SKIP_TICKS;
 	sleep_time = next_game_tick - GetTickCount();
 	if (sleep_time >= 0) {
 		Sleep(sleep_time);
