@@ -22,10 +22,6 @@ public:
 	void Reset();
 	void ResetLife();
 
-	int GetScore();
-	void SetLifes(int new_life);
-	int GetLifes();
-
 	void Draw(int tex_id);
 	void DrawRainbow(int tex_id, float xWindow);
 
@@ -33,17 +29,9 @@ public:
 	bool isGameOver();
 	
 	void Logic(Matrix& map, float cameraXScene);
-	void HitEnemy();
 	Projectile InitShoot();
 
 private:
-	int lifes;
-	int score;
-
 	int state_rainbow;
 	vector<Position> Rainbow;
-
-	void HitProjectile(Matrix& map, vector<cEnemyVertical>& vers);
-	void HitProjectile(Matrix& map, vector<cEnemyHorizontal>& vers);
-	void HitProjectile(Matrix& map, vector<cEnemyCircle>& vers);
 };

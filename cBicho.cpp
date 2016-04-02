@@ -159,14 +159,7 @@ bool cBicho::MapCollidesUp(Matrix& map, float step) {
 		if (fmod(x, TILE_SIZE) != 0) width_tiles++;
 
 		for (int tx = tile_x; tx < tile_x + width_tiles && !collides; ++tx) {
-			if (map[tile_y_new][tx] != 0) collides = true;
-
-			if (isEnemy(map, tx, tile_y_new)) {
-				char msgbuf[64];
-				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y_new, tx);
-				OutputDebugStringA(msgbuf);
-				HitEnemy();
-			}
+			if (isScene(map, tx, tile_y_new)) collides = true;
 		}
 	}
 	return collides;
@@ -185,14 +178,7 @@ bool cBicho::MapCollidesDown(Matrix& map, float step) {
 		if (fmod(x, TILE_SIZE) != 0) width_tiles++;
 
 		for (int tx = tile_x; tx < tile_x + width_tiles && !collides; ++tx) {
-			if (map[tile_y_new][tx] != 0) collides = true;
-
-			if (isEnemy(map, tx, tile_y_new)) {
-				char msgbuf[64];
-				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", tile_y_new, tx);
-				OutputDebugStringA(msgbuf);
-				HitEnemy();
-			}
+			if (isScene(map, tx, tile_y_new)) collides = true;
 		}
 	}
 	return collides;
@@ -211,14 +197,7 @@ bool cBicho::MapCollidesLeft(Matrix& map, float step) {
 		if (fmod(y, TILE_SIZE) != 0) height_tiles++;
 
 		for (int ty = tile_y; ty < tile_y + height_tiles && !collides; ++ty) {
-			if (map[ty][tile_x_new] != 0) collides = true;
-
-			if (isEnemy(map, tile_x_new, ty)) {
-				char msgbuf[64];
-				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", ty, tile_x_new);
-				OutputDebugStringA(msgbuf);
-				HitEnemy();
-			}
+			if (isScene(map, tile_x_new, ty)) collides = true;
 		}
 	}
 	return collides;
@@ -237,14 +216,7 @@ bool cBicho::MapCollidesRight(Matrix& map, float step) {
 		if (fmod(y, TILE_SIZE) != 0) height_tiles++;
 
 		for (int ty = tile_y; ty < tile_y + height_tiles && !collides; ++ty) {
-			if (map[ty][tile_x_new] != 0) collides = true;
-
-			if (isEnemy(map, tile_x_new, ty)) {
-				char msgbuf[64];
-				sprintf(msgbuf, "HIT [y,x]=[%d,%d]\n", ty, tile_x_new);
-				OutputDebugStringA(msgbuf);
-				HitEnemy();
-			}
+			if (isScene(map, tile_x_new, ty)) collides = true;
 		}
 	}
 	return collides;
@@ -299,10 +271,6 @@ int cBicho::GetState() {
 
 void cBicho::SetState(int s) {
 	state = s;
-}
-
-void cBicho::HitEnemy() {
-	OutputDebugStringA("cBicho - HIT\n");
 }
 
 void cBicho::SetMapValue(Matrix& map, int tile_x, int tile_y, int value) {
@@ -369,7 +337,7 @@ void cBicho::MoveProjectiles(Matrix& map) {
 
 vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& projs, int dirX) {
 	for (int p = 0; p < projs.size(); ++p) {
-		projs[p].x += dirX*TILE_SIZE / 3;
+		projs[p].x += dirX * PROJ_SPEED;
 
 		if (projs[p].x < 0 || projs[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
 			// proyectiles fuera de escena se eliminan
