@@ -54,6 +54,7 @@ bool cMenu::Init()
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 	//Sound.PlayCustomSound(SOUND_NYAN_BASE);
+	//Sound.StopCustomSound();
 	calculate_stars();
 
 	return res;
@@ -107,7 +108,7 @@ bool cMenu::Process()
 		processingKey = false;
 
 		//Process Input
-		if (keys[27]) {
+		if (keys[27]) { //ESC
 			switch (internalState) {
 			case MENU:
 				res = false;
@@ -122,8 +123,7 @@ bool cMenu::Process()
 				break;
 			}
 		}
-
-		if (keys[GLUT_KEY_UP]) {
+		else if (keys[GLUT_KEY_UP]) {
 			moveAction(-1);
 		}
 		else if (keys[GLUT_KEY_DOWN]) {
@@ -144,7 +144,7 @@ bool cMenu::Process()
 			}
 		}
 
-		if (keys[13]) {
+		if (keys[13]) { //Enter
 			executeAction();
 		}
 	}
@@ -177,6 +177,10 @@ void cMenu::Render()
 }
 
 //State in use
+void cMenu::SetState(int state) {
+	currentState = state;
+}
+
 int cMenu::GetState() {
 	return currentState;
 }
@@ -186,7 +190,6 @@ void cMenu::executeAction() {
 		currentState = GAME;
 	}
 	else if (actionSelected == howtoAction) {
-		//Sound.StopCustomSound(); //TODO only to test
 		page = PAGE_1;
 		internalState = HOW_TO;
 	}

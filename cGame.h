@@ -56,6 +56,8 @@ public:
 	void UpdateCameraScene();
 	void RestartCameraScene();
 
+	bool hasGameEnd();
+
 private:
 	unsigned char keys[256];
 	cSkyLayer SkyLayer;
@@ -72,6 +74,7 @@ private:
 	float cameraXScene;
 	int currentLevel;
 	bool gamePaused;
+	bool gameEnd;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;

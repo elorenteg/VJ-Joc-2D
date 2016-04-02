@@ -52,6 +52,7 @@ public:
 	void Render();
 
 	//State in use
+	void SetState(int state);
 	int GetState();
 
 private:
