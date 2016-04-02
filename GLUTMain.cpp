@@ -15,7 +15,10 @@ void AppRender()
 		Menu.Render();
 		break;
 	case GAME:
-		Game.Render();
+		if (!Game.hasGameEnd())
+			Game.Render();
+		else
+			Menu.Render();
 		break;
 	}
 }
@@ -87,7 +90,12 @@ void AppIdle()
 		if (!Menu.Loop()) exit(0);
 		break;
 	case GAME:
-		if (!Game.Loop()) exit(0);
+		if (Game.Loop() && Game.hasGameEnd()) {
+			Menu.SetState(MENU);
+		}
+		else if (!Game.Loop()) {
+			exit(0);
+		}
 		break;
 	}
 }
@@ -112,8 +120,8 @@ void main(int argc, char** argv)
 	glutInitWindowSize(GAME_WIDTH, GAME_HEIGHT);
 	glutCreateWindow("Nyan Cat returns!");
 
-	/*glutGameModeString("800x600:32");
-	glutEnterGameMode();*/
+	//glutGameModeString("800x600:32");
+	//glutEnterGameMode();
 
 	//Make the default cursor disappear
 	glutSetCursor(GLUT_CURSOR_NONE);
@@ -124,7 +132,7 @@ void main(int argc, char** argv)
 	glutKeyboardUpFunc(AppKeyboardUp);
 	glutSpecialFunc(AppSpecialKeys);
 	glutSpecialUpFunc(AppSpecialKeysUp);
-	glutMouseFunc(AppMouse);
+	//glutMouseFunc(AppMouse);
 	glutIdleFunc(AppIdle);
 
 	Menu.Init();

@@ -88,6 +88,8 @@ bool cGame::Init() {
 void cGame::startGame() {
 	currentLevel = 1;
 	playerLostLife = false;
+	gamePaused = false;
+	gameEnd = false;
 	GameInfoLayer.Init();
 
 	//Reiniciar puntuacion de Player
@@ -116,9 +118,6 @@ bool cGame::loadLevel(int level) {
 
 	// Enemies initialization
 	Enemies = vector<cBicho*>(0);
-	//EnemiesV = vector<cEnemyVertical*>(0);
-	//EnemiesH = vector<cEnemyHorizontal*>(0);
-	//EnemiesC = vector<cEnemyCircle*>(0);
 	res = initEnemies(level);
 	if (!res) return false;
 
@@ -219,11 +218,11 @@ void cGame::ReadMouse(int button, int state, int x, int y) {
 bool cGame::Process() {
 	bool res = true;
 
-	//Process Input
-	if (keys[27]) res = false;
-
 	if (isGameStandBy()) {
-		if (keys[13]) {
+		if (keys[27]) {
+			gameEnd = true;
+		}
+		else if (keys[13]) {
 			if (isPlayerDead()) {
 				startGame();
 			}
@@ -235,7 +234,7 @@ bool cGame::Process() {
 				loadLevel(currentLevel);
 			}
 		}
-		if (keys['p']) {
+		else if (keys['p']) {
 			gamePaused = false;
 			keys['p'] = false;
 		}
@@ -262,9 +261,10 @@ bool cGame::Process() {
 			keys[' '] = false;
 		}
 
-		if (keys['p']) {
+		if (keys['p'] || keys[27]) {
 			gamePaused = true;
 			keys['p'] = false;
+			keys[27] = false;
 		}
 
 		//Game Logic
@@ -318,6 +318,10 @@ bool cGame::isEndOfLevel() {
 
 bool cGame::isGamePaused() {
 	return gamePaused;
+}
+
+bool cGame::hasGameEnd() {
+	return gameEnd;
 }
 
 bool cGame::isPlayerLostLife() {
@@ -411,7 +415,7 @@ void cGame::RenderMessage(int message) {
 	}
 	else {
 		glColor3f(0.0f, 0.0f, 0.0f);
-		
+
 		char message_main[64];
 		if (message == END_OF_GAME) {
 			strcpy(message_main, END_OF_GAME_MESSAGE);
