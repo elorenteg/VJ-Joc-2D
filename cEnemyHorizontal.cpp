@@ -6,6 +6,9 @@ cEnemyHorizontal::cEnemyHorizontal() {
 	time_state = FRAMES_MOVE;
 	state_lookat = DIR_LEFT;
 	freq_shoots = FREQ_SHOOTS;
+
+	state = LEFT;
+	num_moves = TILES_MOVE;
 }
 
 cEnemyHorizontal::~cEnemyHorizontal() {}
@@ -56,6 +59,7 @@ void cEnemyHorizontal::Draw(int tex_id) {
 }
 
 void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
+	if (GetX() < GetXWindow()) return;
 	float inc = 0;
 	switch (moves[state]) {
 	case RIGHT:

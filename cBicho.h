@@ -103,6 +103,8 @@ protected:
 	bool MapCollidesLeft(Matrix& map, float step);
 	bool MapCollidesRight(Matrix& map, float step);
 
+	virtual bool canMove(Matrix& map, int tx, int ty);
+
 	Projectile InitShoot();
 	void MoveProjectiles(Matrix& map);
 

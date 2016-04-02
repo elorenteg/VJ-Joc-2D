@@ -1,6 +1,6 @@
-#include "cEnemyVertical.h"
+#include "cBoss.h"
 
-cEnemyVertical::cEnemyVertical() {
+cBoss::cBoss() {
 	state = rand() % MAX_MOVES;
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
@@ -11,9 +11,9 @@ cEnemyVertical::cEnemyVertical() {
 	num_moves = TILES_MOVE;
 }
 
-cEnemyVertical::~cEnemyVertical() {}
+cBoss::~cBoss() {}
 
-void cEnemyVertical::Draw(int tex_id) {
+void cBoss::Draw(int tex_id) {
 	float xo, yo, xf, yf;
 
 	switch (GetFrame()) {
@@ -46,16 +46,16 @@ void cEnemyVertical::Draw(int tex_id) {
 	NextFrame(5);
 }
 
-void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
+void cBoss::Logic(Matrix& map, float cameraXSceneInc) {
 	if (GetX() < GetXWindow()) return;
 	float inc = 0;
 	switch (moves[state]) {
-		case UP:
-			inc = 1;
-			break;
-		case DOWN:
-			inc = -1;
-			break;
+	case UP:
+		inc = 1;
+		break;
+	case DOWN:
+		inc = -1;
+		break;
 	}
 
 	int tile_x = x / TILE_SIZE;

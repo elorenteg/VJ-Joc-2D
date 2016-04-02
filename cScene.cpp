@@ -38,7 +38,7 @@ bool cScene::LoadLevel(int level) {
 
 		for (i = 0; i<SCENE_WIDTH; i++) {
 			fscanf(fd, "%c", &tile);
-			if (tile == ' ' || tile == ENEMY_HOR || tile == ENEMY_VER || tile == ENEMY_CIR || tile == RESERVED) {
+			if (tile == ' ' || tile == ENEMY_HOR || tile == ENEMY_VER || tile == ENEMY_CIR || tile == BOSS || tile == RESERVED) {
 				map[j][i] = 0;
 			}
 			else {
@@ -151,5 +151,10 @@ bool cScene::isScene(int tile_x, int tile_y) {
 	if (map[tile_y][tile_x] == CLOUD_INF_ESQ) return true;
 	if (map[tile_y][tile_x] == CLOUD_INF_CEN) return true;
 	if (map[tile_y][tile_x] == CLOUD_INF_DRE) return true;
+	return false;
+}
+
+bool cScene::isBoss(int tile_x, int tile_y) {
+	if (map[tile_y][tile_x] == BOSS - 48) return true;
 	return false;
 }

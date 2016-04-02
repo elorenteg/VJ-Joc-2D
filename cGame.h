@@ -11,6 +11,7 @@
 #include "cEnemyVertical.h"
 #include "cEnemyHorizontal.h"
 #include "cEnemyCircle.h"
+#include "cBoss.h"
 #include "Globals.h"
 
 #define TOTAL_LEVELS	2
@@ -70,12 +71,15 @@ private:
 	cData Data;
 	cFont Font;
 	vector<cBicho*> Enemies;
+	cBoss Boss;
 	
 	float cameraXScene;
 	int currentLevel;
 	bool gamePaused;
 	bool gameEnd;
 	bool playerLostLife;
+	bool bossDead;
+
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;
 	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
@@ -89,6 +93,7 @@ private:
 	bool checkPlayerPosition();
 	bool isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer);
 	void checkCollisionsPlayer();
+	void setBossDead();
 	bool checkCollisionsEnemies();
 	bool checkProjectilesEnemy(vector<Projectile>& projs);
 
@@ -99,4 +104,6 @@ private:
 	bool isPlayerDead();
 	bool isGamePaused();
 	bool isPlayerLostLife();
+	bool isBossDead();
+	bool isEndOfMap();
 };

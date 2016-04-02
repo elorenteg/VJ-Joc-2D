@@ -3,29 +3,24 @@
 #include "cBicho.h"
 #include "Globals.h"
 
-#define	LEFT		0
-#define UP			1
-#define	RIGHT		2
-#define	DOWN		3
+#define	UP			0
+#define	DOWN		1
 
 #define FRAMES_MOVE	15
-#define TILES_MOVE	6
-#define MAX_MOVES	4
+#define TILES_MOVE	4
+#define MAX_MOVES	2
 
 #define FREQ_SHOOTS 35
 
-class cEnemyCircle : public cBicho
+class cBoss : public cBicho
 {
 public:
-	cEnemyCircle();
-	~cEnemyCircle();
+	cBoss();
+	~cBoss();
 
 	void Draw(int tex_id);
 
 	void Logic(Matrix& map, float cameraXScene);
-
-protected:
-	bool lookAtRight();
 
 private:
 	int num_moves;
@@ -33,5 +28,5 @@ private:
 	int freq_shoots;
 
 	int state;
-	int moves[MAX_MOVES] = { LEFT, UP, RIGHT, DOWN };
+	int moves[MAX_MOVES] = { UP, DOWN };
 };

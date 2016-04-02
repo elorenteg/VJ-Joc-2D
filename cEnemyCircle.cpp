@@ -6,6 +6,9 @@ cEnemyCircle::cEnemyCircle() {
 	time_state = FRAMES_MOVE;
 	state_lookat = DIR_LEFT;
 	freq_shoots = FREQ_SHOOTS;
+
+	state = RIGHT;
+	num_moves = TILES_MOVE;
 }
 
 cEnemyCircle::~cEnemyCircle() {}
@@ -55,6 +58,7 @@ bool cEnemyCircle::lookAtRight() {
 }
 
 void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
+	if (GetX() < GetXWindow()) return;
 	float incX = 0;
 	float incY = 0;
 	switch (moves[state]) {

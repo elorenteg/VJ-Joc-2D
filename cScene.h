@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include <windows.h>
 
-#define SCENE_WIDTH		90
+#define SCENE_WIDTH		310
 #define SCENE_HEIGHT	23
 
 #define FILENAME		"level"
@@ -28,6 +28,7 @@ public:
 
 	bool isEnemy(int tile_x, int tile_y);
 	bool isScene(int tile_x, int tile_y);
+	bool isBoss(int tile_x, int tile_y);
 	void SetMapValue(int tile_x, int tile_y, int width, int heihgt, int value);
 
 private:
