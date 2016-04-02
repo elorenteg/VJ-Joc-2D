@@ -15,7 +15,7 @@ void AppRender()
 		Menu.Render();
 		break;
 	case GAME:
-		if (!Game.hasGameEnd())
+		if (!Game.HasGameEnd())
 			Game.Render();
 		else
 			Menu.Render();
@@ -89,11 +89,16 @@ void AppIdle()
 	case MENU:
 		if (!Menu.Loop()) exit(0);
 		break;
+	case START_GAME:
+		Game.SetGameEnd(false);
+		Menu.SetState(GAME);
+		break;
 	case GAME:
-		if (Game.Loop() && Game.hasGameEnd()) {
+		bool res = Game.Loop();
+		if (res && Game.HasGameEnd()) {
 			Menu.SetState(MENU);
 		}
-		else if (!Game.Loop()) {
+		else if (!res) {
 			exit(0);
 		}
 		break;

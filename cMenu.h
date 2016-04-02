@@ -7,9 +7,10 @@
 #include "Globals.h"
 
 #define MENU		0
-#define GAME		1
-#define HOW_TO		2
-#define CREDITS		3
+#define START_GAME		1
+#define GAME		2
+#define HOW_TO		3
+#define CREDITS		4
 
 #define PAGE_1 1
 #define PAGE_2 2
@@ -67,9 +68,8 @@ private:
 	const int FRAMES_PER_SECOND = 60;
 	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 	// Returns the current number of ms elapsed since the system was started
-	DWORD next_game_tick = GetTickCount();
-	int sleep_time = 0;
-	bool game_is_running = true;
+	DWORD next_game_tick;
+	int sleep_time;
 
 	enum Action { gameAction, howtoAction, creditsAction, stopAction };
 	Action actionSelected;

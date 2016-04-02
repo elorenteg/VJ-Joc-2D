@@ -1,7 +1,5 @@
 #include "cGame.h"
 
-bool firstRender;
-
 string concat_path(string folder, string file) {
 	string path = folder + "/" + file;
 	return path;
@@ -104,7 +102,6 @@ void cGame::startGame() {
 
 bool cGame::loadLevel(int level) {
 	bool res = true;
-	firstRender = true;
 	cameraXScene = 0.0f;
 	playerLostLife = false;
 
@@ -193,16 +190,11 @@ bool cGame::initEnemies(int level) {
 
 bool cGame::Loop() {
 	bool res = true;
-
+	
 	res = Process();
 	if (res) Render();
 
-	if (firstRender) {
-		next_game_tick = GetTickCount();
-		firstRender = false;
-	}
-
-	next_game_tick += SKIP_TICKS;
+	next_game_tick = GetTickCount() + SKIP_TICKS;
 	sleep_time = next_game_tick - GetTickCount();
 	if (sleep_time >= 0) {
 		Sleep(sleep_time);
@@ -228,6 +220,7 @@ bool cGame::Process() {
 
 	if (isGameStandBy()) {
 		if (keys[27]) {
+			keys[27] = false;
 			gameEnd = true;
 		}
 		else if (keys[13]) {
@@ -307,35 +300,6 @@ bool cGame::Process() {
 	return res;
 }
 
-bool cGame::isGameStandBy() {
-	return isPlayerDead() || isEndOfLevel() || isGamePaused() || isPlayerOutsideWindow() || isPlayerLostLife();
-}
-
-bool cGame::isPlayerOutsideWindow() {
-	return Player.isOutsideWindow();
-}
-
-bool cGame::isPlayerDead() {
-	//return Player.isGameOver();
-	return GameInfoLayer.GetCurrentLife() == 0;
-}
-
-bool cGame::isEndOfLevel() {
-	return Scene.endOfMap(cameraXScene + GAME_SCROLL);
-}
-
-bool cGame::isGamePaused() {
-	return gamePaused;
-}
-
-bool cGame::hasGameEnd() {
-	return gameEnd;
-}
-
-bool cGame::isPlayerLostLife() {
-	return playerLostLife;
-}
-
 //Output
 void cGame::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -387,6 +351,39 @@ void cGame::Render() {
 	GameInfoLayer.Draw();
 
 	glutSwapBuffers();
+}
+
+bool cGame::isGameStandBy() {
+	return isPlayerDead() || isEndOfLevel() || isGamePaused() || isPlayerOutsideWindow() || isPlayerLostLife();
+}
+
+bool cGame::isPlayerOutsideWindow() {
+	return Player.isOutsideWindow();
+}
+
+bool cGame::isPlayerDead() {
+	//return Player.isGameOver();
+	return GameInfoLayer.GetCurrentLife() == 0;
+}
+
+bool cGame::isEndOfLevel() {
+	return Scene.endOfMap(cameraXScene + GAME_SCROLL);
+}
+
+bool cGame::isGamePaused() {
+	return gamePaused;
+}
+
+void cGame::SetGameEnd(bool end) {
+	gameEnd = end;
+}
+
+bool cGame::HasGameEnd() {
+	return gameEnd;
+}
+
+bool cGame::isPlayerLostLife() {
+	return playerLostLife;
 }
 
 void cGame::RenderMessage(int message) {

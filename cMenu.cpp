@@ -67,7 +67,7 @@ bool cMenu::Loop()
 	res = Process();
 	if (res) Render();
 
-	next_game_tick += SKIP_TICKS;
+	next_game_tick = GetTickCount() + SKIP_TICKS;
 	sleep_time = next_game_tick - GetTickCount();
 	if (sleep_time >= 0) {
 		Sleep(sleep_time);
@@ -145,6 +145,7 @@ bool cMenu::Process()
 		}
 
 		if (keys[13]) { //Enter
+			keys[13] = false;
 			executeAction();
 		}
 	}
@@ -187,7 +188,7 @@ int cMenu::GetState() {
 
 void cMenu::executeAction() {
 	if (actionSelected == gameAction) {
-		currentState = GAME;
+		currentState = START_GAME;
 	}
 	else if (actionSelected == howtoAction) {
 		page = PAGE_1;
