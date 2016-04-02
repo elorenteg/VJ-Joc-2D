@@ -274,7 +274,7 @@ bool cGame::Process() {
 			playerDead = true;
 		}
 
-		playerDead = playerDead || checkPlayerPosition();
+		//playerDead = playerDead || checkPlayerPosition();
 
 		Matrix map = Scene.GetMap();
 		Player.LogicProjectiles(map);
@@ -287,7 +287,7 @@ bool cGame::Process() {
 		Scene.SetMap(map);
 
 		checkCollisionsPlayer();
-		playerDead = playerDead || checkCollisionsEnemies();
+		//playerDead = playerDead || checkCollisionsEnemies();
 
 		if (playerDead) {
 			GameInfoLayer.SetCurrentLife(GameInfoLayer.GetCurrentLife() - 1);

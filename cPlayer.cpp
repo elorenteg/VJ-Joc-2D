@@ -108,7 +108,7 @@ void cPlayer::DrawRainbow(int tex_id, float xWindow) {
 
 		if (yAnt == y) {
 			++num;
-			if (num == 6) {
+			if (num == 5) {
 				++count;
 				num = 0;
 			}
@@ -147,11 +147,21 @@ void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
 		}
 		else {
 			Position posAnt = Rainbow[Rainbow.size() - 1];
-			while (posAnt.x + SIZE_RAINBOW < GetX() + 12) {
-				pos.x = posAnt.x + SIZE_RAINBOW;
-				pos.y = GetY();
-				Rainbow.push_back(pos);
-				posAnt = pos;
+			if (posAnt.x < GetX()) {
+				while (posAnt.x + SIZE_RAINBOW < GetX() + 12) {
+					pos.x = posAnt.x + SIZE_RAINBOW;
+					pos.y = GetY();
+					Rainbow.push_back(pos);
+					posAnt = pos;
+				}
+			}
+			else {
+				while (posAnt.x - SIZE_RAINBOW > GetX() + 12) {
+					pos.x = posAnt.x - SIZE_RAINBOW;
+					pos.y = GetY();
+					Rainbow.push_back(pos);
+					posAnt = pos;
+				}
 			}
 		}
 	}
