@@ -36,8 +36,6 @@ public:
 	void HitEnemy();
 	Projectile InitShoot();
 
-	void LogicProjectiles(Matrix& map, vector<cEnemyVertical>& vers, vector<cEnemyHorizontal>& hors, vector<cEnemyCircle>& cirs);
-
 private:
 	int lifes;
 	int score;

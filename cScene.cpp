@@ -127,3 +127,29 @@ bool cScene::endOfMap(float cameraX) {
 	if (cameraX + GAME_WIDTH >= SCENE_WIDTH * TILE_SIZE) return true;
 	return false;
 }
+
+void cScene::SetMapValue(int tile_x, int tile_y, int width, int heihgt, int value) {
+	for (int i = tile_x; i < tile_x + width / TILE_SIZE; ++i) {
+		for (int j = tile_y; j < tile_y + heihgt / TILE_SIZE; ++j) {
+			map[j][i] = value;
+		}
+	}
+}
+
+bool cScene::isEnemy(int tile_x, int tile_y) {
+	if (map[tile_y][tile_x] == ENEMY_VER - 48) return true;
+	if (map[tile_y][tile_x] == ENEMY_HOR - 48) return true;
+	if (map[tile_y][tile_x] == ENEMY_CIR - 48) return true;
+	return false;
+}
+
+bool cScene::isScene(int tile_x, int tile_y) {
+	if (map[tile_y][tile_x] == GROUND) return true;
+	if (map[tile_y][tile_x] == CLOUD_SUP_ESQ) return true;
+	if (map[tile_y][tile_x] == CLOUD_SUP_CEN) return true;
+	if (map[tile_y][tile_x] == CLOUD_SUP_DRE) return true;
+	if (map[tile_y][tile_x] == CLOUD_INF_ESQ) return true;
+	if (map[tile_y][tile_x] == CLOUD_INF_CEN) return true;
+	if (map[tile_y][tile_x] == CLOUD_INF_DRE) return true;
+	return false;
+}

@@ -43,6 +43,15 @@ void cBicho::SetXWindow(float xWind) {
 	xWindow = xWind;
 }
 
+void cBicho::SetProjectiles(vector<Projectile>& projs, int dir) {
+	if (dir == DIR_RIGHT) {
+		projsRight = projs;
+	}
+	else {
+		projsLeft = projs;
+	}
+}
+
 float cBicho::GetX() {
 	return x;
 }
@@ -360,7 +369,7 @@ void cBicho::MoveProjectiles(Matrix& map) {
 
 vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& projs, int dirX) {
 	for (int p = 0; p < projs.size(); ++p) {
-		projs[p].x += dirX*TILE_SIZE / 2;
+		projs[p].x += dirX*TILE_SIZE / 3;
 
 		if (projs[p].x < 0 || projs[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
 			// proyectiles fuera de escena se eliminan
@@ -391,6 +400,15 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 	return projs;
 }
 
-void cBicho::LogicProjectiles(Matrix& map, cPlayer player) {
+void cBicho::LogicProjectiles(Matrix& map) {
 	MoveProjectiles(map);
+}
+
+void cBicho::Logic(Matrix& map, float cameraXScene) {
+	OutputDebugStringA("NO :(");
+}
+
+
+void cBicho::Draw(int tex_id) {
+	OutputDebugStringA("NO :(");
 }

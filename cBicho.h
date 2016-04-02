@@ -54,6 +54,7 @@ public:
 	void SetZ(float z);
 	void SetXWindow(float xWindow);
 	void SetMapValue(Matrix& map, int tile_x, int tile_y, int value);
+	void SetProjectiles(vector<Projectile>& projs, int dir);
 
 	float GetX();
 	float GetY();
@@ -67,9 +68,15 @@ public:
 	void MoveUp(Matrix& map);
 	void MoveDown(Matrix& map);
 
+	virtual void Draw(int tex_id);
+	virtual void Logic(Matrix& map, float cameraXScene);
+
+	bool isEnemy(Matrix& map, int tile_x, int tile_y);
+	bool isScene(Matrix& map, int tile_x, int tile_y);
+
 	void Shoot(Matrix& map);
 	void DrawProjectiles(int tex_id);
-	void LogicProjectiles(Matrix& map, cPlayer player);
+	void LogicProjectiles(Matrix& map);
 
 	int  GetState();
 	void SetState(int s);
@@ -93,9 +100,6 @@ protected:
 	bool MapCollidesDown(Matrix& map, float step);
 	bool MapCollidesLeft(Matrix& map, float step);
 	bool MapCollidesRight(Matrix& map, float step);
-
-	bool isEnemy(Matrix& map, int tile_x, int tile_y);
-	bool isScene(Matrix& map, int tile_x, int tile_y);
 
 	virtual void HitEnemy();
 

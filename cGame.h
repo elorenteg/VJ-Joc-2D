@@ -4,6 +4,7 @@
 #include "cSkyLayer.h"
 #include "cMountainLayer.h"
 #include "cGameInfoLayer.h"
+#include "cBicho.h"
 #include "cPlayer.h"
 #include "cData.h"
 #include "cFont.h"
@@ -67,15 +68,13 @@ private:
 	cPlayer Player;
 	cData Data;
 	cFont Font;
-	vector<cEnemyVertical> EnemiesV;
-	vector<cEnemyHorizontal> EnemiesH;
-	vector<cEnemyCircle> EnemiesC;
+	vector<cBicho*> Enemies;
 	
 	float cameraXScene;
 	int currentLevel;
 	bool gamePaused;
 	bool gameEnd;
-
+	bool playerLostLife;
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;
 	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
@@ -87,10 +86,17 @@ private:
 	bool loadLevel(int level);
 	bool initEnemies(int level);
 
+	bool checkPlayerPosition();
+	bool isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer);
+	void checkCollisionsPlayer();
+	bool checkCollisionsEnemies();
+	bool checkProjectilesEnemy(vector<Projectile>& projs);
+
 	void startGame();
 	bool isGameStandBy();
 	bool isEndOfLevel();
 	bool isPlayerOutsideWindow();
 	bool isPlayerDead();
 	bool isGamePaused();
+	bool isPlayerLostLife();
 };
