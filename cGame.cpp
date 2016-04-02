@@ -185,10 +185,10 @@ bool cGame::initEnemies(int level) {
 
 bool cGame::Loop() {
 	bool res = true;
-
+	
 	res = Process();
 	if (res) Render();
-
+	
 	if (firstRender) {
 		next_game_tick = GetTickCount();
 		firstRender = false;
@@ -220,6 +220,7 @@ bool cGame::Process() {
 
 	if (isGameStandBy()) {
 		if (keys[27]) {
+			keys[27] = false;
 			gameEnd = true;
 		}
 		else if (keys[13]) {
@@ -320,7 +321,11 @@ bool cGame::isGamePaused() {
 	return gamePaused;
 }
 
-bool cGame::hasGameEnd() {
+void cGame::SetGameEnd(bool end) {
+	gameEnd = end;
+}
+
+bool cGame::HasGameEnd() {
 	return gameEnd;
 }
 

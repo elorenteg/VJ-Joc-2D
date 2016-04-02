@@ -57,7 +57,8 @@ public:
 	void UpdateCameraScene();
 	void RestartCameraScene();
 
-	bool hasGameEnd();
+	void SetGameEnd(bool end);
+	bool HasGameEnd();
 
 private:
 	unsigned char keys[256];
