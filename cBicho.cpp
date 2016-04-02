@@ -154,7 +154,7 @@ bool cBicho::MapCollidesUp(Matrix& map, float step) {
 	// tile al que corresponde
 	int tile_x = x / TILE_SIZE;
 	int tile_y = y / TILE_SIZE;
-	int tile_y_new = (y + BICHO_HEIGHT) / TILE_SIZE;
+	int tile_y_new = (y + h) / TILE_SIZE;
 
 	bool collides = false;
 	if (tile_y_new >= SCENE_HEIGHT) collides = true;
@@ -211,10 +211,10 @@ bool cBicho::MapCollidesRight(Matrix& map, float step) {
 	// tile al que corresponde
 	int tile_x = x / TILE_SIZE;
 	int tile_y = y / TILE_SIZE;
-	int tile_x_new = (x + step + BICHO_WIDTH) / TILE_SIZE;
+	int tile_x_new = (x + step + w) / TILE_SIZE;
 
 	bool collides = false;
-	if (x + BICHO_WIDTH + step >= xWindow + GAME_WIDTH) collides = true;
+	if (x + w + step >= xWindow + GAME_WIDTH) collides = true;
 	else {
 		int height_tiles = h / TILE_SIZE;
 		if (fmod(y, TILE_SIZE) != 0) height_tiles++;
@@ -278,8 +278,8 @@ void cBicho::SetState(int s) {
 }
 
 void cBicho::SetMapValue(Matrix& map, int tile_x, int tile_y, int value) {
-	for (int i = tile_x; i < tile_x + BICHO_WIDTH / TILE_SIZE; ++i) {
-		for (int j = tile_y; j < tile_y + BICHO_HEIGHT / TILE_SIZE; ++j) {
+	for (int i = tile_x; i < tile_x + w / TILE_SIZE; ++i) {
+		for (int j = tile_y; j < tile_y + h / TILE_SIZE; ++j) {
 			map[j][i] = value;
 		}
 	}
@@ -318,7 +318,7 @@ Projectile cBicho::InitShoot() {
 	Projectile proj;
 	if (lookAtRight()) proj.x = x + 50;
 	else proj.x = x - 50;
-	proj.y = y + BICHO_HEIGHT / 2;
+	proj.y = y + h / 2;
 
 	return proj;
 }
@@ -329,7 +329,7 @@ bool cBicho::lookAtRight() {
 
 bool cBicho::isInScene() {
 	bool isInside = true;
-	if (x < xWindow || x + BICHO_WIDTH >= xWindow + GAME_WIDTH) isInside = false;
+	if (x < xWindow || x + w >= xWindow + GAME_WIDTH) isInside = false;
 
 	return isInside;
 }

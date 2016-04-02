@@ -104,6 +104,7 @@ bool cGame::loadLevel(int level) {
 	bool res = true;
 	cameraXScene = 0.0f;
 	playerLostLife = false;
+	bossDead = false;
 
 	MountainLayer.restartLevel();
 	SkyLayer.restartLevel();
@@ -179,6 +180,12 @@ bool cGame::initEnemies(int level) {
 				Scene.SetMapValue(i, j, BICHO_WIDTH, BICHO_HEIGHT, ENEMY_CIR - 48);
 				Enemies.push_back(enemy);
 			}
+			else if (tile == BOSS) {
+				Boss.SetTile(i, j);
+				Boss.SetZ(SCENE_DEPTH);
+				Boss.SetWidthHeight(2*BICHO_WIDTH, 2*BICHO_HEIGHT);
+				Scene.SetMapValue(i, j, 2*BICHO_WIDTH, 2*BICHO_HEIGHT, BOSS - 48);
+			}
 		}
 		fscanf(fd, "%c", &tile); //pass enter
 	}
@@ -218,6 +225,12 @@ void cGame::ReadMouse(int button, int state, int x, int y) {
 bool cGame::Process() {
 	bool res = true;
 
+	// Do not scroll if level is finished
+	if (isGameStandBy() || isEndOfMap()) {
+		SkyLayer.endOfLevel();
+		MountainLayer.endOfLevel();
+	}
+
 	if (isGameStandBy()) {
 		if (keys[27]) {
 			keys[27] = false;
@@ -230,7 +243,7 @@ bool cGame::Process() {
 			else if (isPlayerOutsideWindow() || isPlayerLostLife()) {
 				loadLevel(currentLevel);
 			}
-			else if (isEndOfLevel() && currentLevel < TOTAL_LEVELS) {
+			else if (isEndOfLevel() && currentLevel < TOTAL_LEVELS && isBossDead()) {
 				currentLevel++;
 				loadLevel(currentLevel);
 			}
@@ -241,7 +254,6 @@ bool cGame::Process() {
 		}
 	}
 	else {
-		bool playerDead = false;
 
 		if (keys[GLUT_KEY_UP]) {
 			Player.MoveUp(Scene.GetMap());
@@ -268,8 +280,13 @@ bool cGame::Process() {
 			keys[27] = false;
 		}
 
+		float scroll = GAME_SCROLL;
+		if (isEndOfMap()) scroll = 0;
+
+		bool playerDead = false;
+
 		//Game Logic
-		Player.Logic(Scene.GetMap(), GAME_SCROLL);
+		Player.Logic(Scene.GetMap(), scroll);
 
 		if (isPlayerOutsideWindow()) {
 			playerDead = true;
@@ -281,11 +298,15 @@ bool cGame::Process() {
 		Player.LogicProjectiles(map);
 
 		for (int i = 0; i < Enemies.size(); ++i) {
-			Enemies[i]->Logic(map, GAME_SCROLL);
+			Enemies[i]->Logic(map, scroll);
 			Enemies[i]->LogicProjectiles(map);
 		}
 
+		Boss.Logic(map, scroll);
+
 		Scene.SetMap(map);
+
+		setBossDead();
 
 		checkCollisionsPlayer();
 		//playerDead = playerDead || checkCollisionsEnemies();
@@ -305,11 +326,7 @@ void cGame::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1.0f, 1.0f, 1.0f);
 
-	// Do not scroll if level is finished
 	if (isGameStandBy()) {
-		SkyLayer.endOfLevel();
-		MountainLayer.endOfLevel();
-
 		if (isEndOfLevel()) {
 			if (currentLevel == TOTAL_LEVELS) {
 				RenderMessage(END_OF_GAME);
@@ -345,6 +362,8 @@ void cGame::Render() {
 		Enemies[i]->DrawProjectiles(Data.GetID(IMG_PROJ_GRIS));
 	}
 
+	Boss.Draw(Data.GetID(IMG_NINJA));
+
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
 	RestartCameraScene();
 
@@ -354,7 +373,7 @@ void cGame::Render() {
 }
 
 bool cGame::isGameStandBy() {
-	return isPlayerDead() || isEndOfLevel() || isGamePaused() || isPlayerOutsideWindow() || isPlayerLostLife();
+	return isPlayerDead() || isGamePaused() || isPlayerOutsideWindow() || isPlayerLostLife() || isEndOfLevel();
 }
 
 bool cGame::isPlayerOutsideWindow() {
@@ -367,11 +386,19 @@ bool cGame::isPlayerDead() {
 }
 
 bool cGame::isEndOfLevel() {
+	return isEndOfMap() && isBossDead();
+}
+
+bool cGame::isEndOfMap() {
 	return Scene.endOfMap(cameraXScene + GAME_SCROLL);
 }
 
 bool cGame::isGamePaused() {
 	return gamePaused;
+}
+
+bool cGame::isBossDead() {
+	return bossDead;
 }
 
 void cGame::SetGameEnd(bool end) {
@@ -462,7 +489,7 @@ void cGame::UpdateCameraScene() {
 	glMatrixMode(GL_MODELVIEW);
 
 	// If not end of level, map can continue scrolling
-	if (!isGameStandBy()) {
+	if (!(isGameStandBy() || isEndOfMap())) {
 		cameraXScene += GAME_SCROLL;
 	}
 }
@@ -472,6 +499,25 @@ void cGame::RestartCameraScene() {
 	glLoadIdentity();
 	glOrtho(0, 0 + GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void cGame::setBossDead() {
+	vector<Projectile> projsRight = Player.GetProjectiles(DIR_RIGHT);
+
+	for (int p = 0; p < projsRight.size(); ++p) {
+		float px = projsRight[p].x;
+		float py = projsRight[p].y;
+
+		if (Boss.GetX() <= px && px <= Boss.GetX() + Boss.GetWidth() &&
+			Boss.GetY() <= py && py <= Boss.GetY() + Boss.GetHeight()) {
+			bossDead = true;
+			Boss.SetWidthHeight(0, 0);
+
+			projsRight.erase(projsRight.begin() + p);
+		}
+	}
+
+	Player.SetProjectiles(projsRight, DIR_RIGHT);
 }
 
 bool cGame::checkPlayerPosition() {
