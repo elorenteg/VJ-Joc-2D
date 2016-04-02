@@ -30,12 +30,12 @@ bool cGame::Init() {
 	char path[64];
 
 	//Background initialization
-	strcpy(path, concat_path(IMAGES_FOLDER, "fondo_cielo.png").c_str());
+	strcpy(path, concat_path(IMAGES_FOLDER, "fondo_cielo4.png").c_str());
 	res = Data.LoadImage(IMG_BACKGROUND, path, GL_RGBA);
 	if (!res) return false;
 
 	//Layer2 initialization
-	strcpy(path, concat_path(IMAGES_FOLDER, "fondo_capa2.png").c_str());
+	strcpy(path, concat_path(IMAGES_FOLDER, "fondo_montana.png").c_str());
 	res = Data.LoadImage(IMG_LAYER2, path, GL_RGBA);
 	if (!res) return false;
 
@@ -105,6 +105,9 @@ bool cGame::loadLevel(int level) {
 	firstRender = true;
 	cameraXScene = 0.0f;
 	playerLostLife = false;
+
+	MountainLayer.restartLevel();
+	SkyLayer.restartLevel();
 
 	GameInfoLayer.SetCurrentLevel(level);
 
@@ -336,8 +339,8 @@ void cGame::Render() {
 
 	// Do not scroll if level is finished
 	if (isGameStandBy()) {
-		SkyLayer.endOfGame();
-		MountainLayer.endOfGame();
+		SkyLayer.endOfLevel();
+		MountainLayer.endOfLevel();
 
 		if (isEndOfLevel()) {
 			if (currentLevel == TOTAL_LEVELS) {
@@ -359,7 +362,7 @@ void cGame::Render() {
 	}
 
 	SkyLayer.Draw(Data.GetID(IMG_BACKGROUND));
-	MountainLayer.Draw(Data.GetID(IMG_LAYER2));
+	MountainLayer.Draw(Data.GetID(IMG_LAYER2), currentLevel);
 
 	UpdateCameraScene();
 	Scene.Draw(Data.GetID(IMG_SCENE));
