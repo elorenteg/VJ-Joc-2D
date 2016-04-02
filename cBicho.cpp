@@ -369,7 +369,7 @@ void cBicho::MoveProjectiles(Matrix& map) {
 
 vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& projs, int dirX) {
 	for (int p = 0; p < projs.size(); ++p) {
-		projs[p].x += dirX*TILE_SIZE / 2;
+		projs[p].x += dirX*TILE_SIZE / 3;
 
 		if (projs[p].x < 0 || projs[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
 			// proyectiles fuera de escena se eliminan

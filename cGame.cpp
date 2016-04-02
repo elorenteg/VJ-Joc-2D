@@ -87,6 +87,7 @@ bool cGame::Init() {
 
 void cGame::startGame() {
 	currentLevel = 1;
+	playerLostLife = false;
 	GameInfoLayer.Init();
 
 	//Reiniciar puntuacion de Player
@@ -98,6 +99,7 @@ bool cGame::loadLevel(int level) {
 	bool res = true;
 	firstRender = true;
 	cameraXScene = 0.0f;
+	playerLostLife = false;
 
 	GameInfoLayer.SetCurrentLevel(level);
 
@@ -222,8 +224,11 @@ bool cGame::Process() {
 
 	if (isGameStandBy()) {
 		if (keys[13]) {
-			if (isPlayerDead() || isPlayerOutsideWindow()) {
+			if (isPlayerDead()) {
 				startGame();
+			}
+			else if (isPlayerOutsideWindow() || isPlayerLostLife()) {
+				loadLevel(currentLevel);
 			}
 			else if (isEndOfLevel() && currentLevel < TOTAL_LEVELS) {
 				currentLevel++;
@@ -269,6 +274,8 @@ bool cGame::Process() {
 			playerDead = true;
 		}
 
+		playerDead = playerDead || checkPlayerPosition();
+
 		Matrix map = Scene.GetMap();
 		Player.LogicProjectiles(map);
 
@@ -284,7 +291,7 @@ bool cGame::Process() {
 
 		if (playerDead) {
 			GameInfoLayer.SetCurrentLife(GameInfoLayer.GetCurrentLife() - 1);
-			loadLevel(currentLevel);
+			playerLostLife = true;
 			return res;
 		}
 	}
@@ -293,7 +300,7 @@ bool cGame::Process() {
 }
 
 bool cGame::isGameStandBy() {
-	return isPlayerDead() || isEndOfLevel() || isGamePaused() || isPlayerOutsideWindow();
+	return isPlayerDead() || isEndOfLevel() || isGamePaused() || isPlayerOutsideWindow() || isPlayerLostLife();
 }
 
 bool cGame::isPlayerOutsideWindow() {
@@ -311,6 +318,10 @@ bool cGame::isEndOfLevel() {
 
 bool cGame::isGamePaused() {
 	return gamePaused;
+}
+
+bool cGame::isPlayerLostLife() {
+	return playerLostLife;
 }
 
 //Output
@@ -337,7 +348,7 @@ void cGame::Render() {
 		else if (isGamePaused()) {
 			RenderMessage(GAME_PAUSED);
 		}
-		else if (isPlayerOutsideWindow()) {
+		else if (isPlayerOutsideWindow() || isPlayerLostLife()) {
 			RenderMessage(LIFE_LOST);
 		}
 	}
@@ -452,6 +463,38 @@ void cGame::RestartCameraScene() {
 	glLoadIdentity();
 	glOrtho(0, 0 + GAME_WIDTH, 0, GAME_HEIGHT, 0, GAME_DEPTH);
 	glMatrixMode(GL_MODELVIEW);
+}
+
+bool cGame::checkPlayerPosition() {
+	bool collides = false;
+	float xPlayer = Player.GetX();
+	float yPlayer = Player.GetY();
+	int wPlayer = Player.GetWidth();
+	int hPlayer = Player.GetHeight();
+
+	for (int i = 0; i < Enemies.size() && !collides; ++i) {
+		float enX = Enemies[i]->GetX();
+		float enY = Enemies[i]->GetY();
+		float enW = Enemies[i]->GetWidth();
+		float enH = Enemies[i]->GetHeight();
+		if (isPositionInside(enX, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
+			isPositionInside(enX + enW, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
+			isPositionInside(enX + enW, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
+			isPositionInside(enX, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer)) {
+			collides = true;
+		}
+	}
+
+	return collides;
+}
+
+bool cGame::isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer) {
+	if (xPlayer < x && x < xPlayer + wPlayer &&
+		yPlayer < y && y < yPlayer + hPlayer) {
+		return true;
+	}
+
+	return false;
 }
 
 void cGame::checkCollisionsPlayer() {
