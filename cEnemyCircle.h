@@ -9,7 +9,7 @@
 #define	DOWN		3
 
 #define FRAMES_MOVE	15
-#define TILES_MOVE	3
+#define TILES_MOVE	6
 #define MAX_MOVES	4
 
 #define FREQ_SHOOTS 35

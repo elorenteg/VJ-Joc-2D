@@ -160,7 +160,7 @@ bool cGame::initEnemies(int level) {
 				enemy->SetTile(i, j);
 				enemy->SetZ(SCENE_DEPTH);
 				enemy->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-				enemy->SetMapValue(Scene.GetMap(), i, j, ENEMY_VER - 48);
+				Scene.SetMapValue(i, j, BICHO_WIDTH, BICHO_HEIGHT, ENEMY_VER - 48);
 				Enemies.push_back(enemy);
 			}
 			else if (tile == ENEMY_HOR) {
@@ -168,7 +168,7 @@ bool cGame::initEnemies(int level) {
 				enemy->SetTile(i, j);
 				enemy->SetZ(SCENE_DEPTH);
 				enemy->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-				enemy->SetMapValue(Scene.GetMap(), i, j, ENEMY_HOR - 48);
+				Scene.SetMapValue(i, j, BICHO_WIDTH, BICHO_HEIGHT, ENEMY_HOR - 48);
 				Enemies.push_back(enemy);
 			}
 			else if (tile == ENEMY_CIR) {
@@ -176,7 +176,7 @@ bool cGame::initEnemies(int level) {
 				enemy->SetTile(i, j);
 				enemy->SetZ(SCENE_DEPTH);
 				enemy->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-				enemy->SetMapValue(Scene.GetMap(), i, j, ENEMY_CIR - 48);
+				Scene.SetMapValue(i, j, BICHO_WIDTH, BICHO_HEIGHT, ENEMY_CIR - 48);
 				Enemies.push_back(enemy);
 			}
 		}
