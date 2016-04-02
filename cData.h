@@ -16,11 +16,13 @@
 #define IMG_PLAYER		5
 #define IMG_NINJA		6
 #define IMG_GRADIENT	7
-#define IMG_SHOOT		8
 
-#define IMG_RAINBOW		9
+#define IMG_PROJ		8
+#define IMG_PROJ_GRIS	9
 
-#define IMG_KEYBOARD	10
+#define IMG_RAINBOW		10
+
+#define IMG_KEYBOARD	11
 
 
 class cData

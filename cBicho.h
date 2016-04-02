@@ -8,8 +8,10 @@
 #define BICHO_WIDTH		TILE_SIZE*3
 #define BICHO_HEIGHT	TILE_SIZE*2
 
-#define PROJ_WIDTH		TILE_SIZE*2
-#define	PROJ_HEIGHT		TILE_SIZE/2
+#define PROJ_WIDTH		27
+#define	PROJ_HEIGHT		7
+#define PROJ_SPEED		5
+
 #define DIR_NONE		0
 #define	DIR_UP			1
 #define DIR_DOWN		-1
@@ -101,9 +103,7 @@ protected:
 	bool MapCollidesLeft(Matrix& map, float step);
 	bool MapCollidesRight(Matrix& map, float step);
 
-	virtual void HitEnemy();
-
-	virtual Projectile InitShoot();
+	Projectile InitShoot();
 	void MoveProjectiles(Matrix& map);
 
 	virtual bool lookAtRight();

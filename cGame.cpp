@@ -77,7 +77,12 @@ bool cGame::Init() {
 
 	//Projectile initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "projectiles.png").c_str());
-	res = Data.LoadImage(IMG_SHOOT, path, GL_RGBA);
+	res = Data.LoadImage(IMG_PROJ, path, GL_RGBA);
+	if (!res) return false;
+
+	//Projectile initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "projectiles_gris.png").c_str());
+	res = Data.LoadImage(IMG_PROJ_GRIS, path, GL_RGBA);
 	if (!res) return false;
 
 	startGame();
@@ -275,7 +280,7 @@ bool cGame::Process() {
 			playerDead = true;
 		}
 
-		//playerDead = playerDead || checkPlayerPosition();
+		playerDead = playerDead || checkPlayerPosition();
 
 		Matrix map = Scene.GetMap();
 		Player.LogicProjectiles(map);
@@ -371,11 +376,11 @@ void cGame::Render() {
 	glColor3f(1.0f, 1.0f, 1.0f);
 
 	Player.Draw(Data.GetID(IMG_PLAYER));
-	Player.DrawProjectiles(Data.GetID(IMG_SHOOT));
+	Player.DrawProjectiles(Data.GetID(IMG_PROJ));
 
 	for (int i = 0; i < Enemies.size(); ++i) {
 		Enemies[i]->Draw(Data.GetID(IMG_NINJA));
-		Enemies[i]->DrawProjectiles(Data.GetID(IMG_SHOOT));
+		Enemies[i]->DrawProjectiles(Data.GetID(IMG_PROJ_GRIS));
 	}
 
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
