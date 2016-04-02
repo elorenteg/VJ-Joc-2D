@@ -71,6 +71,7 @@ private:
 	float cameraXScene;
 	int currentLevel;
 	bool gamePaused;
+	bool playerLostLife;
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;
@@ -95,4 +96,5 @@ private:
 	bool isPlayerOutsideWindow();
 	bool isPlayerDead();
 	bool isGamePaused();
+	bool isPlayerLostLife();
 };

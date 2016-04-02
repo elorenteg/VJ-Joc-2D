@@ -87,6 +87,7 @@ bool cGame::Init() {
 
 void cGame::startGame() {
 	currentLevel = 1;
+	playerLostLife = false;
 	GameInfoLayer.Init();
 
 	//Reiniciar puntuacion de Player
@@ -98,6 +99,7 @@ bool cGame::loadLevel(int level) {
 	bool res = true;
 	firstRender = true;
 	cameraXScene = 0.0f;
+	playerLostLife = false;
 
 	GameInfoLayer.SetCurrentLevel(level);
 
@@ -222,8 +224,11 @@ bool cGame::Process() {
 
 	if (isGameStandBy()) {
 		if (keys[13]) {
-			if (isPlayerDead() || isPlayerOutsideWindow()) {
+			if (isPlayerDead()) {
 				startGame();
+			}
+			else if (isPlayerOutsideWindow() || isPlayerLostLife()) {
+				loadLevel(currentLevel);
 			}
 			else if (isEndOfLevel() && currentLevel < TOTAL_LEVELS) {
 				currentLevel++;
@@ -282,11 +287,12 @@ bool cGame::Process() {
 		Scene.SetMap(map);
 
 		checkCollisionsPlayer();
-		//playerDead = playerDead || checkCollisionsEnemies();
+		playerDead = playerDead || checkCollisionsEnemies();
 
 		if (playerDead) {
 			GameInfoLayer.SetCurrentLife(GameInfoLayer.GetCurrentLife() - 1);
-			loadLevel(currentLevel);
+			playerLostLife = true;
+			//loadLevel(currentLevel);
 			return res;
 		}
 	}
@@ -295,7 +301,7 @@ bool cGame::Process() {
 }
 
 bool cGame::isGameStandBy() {
-	return isPlayerDead() || isEndOfLevel() || isGamePaused() || isPlayerOutsideWindow();
+	return isPlayerDead() || isEndOfLevel() || isGamePaused() || isPlayerOutsideWindow() || isPlayerLostLife();
 }
 
 bool cGame::isPlayerOutsideWindow() {
@@ -313,6 +319,10 @@ bool cGame::isEndOfLevel() {
 
 bool cGame::isGamePaused() {
 	return gamePaused;
+}
+
+bool cGame::isPlayerLostLife() {
+	return playerLostLife;
 }
 
 //Output
@@ -339,7 +349,7 @@ void cGame::Render() {
 		else if (isGamePaused()) {
 			RenderMessage(GAME_PAUSED);
 		}
-		else if (isPlayerOutsideWindow()) {
+		else if (isPlayerOutsideWindow() || isPlayerLostLife()) {
 			RenderMessage(LIFE_LOST);
 		}
 	}
