@@ -6,6 +6,9 @@ cEnemyVertical::cEnemyVertical() {
 	time_state = FRAMES_MOVE;
 	state_lookat = DIR_LEFT;
 	freq_shoots = FREQ_SHOOTS;
+
+	state = UP;
+	num_moves = TILES_MOVE;
 }
 
 cEnemyVertical::~cEnemyVertical() {}

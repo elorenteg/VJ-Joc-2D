@@ -33,6 +33,11 @@ bool cPlayer::isGameOver() {
 	return false;
 }
 
+bool cPlayer::canMove(Matrix& map, int tx, int ty) {
+	if (isScene(map, tx, ty)) return false;
+	else return true;
+}
+
 void cPlayer::Draw(int tex_id) {
 	float xo, yo, xf, yf;
 

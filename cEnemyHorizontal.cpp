@@ -6,6 +6,9 @@ cEnemyHorizontal::cEnemyHorizontal() {
 	time_state = FRAMES_MOVE;
 	state_lookat = DIR_LEFT;
 	freq_shoots = FREQ_SHOOTS;
+
+	state = LEFT;
+	num_moves = TILES_MOVE;
 }
 
 cEnemyHorizontal::~cEnemyHorizontal() {}

@@ -101,7 +101,6 @@ void cBicho::DrawProjectiles(int tex_id) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-
 void cBicho::DrawProjectiles(int tex_id, vector<Projectile>& projectiles) {
 	int w = PROJ_WIDTH;
 	int h = PROJ_HEIGHT;
@@ -146,6 +145,11 @@ void cBicho::DrawProjectiles(int tex_id, vector<Projectile>& projectiles) {
 	}
 }
 
+bool cBicho::canMove(Matrix& map, int tx, int ty) {
+	if (map[ty][tx] != 0) return false;
+	else return true;
+}
+
 bool cBicho::MapCollidesUp(Matrix& map, float step) {
 	// tile al que corresponde
 	int tile_x = x / TILE_SIZE;
@@ -159,7 +163,7 @@ bool cBicho::MapCollidesUp(Matrix& map, float step) {
 		if (fmod(x, TILE_SIZE) != 0) width_tiles++;
 
 		for (int tx = tile_x; tx < tile_x + width_tiles && !collides; ++tx) {
-			if (isScene(map, tx, tile_y_new)) collides = true;
+			if (!canMove(map,tx,tile_y_new)) collides = true;
 		}
 	}
 	return collides;
@@ -178,7 +182,7 @@ bool cBicho::MapCollidesDown(Matrix& map, float step) {
 		if (fmod(x, TILE_SIZE) != 0) width_tiles++;
 
 		for (int tx = tile_x; tx < tile_x + width_tiles && !collides; ++tx) {
-			if (isScene(map, tx, tile_y_new)) collides = true;
+			if (!canMove(map, tx, tile_y_new)) collides = true;
 		}
 	}
 	return collides;
@@ -197,7 +201,7 @@ bool cBicho::MapCollidesLeft(Matrix& map, float step) {
 		if (fmod(y, TILE_SIZE) != 0) height_tiles++;
 
 		for (int ty = tile_y; ty < tile_y + height_tiles && !collides; ++ty) {
-			if (isScene(map, tile_x_new, ty)) collides = true;
+			if (!canMove(map, tile_x_new, ty)) collides = true;
 		}
 	}
 	return collides;
@@ -216,7 +220,7 @@ bool cBicho::MapCollidesRight(Matrix& map, float step) {
 		if (fmod(y, TILE_SIZE) != 0) height_tiles++;
 
 		for (int ty = tile_y; ty < tile_y + height_tiles && !collides; ++ty) {
-			if (isScene(map, tile_x_new, ty)) collides = true;
+			if (!canMove(map, tile_x_new, ty)) collides = true;
 		}
 	}
 	return collides;
