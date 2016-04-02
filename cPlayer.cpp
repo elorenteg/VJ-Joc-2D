@@ -67,6 +67,8 @@ void cPlayer::Draw(int tex_id) {
 }
 
 void cPlayer::DrawRainbow(int tex_id, float xWindow) {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 
@@ -106,6 +108,7 @@ void cPlayer::DrawRainbow(int tex_id, float xWindow) {
 	}
 
 	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 }
 
 void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {

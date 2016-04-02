@@ -69,7 +69,7 @@ bool cGame::Init() {
 	if (!res) return false;
 
 	//Rainbow initialization
-	strcpy(path, concat_path(IMAGES_FOLDER, "rainbow.png").c_str());
+	strcpy(path, concat_path(IMAGES_FOLDER, "rainbow2.png").c_str());
 	res = Data.LoadImage(IMG_RAINBOW, path, GL_RGBA);
 	if (!res) return false;
 
