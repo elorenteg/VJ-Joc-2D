@@ -12,6 +12,9 @@ void cSound::PlayCustomSound(int sound) {
 	if (sound == SOUND_NYAN_BASE) {
 		PlaySound((LPCSTR) "Sound/nyan_cat_base.wav", NULL, SND_ASYNC | SND_FILENAME);
 	}
+	else if (sound == SOUND_CAT_DYING) {
+		PlaySound((LPCSTR) "Sound/cat_dying.wav", NULL, SND_ASYNC | SND_FILENAME);
+	}
 }
 
 void cSound::StopCustomSound() {

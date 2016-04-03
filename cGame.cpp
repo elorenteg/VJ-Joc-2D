@@ -322,9 +322,9 @@ bool cGame::Process() {
 		//playerDead = playerDead || checkCollisionsEnemies();
 
 		if (playerDead) {
+			startSound(SOUND_CAT_DYING);
 			GameInfoLayer.SetCurrentLife(GameInfoLayer.GetCurrentLife() - 1);
 			playerLostLife = true;
-			return res;
 		}
 	}
 
@@ -339,20 +339,20 @@ void cGame::Render() {
 	if (isGameStandBy()) {
 		if (isEndOfLevel()) {
 			if (currentLevel == TOTAL_LEVELS) {
-				RenderMessage(END_OF_GAME);
+				renderMessage(END_OF_GAME);
 			}
 			else {
-				RenderMessage(END_OF_LEVEL);
+				renderMessage(END_OF_LEVEL);
 			}
 		}
 		else if (isPlayerDead()) {
-			RenderMessage(END_GAME_OVER);
+			renderMessage(END_GAME_OVER);
 		}
 		else if (isGamePaused()) {
-			RenderMessage(GAME_PAUSED);
+			renderMessage(GAME_PAUSED);
 		}
 		else if (isPlayerOutsideWindow() || isPlayerLostLife()) {
-			RenderMessage(LIFE_LOST);
+			renderMessage(LIFE_LOST);
 		}
 	}
 
@@ -423,7 +423,11 @@ bool cGame::isPlayerLostLife() {
 	return playerLostLife;
 }
 
-void cGame::RenderMessage(int message) {
+void cGame::startSound(int sound){
+	Sound.PlayCustomSound(sound);
+}
+
+void cGame::renderMessage(int message) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, Data.GetID(IMG_MARCO));
 

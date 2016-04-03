@@ -3,6 +3,7 @@
 #include "Globals.h"
 
 #define SOUND_NYAN_BASE		0
+#define SOUND_CAT_DYING		1
 
 class cSound
 {

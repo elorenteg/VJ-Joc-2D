@@ -64,13 +64,6 @@ private:
 	cSound Sound;
 	bool processingKey;
 
-	//http://www.koonsolo.com/news/dewitters-gameloop/
-	const int FRAMES_PER_SECOND = 60;
-	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
-	// Returns the current number of ms elapsed since the system was started
-	DWORD next_game_tick;
-	int sleep_time;
-
 	enum Action { gameAction, howtoAction, creditsAction, stopAction };
 	Action actionSelected;
 
@@ -94,4 +87,11 @@ private:
 
 	void render_stars();
 	void calculate_stars();
+
+	//http://www.koonsolo.com/news/dewitters-gameloop/
+	const int FRAMES_PER_SECOND = 60;
+	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
+	// Returns the current number of ms elapsed since the system was started
+	DWORD next_game_tick;
+	int sleep_time;
 };

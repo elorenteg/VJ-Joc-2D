@@ -12,6 +12,7 @@
 #include "cEnemyHorizontal.h"
 #include "cEnemyCircle.h"
 #include "cBoss.h"
+#include "cSound.h"
 #include "Globals.h"
 
 #define TOTAL_LEVELS	2
@@ -54,7 +55,6 @@ public:
 
 	//Output
 	void Render();
-	void RenderMessage(int message);
 	void UpdateCameraScene();
 	void RestartCameraScene();
 
@@ -72,6 +72,7 @@ private:
 	cFont Font;
 	vector<cBicho*> Enemies;
 	cBoss Boss;
+	cSound Sound;
 	
 	float cameraXScene;
 	int currentLevel;
@@ -79,13 +80,6 @@ private:
 	bool gameEnd;
 	bool playerLostLife;
 	bool bossDead;
-
-	//http://www.koonsolo.com/news/dewitters-gameloop/
-	const int FRAMES_PER_SECOND = 70;
-	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
-	// Returns the current number of ms elapsed since the system was started
-	DWORD next_game_tick;
-	int sleep_time;
 
 	bool loadLevel(int level);
 	bool initEnemies(int level);
@@ -97,6 +91,9 @@ private:
 	bool checkCollisionsEnemies();
 	bool checkProjectilesEnemy(vector<Projectile>& projs);
 
+	void startSound(int sound);
+	void renderMessage(int message);
+
 	void startGame();
 	bool isGameStandBy();
 	bool isEndOfLevel();
@@ -106,4 +103,11 @@ private:
 	bool isPlayerLostLife();
 	bool isBossDead();
 	bool isEndOfMap();
+
+	//http://www.koonsolo.com/news/dewitters-gameloop/
+	const int FRAMES_PER_SECOND = 70;
+	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
+	// Returns the current number of ms elapsed since the system was started
+	DWORD next_game_tick;
+	int sleep_time;
 };
