@@ -199,9 +199,9 @@ bool cGame::initEnemies(int level) {
 				cEnemyCircle* enemy = new cEnemyCircle();
 				enemy->SetTile(i, j);
 				enemy->SetZ(SCENE_DEPTH);
-				enemy->SetWidthHeight(2*BICHO_WIDTH, BICHO_HEIGHT);
+				enemy->SetWidthHeight(5 * TILE_SIZE, BICHO_HEIGHT);
 				enemy->SetWidthHeightProjectiles(20, 20);
-				Scene.SetMapValue(i, j, 2*BICHO_WIDTH, BICHO_HEIGHT, ENEMY_CIR - 48);
+				Scene.SetMapValue(i, j, 5*TILE_SIZE, BICHO_HEIGHT, ENEMY_CIR - 48);
 				Enemies.push_back(enemy);
 			}
 			else if (tile == BOSS) {
