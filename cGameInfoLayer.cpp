@@ -56,7 +56,7 @@ void cGameInfoLayer::Draw() {
 	char level_value[8];
 	sprintf(level_value, "%d", current_level);
 	strcat(level_text, level_value);
-	Font.drawText(5.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 90.0f, 25.0f, level_text);
+	Font.drawText(5.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 90.0f, 20.0f, level_text);
 
 	// Vides
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -66,7 +66,7 @@ void cGameInfoLayer::Draw() {
 	char life_value[8];
 	sprintf(life_value, "%d", current_life);
 	strcat(life_text, life_value);
-	Font.drawText(110.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 75.0f, 25.0f, life_text);
+	Font.drawText(110.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 75.0f, 20.0f, life_text);
 
 	// Puntuacio
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -76,7 +76,7 @@ void cGameInfoLayer::Draw() {
 	char score_value[8];
 	sprintf(score_value, "%d", current_score);
 	strcat(score_text, score_value);
-	Font.drawText(GAME_WIDTH - 275.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 135.0f, 25.0f, score_text);
+	Font.drawText(GAME_WIDTH - 275.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 135.0f, 20.0f, score_text);
 
 	// Maxima Puntuacio
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -86,7 +86,7 @@ void cGameInfoLayer::Draw() {
 	char high_score_value[8];
 	sprintf(high_score_value, "%d", high_score);
 	strcat(high_score_text, high_score_value);
-	Font.drawText(GAME_WIDTH - 125.0f, GAME_HEIGHT - 25.0f, GAMEINFO_DEPTH, 120.0f, 25.0f, high_score_text);
+	Font.drawText(GAME_WIDTH - 125.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 120.0f, 20.0f, high_score_text);
 }
 
 void cGameInfoLayer::SetCurrentLevel(int level) {
