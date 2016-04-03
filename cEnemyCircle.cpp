@@ -111,10 +111,19 @@ void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
 	}
 
 	xWindow += cameraXSceneInc;
+}
+
+void cEnemyCircle::LogicProjectiles(Matrix& map, int level, int total_levels) {
+	MoveProjectiles(map);
 
 	--freq_shoots;
-	if (freq_shoots == 0) {
-		freq_shoots = FREQ_SHOOTS;
+	if (freq_shoots <= 0) {
+		freq_shoots = maxFreqProjectiles(level, total_levels);
+
 		Shoot(map);
 	}
+}
+
+int cEnemyCircle::maxFramesProjectiles() {
+	return 4;
 }

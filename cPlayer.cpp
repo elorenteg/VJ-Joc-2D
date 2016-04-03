@@ -159,10 +159,6 @@ void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
 	}
 }
 
-Projectile cPlayer::InitShoot() {
-	Projectile proj;
-	proj.x = x + 50;
-	proj.y = y + BICHO_HEIGHT / 2;
-
-	return proj;
+void cPlayer::LogicProjectiles(Matrix& map) {
+	MoveProjectiles(map);
 }

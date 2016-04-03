@@ -12,7 +12,7 @@
 #define TILES_MOVE	6
 #define MAX_MOVES	4
 
-#define FREQ_SHOOTS 35
+#define FREQ_SHOOTS 100
 
 class cEnemyCircle : public cBicho
 {
@@ -23,9 +23,11 @@ public:
 	void Draw(int tex_id);
 
 	void Logic(Matrix& map, float cameraXScene);
+	void LogicProjectiles(Matrix& map, int level, int total_levels);
 
 protected:
 	bool lookAtRight();
+	int maxFramesProjectiles();
 
 private:
 	int num_moves;

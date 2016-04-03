@@ -50,12 +50,12 @@ void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
 	if (GetX() < GetXWindow()) return;
 	float inc = 0;
 	switch (moves[state]) {
-		case UP:
-			inc = 1;
-			break;
-		case DOWN:
-			inc = -1;
-			break;
+	case UP:
+		inc = 1;
+		break;
+	case DOWN:
+		inc = -1;
+		break;
 	}
 
 	int tile_x = x / TILE_SIZE;
@@ -90,10 +90,19 @@ void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
 	}
 
 	xWindow += cameraXSceneInc;
+}
+
+void cEnemyVertical::LogicProjectiles(Matrix& map, int level, int total_levels) {
+	MoveProjectiles(map);
 
 	--freq_shoots;
-	if (freq_shoots == 0) {
-		freq_shoots = FREQ_SHOOTS;
+	if (freq_shoots <= 0) {
+		freq_shoots = maxFreqProjectiles(level, total_levels);
+
 		Shoot(map);
 	}
+}
+
+int cEnemyVertical::maxFramesProjectiles() {
+	return 4;
 }

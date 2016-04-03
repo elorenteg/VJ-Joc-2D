@@ -73,6 +73,21 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PIRATE, path, GL_RGBA);
 	if (!res) return false;
 
+	//Ninja-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_tac.png").c_str());
+	res = Data.LoadImage(IMG_TAC, path, GL_RGBA);
+	if (!res) return false;
+
+	//Zombie-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_mummy.png").c_str());
+	res = Data.LoadImage(IMG_MUMMY, path, GL_RGBA);
+	if (!res) return false;
+
+	//Pirate-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_groudon.png").c_str());
+	res = Data.LoadImage(IMG_GROUDON, path, GL_RGBA);
+	if (!res) return false;
+
 	//Gradient-nyancat initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_gradiente.png").c_str());
 	res = Data.LoadImage(IMG_GRADIENT, path, GL_RGBA);
@@ -89,8 +104,18 @@ bool cGame::Init() {
 	if (!res) return false;
 
 	//Projectile initialization
-	strcpy(path, concat_path(IMAGES_FOLDER, "projectiles_gris.png").c_str());
-	res = Data.LoadImage(IMG_PROJ_GRIS, path, GL_RGBA);
+	strcpy(path, concat_path(IMAGES_FOLDER, "ninja_stars.png").c_str());
+	res = Data.LoadImage(IMG_PROJ_NINJA, path, GL_RGBA);
+	if (!res) return false;
+	
+	//Projectile initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "projectiles_enemy_zombie.png").c_str());
+	res = Data.LoadImage(IMG_PROJ_ZOMBIE, path, GL_RGBA);
+	if (!res) return false;
+	
+	//Projectile initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "skulls.png").c_str());
+	res = Data.LoadImage(IMG_PROJ_PIRATE, path, GL_RGBA);
 	if (!res) return false;
 
 	startGame();
@@ -168,15 +193,16 @@ bool cGame::initEnemies(int level) {
 
 		for (i = 0; i < SCENE_WIDTH; i++) {
 			fscanf(fd, "%c", &tile);
-			if (tile == ENEMY_VER) {
+			if (tile == ENEMY_VER) { // Ninja
 				cEnemyVertical* enemy = new cEnemyVertical();
 				enemy->SetTile(i, j);
 				enemy->SetZ(SCENE_DEPTH);
 				enemy->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+				enemy->SetWidthHeightProjectiles(20, 20);
 				Scene.SetMapValue(i, j, BICHO_WIDTH, BICHO_HEIGHT, ENEMY_VER - 48);
 				Enemies.push_back(enemy);
 			}
-			else if (tile == ENEMY_HOR) {
+			else if (tile == ENEMY_HOR) { // Zombi
 				cEnemyHorizontal* enemy = new cEnemyHorizontal();
 				enemy->SetTile(i, j);
 				enemy->SetZ(SCENE_DEPTH);
@@ -184,12 +210,13 @@ bool cGame::initEnemies(int level) {
 				Scene.SetMapValue(i, j, BICHO_WIDTH, BICHO_HEIGHT, ENEMY_HOR - 48);
 				Enemies.push_back(enemy);
 			}
-			else if (tile == ENEMY_CIR) {
+			else if (tile == ENEMY_CIR) { // Pirate
 				cEnemyCircle* enemy = new cEnemyCircle();
 				enemy->SetTile(i, j);
 				enemy->SetZ(SCENE_DEPTH);
-				enemy->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-				Scene.SetMapValue(i, j, BICHO_WIDTH, BICHO_HEIGHT, ENEMY_CIR - 48);
+				enemy->SetWidthHeight(5 * TILE_SIZE, BICHO_HEIGHT);
+				enemy->SetWidthHeightProjectiles(20, 20);
+				Scene.SetMapValue(i, j, 5*TILE_SIZE, BICHO_HEIGHT, ENEMY_CIR - 48);
 				Enemies.push_back(enemy);
 			}
 			else if (tile == BOSS) {
@@ -311,7 +338,7 @@ bool cGame::Process() {
 
 		for (int i = 0; i < Enemies.size(); ++i) {
 			Enemies[i]->Logic(map, scroll);
-			Enemies[i]->LogicProjectiles(map);
+			Enemies[i]->LogicProjectiles(map,currentLevel, TOTAL_LEVELS);
 		}
 
 		Boss.Logic(map, scroll);
@@ -369,12 +396,38 @@ void cGame::Render() {
 	Player.Draw(Data.GetID(IMG_WINGS));
 	Player.DrawProjectiles(Data.GetID(IMG_PROJ));
 
+	int tex_id_bicho, tex_id_proj;
 	for (int i = 0; i < Enemies.size(); ++i) {
-		Enemies[i]->Draw(Data.GetID(IMG_NINJA));
-		Enemies[i]->DrawProjectiles(Data.GetID(IMG_PROJ_GRIS));
+		if (typeid(*Enemies[i]) == typeid(cEnemyVertical)) {
+			tex_id_bicho = Data.GetID(IMG_NINJA);
+			tex_id_proj = Data.GetID(IMG_PROJ_NINJA);
+		}
+		else if (typeid(*Enemies[i]) == typeid(cEnemyHorizontal)) {
+			tex_id_bicho = Data.GetID(IMG_ZOMBIE);
+			tex_id_proj = Data.GetID(IMG_PROJ_ZOMBIE);
+		}
+		else {
+			tex_id_bicho = Data.GetID(IMG_PIRATE);
+			tex_id_proj = Data.GetID(IMG_PROJ_PIRATE);
+		}
+		Enemies[i]->Draw(tex_id_bicho);
+		Enemies[i]->DrawProjectiles(tex_id_proj);
 	}
 
-	Boss.Draw(Data.GetID(IMG_NINJA));
+	int tex_id_boss, tex_id_boss_proj;
+	if (currentLevel == 1) {
+		tex_id_boss = Data.GetID(IMG_TAC);
+		tex_id_boss_proj = Data.GetID(IMG_PROJ_NINJA);
+	}
+	else if (currentLevel == 2) {
+		tex_id_boss = Data.GetID(IMG_MUMMY);
+		tex_id_boss_proj = Data.GetID(IMG_PROJ_ZOMBIE);
+	}
+	else {
+		tex_id_boss = Data.GetID(IMG_GROUDON);
+		tex_id_boss_proj = Data.GetID(IMG_PROJ_PIRATE);
+	}
+	Boss.Draw(tex_id_boss);
 
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
 	RestartCameraScene();

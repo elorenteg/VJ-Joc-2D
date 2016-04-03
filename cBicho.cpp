@@ -9,6 +9,8 @@ cBicho::cBicho(void) {
 	xWindow = 0;
 	projsLeft = vector<Projectile>(0);
 	projsRight = vector<Projectile>(0);
+	w_proj = PROJ_WIDTH;
+	h_proj = PROJ_HEIGHT;
 }
 
 cBicho::~cBicho(void) {}
@@ -50,6 +52,11 @@ void cBicho::SetProjectiles(vector<Projectile>& projs, int dir) {
 	else {
 		projsLeft = projs;
 	}
+}
+
+void cBicho::SetWidthHeightProjectiles(int width, int height) {
+	w_proj = width;
+	h_proj = height;
 }
 
 float cBicho::GetX() {
@@ -95,46 +102,31 @@ void cBicho::DrawProjectiles(int tex_id) {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 
-	DrawProjectiles(tex_id, projsLeft);
-	DrawProjectiles(tex_id, projsRight);
+	DrawProjectiles(tex_id, projsLeft, DIR_LEFT);
+	DrawProjectiles(tex_id, projsRight, DIR_RIGHT);
 
 	glDisable(GL_TEXTURE_2D);
 }
 
-void cBicho::DrawProjectiles(int tex_id, vector<Projectile>& projectiles) {
-	int w = PROJ_WIDTH;
-	int h = PROJ_HEIGHT;
+void cBicho::DrawProjectiles(int tex_id, vector<Projectile>& projectiles, int dir) {
+	int w = w_proj;
+	int h = h_proj;
 
 	float xo = 0.0f;
 	float xf = 1.0f;
 	float yo, yf;
 
+	int tex_y[MAX_MOVES] = { LEFT, UP, RIGHT, DOWN };
+
 	for (int i = 0; i < projectiles.size(); ++i) {
 		float posx = projectiles[i].x;
 		float posy = projectiles[i].y;
 
-		switch (projectiles[i].state_color) {
-			case FRAME_0:
-				yo = 0.0f;
-				yf = 0.2f;
-				break;
-			case FRAME_1:
-				yo = 0.2f;
-				yf = 0.4f;
-				break;
-			case FRAME_2:
-				yo = 0.4f;
-				yf = 0.6f;
-				break;
-			case FRAME_3:
-				yo = 0.6f;
-				yf = 0.8f;
-				break;
-			case FRAME_4:
-				yo = 0.8f;
-				yf = 1.0f;
-				break;
-		}
+		xo = xo_coords(projectiles[i].state_color, dir);
+		xf = xf_coords(projectiles[i].state_color, dir);
+
+		yo = yo_coords(projectiles[i].state_color);
+		yf = yf_coords(projectiles[i].state_color);
 
 		glBegin(GL_QUADS);
 			glTexCoord2f(xo, yo);	glVertex3f(posx, posy, z);
@@ -143,6 +135,34 @@ void cBicho::DrawProjectiles(int tex_id, vector<Projectile>& projectiles) {
 			glTexCoord2f(xo, yf);	glVertex3f(posx, posy + h, z);
 		glEnd();
 	}
+}
+
+float cBicho::xo_coords(int state_color, int dir) {
+	float xo;
+	if (dir == DIR_LEFT) xo = 0.0f;
+	else xo = 1.0f;
+
+	return xo;
+}
+
+float cBicho::xf_coords(int state_color, int dir) {
+	float xf;
+	if (dir == DIR_LEFT) xf = 1.0f;
+	else xf = 0.0f;
+
+	return xf;
+}
+
+float cBicho::yo_coords(int state_color) {
+	float yo = 1.0f / maxFramesProjectiles() * state_color + 1.0f / maxFramesProjectiles();
+
+	return yo;
+}
+
+float cBicho::yf_coords(int state_color) {
+	float yf = 1.0f / maxFramesProjectiles() * state_color;
+
+	return yf;
 }
 
 bool cBicho::canMove(Matrix& map, int tx, int ty) {
@@ -307,7 +327,7 @@ void cBicho::Shoot(Matrix& map) {
 	if (isInScene()) {
 		Projectile proj = InitShoot();
 		proj.state_color = FRAME_0;
-		proj.time_color = MAX_FRAMES * 3;
+		proj.time_color = PROJ_TIME;
 
 		if (lookAtRight()) projsRight.push_back(proj);
 		else projsLeft.push_back(proj);
@@ -316,9 +336,9 @@ void cBicho::Shoot(Matrix& map) {
 
 Projectile cBicho::InitShoot() {
 	Projectile proj;
-	if (lookAtRight()) proj.x = x + 50;
-	else proj.x = x - 50;
-	proj.y = y + h / 2;
+	if (lookAtRight()) proj.x = (x+w) + 10;
+	else proj.x = x - 10;
+	proj.y = y + (h-h_proj) / 2;
 
 	return proj;
 }
@@ -343,7 +363,7 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 	for (int p = 0; p < projs.size(); ++p) {
 		projs[p].x += dirX * PROJ_SPEED;
 
-		if (projs[p].x < 0 || projs[p].x + PROJ_WIDTH >= xWindow + GAME_WIDTH) {
+		if (projs[p].x < 0 || projs[p].x + w_proj >= xWindow + GAME_WIDTH) {
 			// proyectiles fuera de escena se eliminan
 			projs.erase(projs.begin() + p);
 		}
@@ -351,7 +371,7 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 			// proyectiles dentro de escena
 			int tile_x = projs[p].x / TILE_SIZE;
 			int tile_y = projs[p].y / TILE_SIZE;
-			int width_tiles = PROJ_WIDTH / TILE_SIZE;
+			int width_tiles = w_proj / TILE_SIZE;
 
 			bool hitScene = false;
 			for (int tx = tile_x; tx < tile_x + width_tiles; ++tx) {
@@ -363,8 +383,8 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 				projs[p].time_color = (projs[p].time_color - 1);
 				if (projs[p].time_color == 0) {
 					// cambio de color de gradiente
-					projs[p].time_color = MAX_FRAMES * 3;
-					projs[p].state_color = (projs[p].state_color + 1) % MAX_FRAMES;
+					projs[p].time_color = PROJ_TIME;
+					projs[p].state_color = (projs[p].state_color + 1) % maxFramesProjectiles();
 				}
 			}
 		}
@@ -372,8 +392,8 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 	return projs;
 }
 
-void cBicho::LogicProjectiles(Matrix& map) {
-	MoveProjectiles(map);
+void cBicho::LogicProjectiles(Matrix& map, int level, int total_levels) {
+	OutputDebugStringA("Hola\n");
 }
 
 void cBicho::Logic(Matrix& map, float cameraXScene) {
@@ -383,4 +403,21 @@ void cBicho::Logic(Matrix& map, float cameraXScene) {
 
 void cBicho::Draw(int tex_id) {
 	OutputDebugStringA("NO :(");
+}
+
+int cBicho::maxFramesProjectiles() {
+	return 5;
+}
+
+int cBicho::maxFreqProjectiles(int level, int total_levels) {
+	float freq = float(level) / total_levels + xWindow / (SCENE_WIDTH * TILE_SIZE - GAME_WIDTH);
+	freq = freq / 3;
+	int freq_s = FREQ_SHOOTS - freq * FREQ_SHOOTS;
+
+	if (xWindow <= x && x + w <= xWindow + GAME_WIDTH) {
+		char msgbuf[128];
+		sprintf(msgbuf, "FREQ - %f -- %d\n", freq, freq_s);
+		OutputDebugStringA(msgbuf);
+	}
+	return freq_s;
 }
