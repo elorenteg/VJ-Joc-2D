@@ -30,7 +30,6 @@ public:
 	bool canMove(Matrix& map, int tx, int ty);
 	
 	void Logic(Matrix& map, float cameraXScene);
-	Projectile InitShoot();
 
 private:
 	int state_rainbow;
