@@ -277,7 +277,7 @@ void cMenu::showMenu() {
 	glColor3f(1.0f, 1.0f, 1.0f);
 	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 130.0f, MSS_DEPTH, 200.0f, 50.0f, PLAY_TEXT);
 	Font.drawText(GAME_WIDTH / 2.0f + 170.0f, GAME_HEIGHT / 2.0f + 130.0f, MSS_DEPTH, 30.0f, 50.0f, "<");
-	Font.drawText(GAME_WIDTH / 2.0f + 260.0f, GAME_HEIGHT / 2.0f + 131.0f, MSS_DEPTH, 30.0f, 50.0f, ">");
+	Font.drawText(GAME_WIDTH / 2.0f + 265.0f, GAME_HEIGHT / 2.0f + 131.0f, MSS_DEPTH, 30.0f, 50.0f, ">");
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 	Font.drawText(GAME_WIDTH / 2.0f - 100.0f, GAME_HEIGHT / 2.0f + 30.0f, MSS_DEPTH, 200.0f, 50.0f, HOW_TO_TEXT);
@@ -289,7 +289,7 @@ void cMenu::showMenu() {
 	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f - 170.0f, MSS_DEPTH, 200.0f, 50.0f, EXIT_TEXT);
 	glPopMatrix();
 
-	Player.SetPosition(GAME_WIDTH / 2.0f + 200.0f, GAME_HEIGHT / 2.0f + 130.0f);
+	Player.SetPosition(GAME_WIDTH / 2.0f + 203.0f, GAME_HEIGHT / 2.0f + 130.0f);
 	Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
 	Player.SetZ(MSS_DEPTH);
 	Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
