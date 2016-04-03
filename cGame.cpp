@@ -73,6 +73,21 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PIRATE, path, GL_RGBA);
 	if (!res) return false;
 
+	//Ninja-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_tac.png").c_str());
+	res = Data.LoadImage(IMG_TAC, path, GL_RGBA);
+	if (!res) return false;
+
+	//Zombie-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_mummy.png").c_str());
+	res = Data.LoadImage(IMG_MUMMY, path, GL_RGBA);
+	if (!res) return false;
+
+	//Pirate-nyancat initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_groudon.png").c_str());
+	res = Data.LoadImage(IMG_GROUDON, path, GL_RGBA);
+	if (!res) return false;
+
 	//Gradient-nyancat initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_gradiente.png").c_str());
 	res = Data.LoadImage(IMG_GRADIENT, path, GL_RGBA);
@@ -399,7 +414,20 @@ void cGame::Render() {
 		Enemies[i]->DrawProjectiles(tex_id_proj);
 	}
 
-	Boss.Draw(Data.GetID(IMG_NINJA));
+	int tex_id_boss, tex_id_boss_proj;
+	if (currentLevel == 1) {
+		tex_id_boss = Data.GetID(IMG_TAC);
+		tex_id_boss_proj = Data.GetID(IMG_PROJ_NINJA);
+	}
+	else if (currentLevel == 2) {
+		tex_id_boss = Data.GetID(IMG_MUMMY);
+		tex_id_boss_proj = Data.GetID(IMG_PROJ_ZOMBIE);
+	}
+	else {
+		tex_id_boss = Data.GetID(IMG_GROUDON);
+		tex_id_boss_proj = Data.GetID(IMG_PROJ_PIRATE);
+	}
+	Boss.Draw(tex_id_boss);
 
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
 	RestartCameraScene();
