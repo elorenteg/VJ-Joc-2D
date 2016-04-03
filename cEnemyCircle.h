@@ -26,6 +26,7 @@ public:
 
 protected:
 	bool lookAtRight();
+	int maxFramesProjectiles();
 
 private:
 	int num_moves;

@@ -97,3 +97,7 @@ void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
 		Shoot(map);
 	}
 }
+
+int cEnemyVertical::maxFramesProjectiles() {
+	return 4;
+}

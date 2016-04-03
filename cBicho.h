@@ -11,6 +11,7 @@
 #define PROJ_WIDTH		27
 #define	PROJ_HEIGHT		7
 #define PROJ_SPEED		5
+#define PROJ_TIME		15
 
 #define DIR_NONE		0
 #define	DIR_UP			1
@@ -57,6 +58,7 @@ public:
 	void SetXWindow(float xWindow);
 	void SetMapValue(Matrix& map, int tile_x, int tile_y, int value);
 	void SetProjectiles(vector<Projectile>& projs, int dir);
+	void SetWidthHeightProjectiles(int w, int h);
 
 	float GetX();
 	float GetY();
@@ -92,11 +94,13 @@ protected:
 	int state;
 	float xWindow;
 	int state_lookat;
+	int w_proj;
+	int h_proj;
 	vector<Projectile> projsLeft;
 	vector<Projectile> projsRight;
 
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
-	void DrawProjectiles(int tex_id, vector<Projectile>& projectiles);
+	void DrawProjectiles(int tex_id, vector<Projectile>& projectiles, int dir);
 
 	bool MapCollidesUp(Matrix& map, float step);
 	bool MapCollidesDown(Matrix& map, float step);
@@ -104,6 +108,11 @@ protected:
 	bool MapCollidesRight(Matrix& map, float step);
 
 	virtual bool canMove(Matrix& map, int tx, int ty);
+	virtual int maxFramesProjectiles();
+	float xo_coords(int state_color, int dir);
+	float xf_coords(int state_color, int dir);
+	float yo_coords(int state_color);
+	float yf_coords(int state_color);
 
 	Projectile InitShoot();
 	void MoveProjectiles(Matrix& map);

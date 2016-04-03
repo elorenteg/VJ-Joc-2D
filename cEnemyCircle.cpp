@@ -118,3 +118,7 @@ void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
 		Shoot(map);
 	}
 }
+
+int cEnemyCircle::maxFramesProjectiles() {
+	return 4;
+}
