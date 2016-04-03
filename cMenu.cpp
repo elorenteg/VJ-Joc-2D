@@ -53,8 +53,6 @@ bool cMenu::Init()
 	if (!res) return false;
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
-	//Sound.PlayCustomSound(SOUND_NYAN_BASE);
-	//Sound.StopCustomSound();
 	calculate_stars();
 
 	return res;

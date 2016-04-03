@@ -111,6 +111,8 @@ void cGame::startGame() {
 }
 
 bool cGame::loadLevel(int level) {
+	Sound.PlayCustomSound(SOUND_NYAN_BASE);
+	//Sound.StopCustomSound();
 	bool res = true;
 	cameraXScene = 0.0f;
 	playerLostLife = false;
