@@ -43,8 +43,8 @@ bool cGame::Init() {
 	if (!res) return false;
 
 	//Player initialization
-	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_alas.png").c_str());
-	res = Data.LoadImage(IMG_PLAYER, path, GL_RGBA);
+	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_player_wings.png").c_str());
+	res = Data.LoadImage(IMG_WINGS, path, GL_RGBA);
 	if (!res) return false;
 
 	//Font initialization
@@ -366,7 +366,7 @@ void cGame::Render() {
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 
-	Player.Draw(Data.GetID(IMG_PLAYER));
+	Player.Draw(Data.GetID(IMG_WINGS));
 	Player.DrawProjectiles(Data.GetID(IMG_PROJ));
 
 	for (int i = 0; i < Enemies.size(); ++i) {

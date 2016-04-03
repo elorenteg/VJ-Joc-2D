@@ -42,7 +42,6 @@ using namespace std;
 
 typedef vector<vector<int>> Matrix;
 
-
 //OutputDebugStringA("HI");
 
 //char msgbuf[128];

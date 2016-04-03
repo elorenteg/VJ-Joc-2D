@@ -22,3 +22,7 @@ bool cData::LoadImage(int img, char *filename, int type)
 
 	return true;
 }
+
+int cData::GetIMGPlayer(int pos) {
+	return playersArray[pos];
+}

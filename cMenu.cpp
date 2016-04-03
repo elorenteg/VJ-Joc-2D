@@ -38,11 +38,39 @@ bool cMenu::Init()
 	res = Data.LoadImage(IMG_FONT, font_path, GL_RGBA);
 	if (!res) return false;
 
-	char player_path[64];
-	strcpy(player_path, IMAGES_FOLDER);
-	strcat(player_path, "/");
-	strcat(player_path, "nyancat_alas.png");
-	res = Data.LoadImage(IMG_PLAYER, player_path, GL_RGBA);
+	char player_path_1[64];
+	strcpy(player_path_1, IMAGES_FOLDER);
+	strcat(player_path_1, "/");
+	strcat(player_path_1, "nyancat_player_wings.png");
+	res = Data.LoadImage(IMG_WINGS, player_path_1, GL_RGBA);
+	if (!res) return false;
+
+	char player_path_2[64];
+	strcpy(player_path_2, IMAGES_FOLDER);
+	strcat(player_path_2, "/");
+	strcat(player_path_2, "nyancat_player_game_boy.png");
+	res = Data.LoadImage(IMG_GAME_BOY, player_path_2, GL_RGBA);
+	if (!res) return false;
+
+	char player_path_3[64];
+	strcpy(player_path_3, IMAGES_FOLDER);
+	strcat(player_path_3, "/");
+	strcat(player_path_3, "nyancat_player_mexican.png");
+	res = Data.LoadImage(IMG_MEXICAN, player_path_3, GL_RGBA);
+	if (!res) return false;
+
+	char player_path_4[64];
+	strcpy(player_path_4, IMAGES_FOLDER);
+	strcat(player_path_4, "/");
+	strcat(player_path_4, "nyancat_player_oktober.png");
+	res = Data.LoadImage(IMG_OKTOBER, player_path_4, GL_RGBA);
+	if (!res) return false;
+
+	char player_path_5[64];
+	strcpy(player_path_5, IMAGES_FOLDER);
+	strcat(player_path_5, "/");
+	strcat(player_path_5, "nyancat_player_picachu.png");
+	res = Data.LoadImage(IMG_PIKACHU, player_path_5, GL_RGBA);
 	if (!res) return false;
 
 	char keyboard_arrow_path[64];
@@ -51,6 +79,8 @@ bool cMenu::Init()
 	strcat(keyboard_arrow_path, "keyboard_arrows.png");
 	res = Data.LoadImage(IMG_KEYBOARD, keyboard_arrow_path, GL_RGBA);
 	if (!res) return false;
+
+	currentPlayerIDPos = 0;
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 	calculate_stars();
@@ -141,10 +171,22 @@ bool cMenu::Process()
 				}
 			}
 		}
-
-		if (keys[13]) { //Enter
+		else if (keys[13]) { //Enter
 			keys[13] = false;
 			executeAction();
+		}
+
+		if (actionSelected == gameAction) {
+			if (keys[GLUT_KEY_LEFT]) {
+				if (currentPlayerIDPos > 0) {
+					currentPlayerIDPos--;
+				}
+			}
+			else if (keys[GLUT_KEY_RIGHT]) {
+				if (currentPlayerIDPos < NUMBER_OF_PLAYERS - 1) {
+					currentPlayerIDPos++;
+				}
+			}
 		}
 	}
 
@@ -234,6 +276,8 @@ void cMenu::showMenu() {
 	glPushMatrix();
 	glColor3f(1.0f, 1.0f, 1.0f);
 	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f + 130.0f, MSS_DEPTH, 200.0f, 50.0f, PLAY_TEXT);
+	Font.drawText(GAME_WIDTH / 2.0f + 170.0f, GAME_HEIGHT / 2.0f + 130.0f, MSS_DEPTH, 30.0f, 50.0f, "<");
+	Font.drawText(GAME_WIDTH / 2.0f + 260.0f, GAME_HEIGHT / 2.0f + 131.0f, MSS_DEPTH, 30.0f, 50.0f, ">");
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 	Font.drawText(GAME_WIDTH / 2.0f - 100.0f, GAME_HEIGHT / 2.0f + 30.0f, MSS_DEPTH, 200.0f, 50.0f, HOW_TO_TEXT);
@@ -244,6 +288,11 @@ void cMenu::showMenu() {
 	glColor3f(1.0f, 1.0f, 1.0f);
 	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f - 170.0f, MSS_DEPTH, 200.0f, 50.0f, EXIT_TEXT);
 	glPopMatrix();
+
+	Player.SetPosition(GAME_WIDTH / 2.0f + 200.0f, GAME_HEIGHT / 2.0f + 130.0f);
+	Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
+	Player.SetZ(MSS_DEPTH);
+	Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
 
 	if (actionSelected == gameAction)
 		glColor3f(1.0f, 0.0f, 0.0f);
@@ -287,7 +336,7 @@ void cMenu::showInstrucctions() {
 		Player.SetPosition(GAME_WIDTH / 2.0f - 40.0f, GAME_HEIGHT - 235.0f);
 		Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
 		Player.SetZ(MSS_DEPTH - 1);
-		Player.Draw(Data.GetID(IMG_PLAYER));
+		Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
 
 		//Explicacio 2
 		glColor3f(0.0f, 0.0f, 0.0f);
@@ -325,14 +374,14 @@ void cMenu::showCredits() {
 	Player.SetPosition(65.0f, GAME_HEIGHT - 185.0f);
 	Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
 	Player.SetZ(MSS_DEPTH - 1);
-	Player.Draw(Data.GetID(IMG_PLAYER));
+	Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
 
 	glColor3f(0.0f, 0.0f, 0.0f);
 	Font.drawText(160.0f, GAME_HEIGHT - 175.0f, MSS_DEPTH - 1, 325.0f, 20.0f, APP_GAME_TEXT);
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 	Player.SetPosition(510.0f, GAME_HEIGHT - 185.0f);
-	Player.Draw(Data.GetID(IMG_PLAYER));
+	Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
 
 	//Noms
 	glColor3f(0.0f, 0.0f, 0.0f);
