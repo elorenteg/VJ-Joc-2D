@@ -40,5 +40,6 @@ private:
 	int current_score;
 	int current_life;
 
+	void drawImage(int tex_id, float x, float y, float z, float w, float h);
 	void drawRectangle(float x, float y, float z, float width, float height);
 };

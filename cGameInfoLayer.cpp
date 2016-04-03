@@ -20,6 +20,13 @@ bool cGameInfoLayer::Init() {
 	res = Data.LoadImage(IMG_SCENE, scene_path, GL_RGBA);
 	if (!res) return false;
 
+	char heart_path[64];
+	strcpy(heart_path, IMAGES_FOLDER);
+	strcat(heart_path, "/");
+	strcat(heart_path, "heart.png");
+	res = Data.LoadImage(IMG_HEART, heart_path, GL_RGBA);
+	if (!res) return false;
+
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 
 	current_level = 1;
@@ -63,10 +70,21 @@ void cGameInfoLayer::Draw() {
 	char life_text[32];
 	strcpy(life_text, ABR_HEALTH_TEXT);
 	strcat(life_text, ": ");
-	char life_value[8];
-	sprintf(life_value, "%d", current_life);
-	strcat(life_text, life_value);
-	Font.drawText(110.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 75.0f, 20.0f, life_text);
+	//char life_value[8];
+	//sprintf(life_value, "%d", current_life);
+	//strcat(life_text, life_value);
+	Font.drawText(130.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 75.0f, 20.0f, life_text);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	if (current_life > 0) {
+		drawImage(Data.GetID(IMG_HEART), 210.0f, GAME_HEIGHT - 20.0f, GAMEINFO_DEPTH, 20.0f, 16.0f);
+	}
+	if (current_life > 1) {
+		drawImage(Data.GetID(IMG_HEART), 232.0f, GAME_HEIGHT - 20.0f, GAMEINFO_DEPTH, 20.0f, 16.0f);
+	}
+	if (current_life > 2) {
+		drawImage(Data.GetID(IMG_HEART), 254.0f, GAME_HEIGHT - 20.0f, GAMEINFO_DEPTH, 20.0f, 16.0f);
+	}
 
 	// Puntuacio
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -76,7 +94,7 @@ void cGameInfoLayer::Draw() {
 	char score_value[8];
 	sprintf(score_value, "%d", current_score);
 	strcat(score_text, score_value);
-	Font.drawText(GAME_WIDTH - 275.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 135.0f, 20.0f, score_text);
+	Font.drawText(GAME_WIDTH - 300.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 135.0f, 20.0f, score_text);
 
 	// Maxima Puntuacio
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -86,7 +104,7 @@ void cGameInfoLayer::Draw() {
 	char high_score_value[8];
 	sprintf(high_score_value, "%d", high_score);
 	strcat(high_score_text, high_score_value);
-	Font.drawText(GAME_WIDTH - 125.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 120.0f, 20.0f, high_score_text);
+	Font.drawText(GAME_WIDTH - 140.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 120.0f, 20.0f, high_score_text);
 }
 
 void cGameInfoLayer::SetCurrentLevel(int level) {
@@ -133,6 +151,20 @@ void cGameInfoLayer::SaveHighScore(int high_score) {
 	char high_score_value[8];
 	sprintf(high_score_value, "%d", high_score);
 	DataManager.saveMaxScore(high_score_value);
+}
+
+void cGameInfoLayer::drawImage(int tex_id, float x, float y, float z, float w, float h) {
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, tex_id);
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 1.0f);	glVertex3f(x, y, z);
+	glTexCoord2f(1.0f, 1.0f);	glVertex3f(x + w, y, z);
+	glTexCoord2f(1.0f, 0.0f);	glVertex3f(x + w, y + h, z);
+	glTexCoord2f(0.0f, 0.0f);	glVertex3f(x, y + h, z);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
 }
 
 // Draw the rectangle
