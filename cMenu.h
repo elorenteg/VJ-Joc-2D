@@ -7,7 +7,7 @@
 #include "Globals.h"
 
 #define MENU		0
-#define START_GAME		1
+#define START_GAME	1
 #define GAME		2
 #define HOW_TO		3
 #define CREDITS		4

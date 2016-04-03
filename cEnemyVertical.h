@@ -10,7 +10,7 @@
 #define TILES_MOVE	4
 #define MAX_MOVES	2
 
-#define FREQ_SHOOTS 35
+#define FREQ_SHOOTS 100
 
 class cEnemyVertical : public cBicho
 {
@@ -21,6 +21,7 @@ public:
 	void Draw(int tex_id);
 
 	void Logic(Matrix& map, float cameraXScene);
+	void LogicProjectiles(Matrix& map, int level, int total_levels);
 
 protected:
 	int maxFramesProjectiles();

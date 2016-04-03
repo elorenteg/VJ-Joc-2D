@@ -80,7 +80,7 @@ public:
 
 	void Shoot(Matrix& map);
 	void DrawProjectiles(int tex_id);
-	void LogicProjectiles(Matrix& map);
+	virtual void LogicProjectiles(Matrix& map, int level, int total_levels);
 
 	int  GetState();
 	void SetState(int s);
@@ -116,6 +116,7 @@ protected:
 
 	Projectile InitShoot();
 	void MoveProjectiles(Matrix& map);
+	int maxFreqProjectiles(int level, int total_levels);
 
 	virtual bool lookAtRight();
 	bool isInScene();

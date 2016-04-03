@@ -392,8 +392,8 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 	return projs;
 }
 
-void cBicho::LogicProjectiles(Matrix& map) {
-	MoveProjectiles(map);
+void cBicho::LogicProjectiles(Matrix& map, int level, int total_levels) {
+	OutputDebugStringA("Hola\n");
 }
 
 void cBicho::Logic(Matrix& map, float cameraXScene) {
@@ -407,4 +407,17 @@ void cBicho::Draw(int tex_id) {
 
 int cBicho::maxFramesProjectiles() {
 	return 5;
+}
+
+int cBicho::maxFreqProjectiles(int level, int total_levels) {
+	float freq = float(level) / total_levels + xWindow / (SCENE_WIDTH * TILE_SIZE - GAME_WIDTH);
+	freq = freq / 3;
+	int freq_s = FREQ_SHOOTS - freq * FREQ_SHOOTS;
+
+	if (xWindow <= x && x + w <= xWindow + GAME_WIDTH) {
+		char msgbuf[128];
+		sprintf(msgbuf, "FREQ - %f -- %d\n", freq, freq_s);
+		OutputDebugStringA(msgbuf);
+	}
+	return freq_s;
 }

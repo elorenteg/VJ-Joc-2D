@@ -323,7 +323,7 @@ bool cGame::Process() {
 
 		for (int i = 0; i < Enemies.size(); ++i) {
 			Enemies[i]->Logic(map, scroll);
-			Enemies[i]->LogicProjectiles(map);
+			Enemies[i]->LogicProjectiles(map,currentLevel, TOTAL_LEVELS);
 		}
 
 		Boss.Logic(map, scroll);

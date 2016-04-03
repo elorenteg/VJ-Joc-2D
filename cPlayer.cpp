@@ -158,3 +158,7 @@ void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
 		}
 	}
 }
+
+void cPlayer::LogicProjectiles(Matrix& map) {
+	MoveProjectiles(map);
+}
