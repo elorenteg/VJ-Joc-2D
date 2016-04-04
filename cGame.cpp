@@ -47,6 +47,34 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_WINGS, path, GL_RGBA);
 	if (!res) return false;
 
+	char player_path_2[64];
+	strcpy(player_path_2, IMAGES_FOLDER);
+	strcat(player_path_2, "/");
+	strcat(player_path_2, "nyancat_player_game_boy.png");
+	res = Data.LoadImage(IMG_GAME_BOY, player_path_2, GL_RGBA);
+	if (!res) return false;
+
+	char player_path_3[64];
+	strcpy(player_path_3, IMAGES_FOLDER);
+	strcat(player_path_3, "/");
+	strcat(player_path_3, "nyancat_player_mexican.png");
+	res = Data.LoadImage(IMG_MEXICAN, player_path_3, GL_RGBA);
+	if (!res) return false;
+
+	char player_path_4[64];
+	strcpy(player_path_4, IMAGES_FOLDER);
+	strcat(player_path_4, "/");
+	strcat(player_path_4, "nyancat_player_oktober.png");
+	res = Data.LoadImage(IMG_OKTOBER, player_path_4, GL_RGBA);
+	if (!res) return false;
+
+	char player_path_5[64];
+	strcpy(player_path_5, IMAGES_FOLDER);
+	strcat(player_path_5, "/");
+	strcat(player_path_5, "nyancat_player_picachu.png");
+	res = Data.LoadImage(IMG_PIKACHU, player_path_5, GL_RGBA);
+	if (!res) return false;
+
 	//Font initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "font.png").c_str());
 	res = Data.LoadImage(IMG_FONT, path, GL_RGBA);
@@ -107,16 +135,18 @@ bool cGame::Init() {
 	strcpy(path, concat_path(IMAGES_FOLDER, "ninja_stars.png").c_str());
 	res = Data.LoadImage(IMG_PROJ_NINJA, path, GL_RGBA);
 	if (!res) return false;
-	
+
 	//Projectile initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "projectiles_enemy_zombie.png").c_str());
 	res = Data.LoadImage(IMG_PROJ_ZOMBIE, path, GL_RGBA);
 	if (!res) return false;
-	
+
 	//Projectile initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "skulls.png").c_str());
 	res = Data.LoadImage(IMG_PROJ_PIRATE, path, GL_RGBA);
 	if (!res) return false;
+
+	currentPlayerID = DataManager.readPlayerIcon();
 
 	startGame();
 
@@ -216,14 +246,14 @@ bool cGame::initEnemies(int level) {
 				enemy->SetZ(SCENE_DEPTH);
 				enemy->SetWidthHeight(5 * TILE_SIZE, BICHO_HEIGHT);
 				enemy->SetWidthHeightProjectiles(20, 20);
-				Scene.SetMapValue(i, j, 5*TILE_SIZE, BICHO_HEIGHT, ENEMY_CIR - 48);
+				Scene.SetMapValue(i, j, 5 * TILE_SIZE, BICHO_HEIGHT, ENEMY_CIR - 48);
 				Enemies.push_back(enemy);
 			}
 			else if (tile == BOSS) {
 				Boss.SetTile(i, j);
 				Boss.SetZ(SCENE_DEPTH);
-				Boss.SetWidthHeight(2*BICHO_WIDTH, 2*BICHO_HEIGHT);
-				Scene.SetMapValue(i, j, 2*BICHO_WIDTH, 2*BICHO_HEIGHT, BOSS - 48);
+				Boss.SetWidthHeight(2 * BICHO_WIDTH, 2 * BICHO_HEIGHT);
+				Scene.SetMapValue(i, j, 2 * BICHO_WIDTH, 2 * BICHO_HEIGHT, BOSS - 48);
 			}
 		}
 		fscanf(fd, "%c", &tile); //pass enter
@@ -236,7 +266,7 @@ bool cGame::initEnemies(int level) {
 
 bool cGame::Loop() {
 	bool res = true;
-	
+
 	res = Process();
 	if (res) Render();
 
@@ -263,6 +293,10 @@ void cGame::ReadMouse(int button, int state, int x, int y) {
 //Process
 bool cGame::Process() {
 	bool res = true;
+
+	if (currentPlayerID != DataManager.readPlayerIcon()) {
+		currentPlayerID = DataManager.readPlayerIcon();
+	}
 
 	// Do not scroll if level is finished
 	if (isGameStandBy() || isEndOfMap()) {
@@ -293,7 +327,6 @@ bool cGame::Process() {
 		}
 	}
 	else {
-
 		if (keys[GLUT_KEY_UP]) {
 			Player.MoveUp(Scene.GetMap());
 		}
@@ -338,7 +371,7 @@ bool cGame::Process() {
 
 		for (int i = 0; i < Enemies.size(); ++i) {
 			Enemies[i]->Logic(map, scroll);
-			Enemies[i]->LogicProjectiles(map,currentLevel, TOTAL_LEVELS);
+			Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
 		}
 
 		Boss.Logic(map, scroll);
@@ -393,7 +426,7 @@ void cGame::Render() {
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 
-	Player.Draw(Data.GetID(IMG_WINGS));
+	Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerID)));
 	Player.DrawProjectiles(Data.GetID(IMG_PROJ));
 
 	int tex_id_bicho, tex_id_proj;
@@ -478,7 +511,7 @@ bool cGame::isPlayerLostLife() {
 	return playerLostLife;
 }
 
-void cGame::startSound(int sound){
+void cGame::startSound(int sound) {
 	Sound.PlayCustomSound(sound);
 }
 

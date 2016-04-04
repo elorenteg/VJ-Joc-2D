@@ -4,6 +4,7 @@
 #include "cSkyLayer.h"
 #include "cMountainLayer.h"
 #include "cGameInfoLayer.h"
+#include "cDataManager.h"
 #include "cBicho.h"
 #include "cPlayer.h"
 #include "cData.h"
@@ -73,6 +74,7 @@ private:
 	vector<cBicho*> Enemies;
 	cBoss Boss;
 	cSound Sound;
+	cDataManager DataManager;
 	
 	float cameraXScene;
 	int currentLevel;
@@ -80,6 +82,7 @@ private:
 	bool gameEnd;
 	bool playerLostLife;
 	bool bossDead;
+	int currentPlayerID;
 
 	bool loadLevel(int level);
 	bool initEnemies(int level);

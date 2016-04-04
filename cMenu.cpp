@@ -80,7 +80,7 @@ bool cMenu::Init()
 	res = Data.LoadImage(IMG_KEYBOARD, keyboard_arrow_path, GL_RGBA);
 	if (!res) return false;
 
-	currentPlayerIDPos = 0;
+	currentPlayerIDPos = DataManager.readPlayerIcon();
 
 	Font.setFont(Data.GetID(IMG_FONT), 256, 256, 19, 29);
 	calculate_stars();
@@ -180,11 +180,13 @@ bool cMenu::Process()
 			if (keys[GLUT_KEY_LEFT]) {
 				if (currentPlayerIDPos > 0) {
 					currentPlayerIDPos--;
+					DataManager.savePlayerIcon(currentPlayerIDPos);
 				}
 			}
 			else if (keys[GLUT_KEY_RIGHT]) {
 				if (currentPlayerIDPos < NUMBER_OF_PLAYERS - 1) {
 					currentPlayerIDPos++;
+					DataManager.savePlayerIcon(currentPlayerIDPos);
 				}
 			}
 		}
