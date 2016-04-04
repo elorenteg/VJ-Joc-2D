@@ -74,13 +74,14 @@ public:
 
 	virtual void Draw(int tex_id);
 	virtual void Logic(Matrix& map, float cameraXScene);
+	virtual 
 
 	bool isEnemy(Matrix& map, int tile_x, int tile_y);
 	bool isScene(Matrix& map, int tile_x, int tile_y);
 
 	void Shoot(Matrix& map);
 	void DrawProjectiles(int tex_id);
-	virtual void LogicProjectiles(Matrix& map, int level, int total_levels);
+	virtual bool LogicProjectiles(Matrix& map, int level, int total_levels);
 
 	int  GetState();
 	void SetState(int s);

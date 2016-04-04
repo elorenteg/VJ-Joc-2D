@@ -92,7 +92,9 @@ void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
 	xWindow += cameraXSceneInc;
 }
 
-void cEnemyVertical::LogicProjectiles(Matrix& map, int level, int total_levels) {
+bool cEnemyVertical::LogicProjectiles(Matrix& map, int level, int total_levels) {
+	bool enemyShoot = false;
+
 	MoveProjectiles(map);
 
 	--freq_shoots;
@@ -100,7 +102,10 @@ void cEnemyVertical::LogicProjectiles(Matrix& map, int level, int total_levels) 
 		freq_shoots = maxFreqProjectiles(level, total_levels);
 
 		Shoot(map);
+		enemyShoot = true;
 	}
+
+	return enemyShoot;
 }
 
 int cEnemyVertical::maxFramesProjectiles() {

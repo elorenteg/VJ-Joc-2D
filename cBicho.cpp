@@ -392,8 +392,10 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 	return projs;
 }
 
-void cBicho::LogicProjectiles(Matrix& map, int level, int total_levels) {
+bool cBicho::LogicProjectiles(Matrix& map, int level, int total_levels) {
 	OutputDebugStringA("Hola\n");
+
+	return false;
 }
 
 void cBicho::Logic(Matrix& map, float cameraXScene) {

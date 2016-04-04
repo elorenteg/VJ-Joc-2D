@@ -369,9 +369,10 @@ bool cGame::Process() {
 		Matrix map = Scene.GetMap();
 		Player.LogicProjectiles(map);
 
+		bool enemyHasShoot;
 		for (int i = 0; i < Enemies.size(); ++i) {
 			Enemies[i]->Logic(map, scroll);
-			Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
+			enemyHasShoot = Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
 		}
 
 		Boss.Logic(map, scroll);
