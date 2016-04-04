@@ -349,7 +349,7 @@ bool cBicho::lookAtRight() {
 
 bool cBicho::isInScene() {
 	bool isInside = true;
-	if (x < xWindow || x + w >= xWindow + GAME_WIDTH) isInside = false;
+	if (x < xWindow - 100 || x + w >= xWindow + GAME_WIDTH) isInside = false;
 
 	return isInside;
 }
@@ -375,7 +375,7 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 
 			bool hitScene = false;
 			for (int tx = tile_x; tx < tile_x + width_tiles; ++tx) {
-				if (isScene(map, tx, tile_y)) hitScene = true;
+				//if (isScene(map, tx, tile_y)) hitScene = true;
 			}
 
 			if (hitScene) projs.erase(projs.begin() + p);

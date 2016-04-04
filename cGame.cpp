@@ -71,7 +71,7 @@ bool cGame::Init() {
 	char player_path_5[64];
 	strcpy(player_path_5, IMAGES_FOLDER);
 	strcat(player_path_5, "/");
-	strcat(player_path_5, "nyancat_player_picachu_chato.png");
+	strcat(player_path_5, "nyancat_player_picachu.png");
 	res = Data.LoadImage(IMG_PIKACHU, player_path_5, GL_RGBA);
 	if (!res) return false;
 
