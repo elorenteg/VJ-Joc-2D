@@ -16,7 +16,7 @@
 #include "cSound.h"
 #include "Globals.h"
 
-#define TOTAL_LEVELS	2
+#define TOTAL_LEVELS	1
 
 #define END_GAME_OVER	0
 #define END_OF_GAME		1

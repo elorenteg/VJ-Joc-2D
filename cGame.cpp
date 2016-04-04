@@ -146,6 +146,11 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PROJ_PIRATE, path, GL_RGBA);
 	if (!res) return false;
 
+	//Projectile initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "projectiles_boss.png").c_str());
+	res = Data.LoadImage(IMG_PROJ_BOSS, path, GL_RGBA);
+	if (!res) return false;
+
 	currentPlayerID = DataManager.readPlayerIcon();
 
 	startGame();
@@ -252,6 +257,7 @@ bool cGame::initEnemies(int level) {
 				Boss.SetTile(i, j);
 				Boss.SetZ(SCENE_DEPTH);
 				Boss.SetWidthHeight(2 * BICHO_WIDTH, 2 * BICHO_HEIGHT);
+				Boss.SetWidthHeightProjectiles(20, 20);
 				Scene.SetMapValue(i, j, 2 * BICHO_WIDTH, 2 * BICHO_HEIGHT, BOSS - 48);
 			}
 		}
@@ -376,6 +382,7 @@ bool cGame::Process() {
 		}
 
 		Boss.Logic(map, scroll);
+		bool bossHasShoot = Boss.LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
 
 		Scene.SetMap(map);
 
@@ -462,6 +469,7 @@ void cGame::Render() {
 		tex_id_boss_proj = Data.GetID(IMG_PROJ_PIRATE);
 	}
 	Boss.Draw(tex_id_boss);
+	Boss.DrawProjectiles(Data.GetID(IMG_PROJ_BOSS));
 
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
 	RestartCameraScene();
