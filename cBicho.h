@@ -114,7 +114,7 @@ protected:
 	float yo_coords(int state_color);
 	float yf_coords(int state_color);
 
-	Projectile InitShoot();
+	virtual Projectile InitShoot();
 	void MoveProjectiles(Matrix& map);
 	int maxFreqProjectiles(int level, int total_levels);
 

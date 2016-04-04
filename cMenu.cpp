@@ -292,7 +292,7 @@ void cMenu::showMenu() {
 	glPopMatrix();
 
 	Player.SetPosition(GAME_WIDTH / 2.0f + 203.0f, GAME_HEIGHT / 2.0f + 130.0f);
-	Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
+	setPlayerSize();
 	Player.SetZ(MSS_DEPTH);
 	Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
 
@@ -452,5 +452,17 @@ void cMenu::calculate_stars() {
 
 		starsX[i] = x;
 		starsY[i] = y;
+	}
+}
+
+void cMenu::setPlayerSize() {
+	if (Data.GetIMGPlayer(currentPlayerIDPos) == IMG_MEXICAN) {
+		Player.SetWidthHeight(4 * TILE_SIZE, 3 * TILE_SIZE);
+	}
+	else if (Data.GetIMGPlayer(currentPlayerIDPos) == IMG_OKTOBER) {
+		Player.SetWidthHeight(3 * TILE_SIZE, 3 * TILE_SIZE);
+	}
+	else {
+		Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 	}
 }

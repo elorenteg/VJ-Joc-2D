@@ -107,6 +107,8 @@ private:
 	bool isBossDead();
 	bool isEndOfMap();
 
+	void setPlayerSize();
+
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;
 	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;

@@ -71,7 +71,7 @@ bool cGame::Init() {
 	char player_path_5[64];
 	strcpy(player_path_5, IMAGES_FOLDER);
 	strcat(player_path_5, "/");
-	strcat(player_path_5, "nyancat_player_picachu.png");
+	strcat(player_path_5, "nyancat_player_picachu_chato.png");
 	res = Data.LoadImage(IMG_PIKACHU, player_path_5, GL_RGBA);
 	if (!res) return false;
 
@@ -185,8 +185,7 @@ bool cGame::loadLevel(int level) {
 	// Player initialization
 	Player.SetTile(2, SCENE_HEIGHT / 2);
 	Player.SetZ(SCENE_DEPTH);
-	Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-	Player.SetMapValue(Scene.GetMap(), 2, SCENE_HEIGHT / 2, PLAYER - 48);
+	setPlayerSize();
 	Player.ResetLife();
 
 	// Enemies initialization
@@ -296,6 +295,7 @@ bool cGame::Process() {
 
 	if (currentPlayerID != DataManager.readPlayerIcon()) {
 		currentPlayerID = DataManager.readPlayerIcon();
+		setPlayerSize();
 	}
 
 	// Do not scroll if level is finished
@@ -707,4 +707,16 @@ bool cGame::checkProjectilesEnemy(vector<Projectile>& projs) {
 		}
 	}
 	return false;
+}
+
+void cGame::setPlayerSize() {
+	if (Data.GetIMGPlayer(currentPlayerID) == IMG_MEXICAN) {
+		Player.SetWidthHeight(4 * TILE_SIZE, 3 * TILE_SIZE);
+	}
+	else if (Data.GetIMGPlayer(currentPlayerID) == IMG_OKTOBER) {
+		Player.SetWidthHeight(3 * TILE_SIZE, 3 * TILE_SIZE);
+	}
+	else {
+		Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+	}
 }

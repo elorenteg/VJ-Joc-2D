@@ -32,6 +32,9 @@ public:
 	void Logic(Matrix& map, float cameraXScene);
 	void LogicProjectiles(Matrix& map);
 
+protected:
+	Projectile InitShoot();
+
 private:
 	int state_rainbow;
 	vector<Position> Rainbow;
