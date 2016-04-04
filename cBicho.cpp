@@ -375,7 +375,7 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 
 			bool hitScene = false;
 			for (int tx = tile_x; tx < tile_x + width_tiles; ++tx) {
-				//if (isScene(map, tx, tile_y)) hitScene = true;
+				if (isScene(map, tx, tile_y)) hitScene = true;
 			}
 
 			if (hitScene) projs.erase(projs.begin() + p);
