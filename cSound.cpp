@@ -2,6 +2,17 @@
 
 cSound::cSound(void)
 {
+	//init FMOD
+	FMOD::System_Create(&system);// create an instance of the game engine
+	system->init(32, FMOD_INIT_NORMAL, 0);// initialise the game engine with 32 channels
+
+	system->createSound("Sound/menu_change.wav", FMOD_HARDWARE, 0, &menu_change);
+	system->createSound("Sound/nyan_cat_base.wav", FMOD_HARDWARE, 0, &nyan_base);
+	system->createSound("Sound/cat_shoot.wav", FMOD_HARDWARE, 0, &cat_shoot);
+	system->createSound("Sound/cat_dying.wav", FMOD_HARDWARE, 0, &cat_dying);
+	system->createSound("Sound/enemy_dead.wav", FMOD_HARDWARE, 0, &enemy_dead);
+	system->createSound("Sound/boss_dead.wav", FMOD_HARDWARE, 0, &boss_dead);
+	nyan_base->setMode(FMOD_LOOP_OFF);
 }
 
 cSound::~cSound(void)
@@ -9,14 +20,27 @@ cSound::~cSound(void)
 }
 
 void cSound::PlayCustomSound(int sound) {
-	if (sound == SOUND_NYAN_BASE) {
-		PlaySound((LPCSTR) "Sound/nyan_cat_base.wav", NULL, SND_ASYNC | SND_FILENAME);
+	if (sound == CHANGE_IN_MENU) {
+		system->playSound(FMOD_CHANNEL_FREE, menu_change, false, 0);
+	}
+	else if (sound == SOUND_NYAN_BASE) {
+		system->playSound(FMOD_CHANNEL_FREE, nyan_base, false, 0);
+	}
+	else if (sound == SOUND_CAT_SHOOT) {
+		system->playSound(FMOD_CHANNEL_FREE, cat_shoot, false, 0);
 	}
 	else if (sound == SOUND_CAT_DYING) {
-		PlaySound((LPCSTR) "Sound/cat_dying.wav", NULL, SND_ASYNC | SND_FILENAME);
+		system->playSound(FMOD_CHANNEL_FREE, cat_dying, false, 0);
+	}
+	else if (sound == SOUND_ENEMY_DEAD) {
+		system->playSound(FMOD_CHANNEL_FREE, enemy_dead, false, 0);
+	}
+	else if (sound == SOUND_BOSS_DEAD) {
+		system->playSound(FMOD_CHANNEL_FREE, boss_dead, false, 0);
 	}
 }
 
+// TODO
 void cSound::StopCustomSound() {
-	PlaySound(NULL, 0, 0);
+	//PlaySound(NULL, 0, 0);
 }

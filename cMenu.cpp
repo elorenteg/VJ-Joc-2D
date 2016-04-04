@@ -249,27 +249,33 @@ void cMenu::moveAction(int moveTo) {
 	if (actionSelected == gameAction) {
 		if (moveTo == 1) {
 			actionSelected = howtoAction;
+			Sound.PlayCustomSound(CHANGE_IN_MENU);
 		}
 	}
 	else if (actionSelected == howtoAction) {
 		if (moveTo == 1) {
 			actionSelected = creditsAction;
+			Sound.PlayCustomSound(CHANGE_IN_MENU);
 		}
 		else if (moveTo == -1) {
 			actionSelected = gameAction;
+			Sound.PlayCustomSound(CHANGE_IN_MENU);
 		}
 	}
 	else if (actionSelected == creditsAction) {
 		if (moveTo == 1) {
 			actionSelected = stopAction;
+			Sound.PlayCustomSound(CHANGE_IN_MENU);
 		}
 		else if (moveTo == -1) {
 			actionSelected = howtoAction;
+			Sound.PlayCustomSound(CHANGE_IN_MENU);
 		}
 	}
 	else if (actionSelected == stopAction) {
 		if (moveTo == -1) {
 			actionSelected = creditsAction;
+			Sound.PlayCustomSound(CHANGE_IN_MENU);
 		}
 	}
 }
