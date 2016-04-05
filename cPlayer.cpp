@@ -170,3 +170,10 @@ Projectile cPlayer::InitShoot() {
 
 	return proj;
 }
+
+bool cPlayer::canMove(float step) {
+	if (x - step < xWindow) return false;
+	if (x + w + step >= xWindow + GAME_WIDTH) return false;
+
+	return true;
+}

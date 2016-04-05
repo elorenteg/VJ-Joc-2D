@@ -216,7 +216,7 @@ bool cBicho::MapCollidesLeft(Matrix& map, float step) {
 	int tile_x_new = (x - step) / TILE_SIZE;
 
 	bool collides = false;
-	if (x - step < xWindow) collides = true;
+	if (!canMove(step)) collides = true;
 	else {
 		int height_tiles = h / TILE_SIZE;
 		if (fmod(y, TILE_SIZE) != 0) height_tiles++;
@@ -235,7 +235,7 @@ bool cBicho::MapCollidesRight(Matrix& map, float step) {
 	int tile_x_new = (x + step + w) / TILE_SIZE;
 
 	bool collides = false;
-	if (x + w + step >= xWindow + GAME_WIDTH) collides = true;
+	if (!canMove(step)) collides = true;
 	else {
 		int height_tiles = h / TILE_SIZE;
 		if (fmod(y, TILE_SIZE) != 0) height_tiles++;
@@ -440,7 +440,19 @@ int cBicho::maxFreqProjectiles(int level, int total_levels) {
 }
 
 bool cBicho::canShoot() {
-	if (xWindow <= x + w/3 && x + w/3 <= xWindow + GAME_WIDTH - GAME_MARGIN) return true;
+	if (x + w / 2 >= xWindow && x + w - w / 2 <= xWindow + GAME_WIDTH) return true;
 
 	return false;
+}
+
+bool cBicho::canMove(float step) {
+	//int stp = step;
+	//if (!lookAtRight()) stp = -1 * stp;
+
+	if (x + w - step < xWindow || x > xWindow + GAME_WIDTH) return false;
+	//if (x + w + step < xWindow) return false;
+	//
+	//if (x > xWindow + GAME_WIDTH) return false;
+
+	return true;
 }

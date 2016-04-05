@@ -34,6 +34,7 @@ public:
 
 protected:
 	Projectile InitShoot();
+	bool canMove(float step);
 
 private:
 	int state_rainbow;

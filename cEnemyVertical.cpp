@@ -47,7 +47,6 @@ void cEnemyVertical::Draw(int tex_id) {
 }
 
 void cEnemyVertical::Logic(Matrix& map, float cameraXSceneInc) {
-	if (GetX() < GetXWindow()) return;
 	float inc = 0;
 	switch (moves[state]) {
 	case UP:

@@ -120,7 +120,9 @@ protected:
 	virtual Projectile InitShoot();
 	virtual void MoveProjectiles(Matrix& map);
 	virtual int maxFreqProjectiles(int level, int total_levels);
+
 	bool canShoot();
+	virtual bool canMove(float step);
 
 	virtual bool lookAtRight();
 	bool isInScene();
