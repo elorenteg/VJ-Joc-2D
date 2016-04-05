@@ -30,6 +30,7 @@ public:
 	int GetCurrentLife();
 	void SetCurrentLifeBoss(int life);
 	int GetCurrentLifeBoss();
+	void SetShowBossLife(bool show);
 
 	void SaveHighScore(int high_score);
 
@@ -43,6 +44,7 @@ private:
 	int current_score;
 	int current_life;
 	int current_life_boss;
+	bool showBossLife;
 
 	void drawImage(int tex_id, float x, float y, float z, float w, float h);
 	void drawRectangle(float x, float y, float z, float width, float height);

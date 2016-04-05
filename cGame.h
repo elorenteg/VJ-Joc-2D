@@ -104,6 +104,7 @@ private:
 	bool isPlayerLostLife();
 	bool isBossDead();
 	bool isEndOfMap();
+	bool isBossInScene();
 
 	void setPlayerSize();
 

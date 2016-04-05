@@ -183,6 +183,7 @@ bool cGame::loadLevel(int level) {
 
 	GameInfoLayer.SetCurrentLevel(level);
 	GameInfoLayer.SetCurrentLifeBoss(30 / (TOTAL_LEVELS-level+1));
+	GameInfoLayer.SetShowBossLife(false);
 
 	// Load level
 	res = Scene.LoadLevel(level);
@@ -312,6 +313,10 @@ bool cGame::Process() {
 		MountainLayer.endOfLevel();
 	}
 
+	if (isBossInScene()) {
+		GameInfoLayer.SetShowBossLife(true);
+	}
+
 	if (isGameStandBy()) {
 		if (keys[27]) {
 			keys[27] = false;
@@ -361,7 +366,9 @@ bool cGame::Process() {
 		}
 
 		float scroll = GAME_SCROLL;
-		if (isEndOfMap()) scroll = 0;
+		if (isEndOfMap()) {
+			scroll = 0;
+		}
 
 		bool playerDead = false;
 
@@ -520,6 +527,10 @@ bool cGame::HasGameEnd() {
 
 bool cGame::isPlayerLostLife() {
 	return playerLostLife;
+}
+
+bool cGame::isBossInScene() {
+	return cameraXScene <= Boss->GetX() && (Boss->GetX() - cameraXScene <= GAME_WIDTH);
 }
 
 void cGame::startSound(int sound) {
