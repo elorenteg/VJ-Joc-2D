@@ -5,10 +5,15 @@ cBoss::cBoss() {
 	num_moves = rand() % TILES_MOVE;
 	time_state = FRAMES_MOVE;
 	state_lookat = DIR_LEFT;
+
 	freq_shoots = FREQ_SHOOTS;
+	speed_proj = PROJ_SPEED;
 
 	state = UP;
 	num_moves = TILES_MOVE;
+
+	isRafaga = false;
+	time_rafaga = RANG_RAFAGA;
 }
 
 cBoss::~cBoss() {}
@@ -48,6 +53,7 @@ void cBoss::Draw(int tex_id) {
 
 void cBoss::Logic(Matrix& map, float cameraXSceneInc) {
 	if (GetX() < GetXWindow()) return;
+
 	float inc = 0;
 	switch (moves[state]) {
 	case UP:
@@ -80,6 +86,8 @@ void cBoss::Logic(Matrix& map, float cameraXSceneInc) {
 		move = false;
 	}
 
+	//move = false;
+
 	if (move) {
 		int tile_y_new = (y + inc*TILE_SIZE) / TILE_SIZE;
 		SetMapValue(map, tile_x, tile_y_new, ENEMY_VER - 48);
@@ -90,10 +98,69 @@ void cBoss::Logic(Matrix& map, float cameraXSceneInc) {
 	}
 
 	xWindow += cameraXSceneInc;
+}
+
+bool cBoss::LogicProjectiles(Matrix& map, int level, int total_levels) {
+	bool bossShoot = false;
+
+	MoveProjectiles(map);
 
 	--freq_shoots;
-	if (freq_shoots == 0) {
-		freq_shoots = FREQ_SHOOTS;
+	if (freq_shoots <= 0) {
+		OutputDebugStringA("SHOOT\n");
+		freq_shoots = maxFreqProjectiles(level, total_levels);
+
 		Shoot(map);
+		bossShoot = true;
+		
+		--time_rafaga;
+		if (time_rafaga <= 0) {
+			time_rafaga = RANG_RAFAGA;
+			isRafaga = !isRafaga;
+		}
 	}
+
+	return bossShoot;
+}
+
+int cBoss::maxFramesProjectiles() {
+	return 4;
+}
+
+void cBoss::Shoot(Matrix& map) {
+	if (canShoot()) {
+		int ini, fi;
+		if (isRafaga) {
+			ini = -1;
+			fi = 1;
+		}
+		else {
+			ini = 0;
+			fi = 0;
+		}
+
+		for (int type = ini; type <= fi; ++type) {
+			Projectile proj = InitShoot();
+			proj.state_color = FRAME_0;
+			proj.time_color = PROJ_TIME;
+			proj.time_stamp = 0;
+			proj.type = type;
+
+			if (lookAtRight()) projsRight.push_back(proj);
+			else projsLeft.push_back(proj);
+		}
+	}
+}
+
+int cBoss::maxFreqProjectiles(int level, int total_levels) {
+	float freq = float(level) / total_levels + xWindow / (SCENE_WIDTH * TILE_SIZE - GAME_WIDTH);
+	freq = freq / 3;
+	int freq_s = FREQ_SHOOTS - freq;
+
+	if (xWindow <= x && x + w <= xWindow + GAME_WIDTH) {
+		char msgbuf[128];
+		sprintf(msgbuf, "FREQ - %f -- %d\n", freq, freq_s);
+		OutputDebugStringA(msgbuf);
+	}
+	return freq_s;
 }

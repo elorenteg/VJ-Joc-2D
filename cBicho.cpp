@@ -11,6 +11,7 @@ cBicho::cBicho(void) {
 	projsRight = vector<Projectile>(0);
 	w_proj = PROJ_WIDTH;
 	h_proj = PROJ_HEIGHT;
+	speed_proj = PROJ_SPEED;
 }
 
 cBicho::~cBicho(void) {}
@@ -314,6 +315,7 @@ bool cBicho::isEnemy(Matrix& map, int tile_x, int tile_y) {
 
 bool cBicho::isScene(Matrix& map, int tile_x, int tile_y) {
 	if (map[tile_y][tile_x] == GROUND) return true;
+	if (map[tile_y][tile_x] == GRASS) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_ESQ) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_CEN) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_DRE) return true;
@@ -324,10 +326,12 @@ bool cBicho::isScene(Matrix& map, int tile_x, int tile_y) {
 }
 
 void cBicho::Shoot(Matrix& map) {
-	if (isInScene()) {
+	if (canShoot()) {
 		Projectile proj = InitShoot();
 		proj.state_color = FRAME_0;
 		proj.time_color = PROJ_TIME;
+		proj.time_stamp = 0;
+		proj.type = DIR_NONE;
 
 		if (lookAtRight()) projsRight.push_back(proj);
 		else projsLeft.push_back(proj);
@@ -361,9 +365,25 @@ void cBicho::MoveProjectiles(Matrix& map) {
 
 vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& projs, int dirX) {
 	for (int p = 0; p < projs.size(); ++p) {
-		projs[p].x += dirX * PROJ_SPEED;
+		projs[p].x += dirX * speed_proj;
 
-		if (projs[p].x < 0 || projs[p].x + w_proj >= xWindow + GAME_WIDTH) {
+		if (projs[p].type != DIR_NONE) {
+			if (projs[p].type > 0) {
+				if (projs[p].time_stamp < 20) {
+					projs[p].y += 3;
+				}
+			}
+			else {
+				if (projs[p].time_stamp < 20) {
+					projs[p].y -= 3;
+				}
+			}
+		}
+
+		projs[p].time_stamp += 1;
+
+		if (projs[p].x < 0 || projs[p].x + w_proj >= xWindow + GAME_WIDTH ||
+			projs[p].y < 0 || projs[p].y + h_proj >= GAME_HEIGHT - GAME_MARGIN) {
 			// proyectiles fuera de escena se eliminan
 			projs.erase(projs.begin() + p);
 		}
@@ -392,8 +412,10 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 	return projs;
 }
 
-void cBicho::LogicProjectiles(Matrix& map, int level, int total_levels) {
+bool cBicho::LogicProjectiles(Matrix& map, int level, int total_levels) {
 	OutputDebugStringA("Hola\n");
+
+	return false;
 }
 
 void cBicho::Logic(Matrix& map, float cameraXScene) {
@@ -414,10 +436,11 @@ int cBicho::maxFreqProjectiles(int level, int total_levels) {
 	freq = freq / 3;
 	int freq_s = FREQ_SHOOTS - freq * FREQ_SHOOTS;
 
-	if (xWindow <= x && x + w <= xWindow + GAME_WIDTH) {
-		char msgbuf[128];
-		sprintf(msgbuf, "FREQ - %f -- %d\n", freq, freq_s);
-		OutputDebugStringA(msgbuf);
-	}
 	return freq_s;
+}
+
+bool cBicho::canShoot() {
+	if (xWindow <= x + w/3 && x + w/3 <= xWindow + GAME_WIDTH - GAME_MARGIN) return true;
+
+	return false;
 }

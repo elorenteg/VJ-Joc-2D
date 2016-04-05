@@ -4,7 +4,7 @@
 #include "Globals.h"
 
 //Image array size
-#define NUM_IMG			24
+#define NUM_IMG			25
 
 #define IMG_FONT		0
 #define IMG_MARCO		1
@@ -29,12 +29,13 @@
 #define IMG_PROJ_NINJA	18
 #define IMG_PROJ_PIRATE	19
 #define IMG_PROJ_ZOMBIE	20
+#define IMG_PROJ_BOSS	21
 
-#define IMG_RAINBOW		21
+#define IMG_RAINBOW		22
 
-#define IMG_KEYBOARD	22
+#define IMG_KEYBOARD	23
 
-#define IMG_HEART		23
+#define IMG_HEART		24
 
 #define NUMBER_OF_PLAYERS	5
 

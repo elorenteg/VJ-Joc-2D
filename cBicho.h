@@ -34,6 +34,8 @@ typedef struct Projectile {
 	float y;
 	int state_color;
 	int time_color;
+	int time_stamp;
+	int type;
 };
 
 class cRect
@@ -78,9 +80,9 @@ public:
 	bool isEnemy(Matrix& map, int tile_x, int tile_y);
 	bool isScene(Matrix& map, int tile_x, int tile_y);
 
-	void Shoot(Matrix& map);
+	virtual void Shoot(Matrix& map);
 	void DrawProjectiles(int tex_id);
-	virtual void LogicProjectiles(Matrix& map, int level, int total_levels);
+	virtual bool LogicProjectiles(Matrix& map, int level, int total_levels);
 
 	int  GetState();
 	void SetState(int s);
@@ -96,6 +98,7 @@ protected:
 	int state_lookat;
 	int w_proj;
 	int h_proj;
+	float speed_proj;
 	vector<Projectile> projsLeft;
 	vector<Projectile> projsRight;
 
@@ -114,9 +117,10 @@ protected:
 	float yo_coords(int state_color);
 	float yf_coords(int state_color);
 
-	Projectile InitShoot();
-	void MoveProjectiles(Matrix& map);
-	int maxFreqProjectiles(int level, int total_levels);
+	virtual Projectile InitShoot();
+	virtual void MoveProjectiles(Matrix& map);
+	virtual int maxFreqProjectiles(int level, int total_levels);
+	bool canShoot();
 
 	virtual bool lookAtRight();
 	bool isInScene();

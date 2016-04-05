@@ -146,6 +146,11 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PROJ_PIRATE, path, GL_RGBA);
 	if (!res) return false;
 
+	//Projectile initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "projectiles_boss.png").c_str());
+	res = Data.LoadImage(IMG_PROJ_BOSS, path, GL_RGBA);
+	if (!res) return false;
+
 	currentPlayerID = DataManager.readPlayerIcon();
 
 	startGame();
@@ -177,6 +182,8 @@ bool cGame::loadLevel(int level) {
 	SkyLayer.restartLevel();
 
 	GameInfoLayer.SetCurrentLevel(level);
+	GameInfoLayer.SetCurrentLifeBoss(30 / (TOTAL_LEVELS-level+1));
+	GameInfoLayer.SetShowBossLife(false);
 
 	// Load level
 	res = Scene.LoadLevel(level);
@@ -185,8 +192,7 @@ bool cGame::loadLevel(int level) {
 	// Player initialization
 	Player.SetTile(2, SCENE_HEIGHT / 2);
 	Player.SetZ(SCENE_DEPTH);
-	Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
-	Player.SetMapValue(Scene.GetMap(), 2, SCENE_HEIGHT / 2, PLAYER - 48);
+	setPlayerSize();
 	Player.ResetLife();
 
 	// Enemies initialization
@@ -250,9 +256,11 @@ bool cGame::initEnemies(int level) {
 				Enemies.push_back(enemy);
 			}
 			else if (tile == BOSS) {
-				Boss.SetTile(i, j);
-				Boss.SetZ(SCENE_DEPTH);
-				Boss.SetWidthHeight(2 * BICHO_WIDTH, 2 * BICHO_HEIGHT);
+				Boss = new cBoss();
+				Boss->SetTile(i, j);
+				Boss->SetZ(SCENE_DEPTH);
+				Boss->SetWidthHeight(2 * BICHO_WIDTH, 2 * BICHO_HEIGHT);
+				Boss->SetWidthHeightProjectiles(20, 20);
 				Scene.SetMapValue(i, j, 2 * BICHO_WIDTH, 2 * BICHO_HEIGHT, BOSS - 48);
 			}
 		}
@@ -296,12 +304,17 @@ bool cGame::Process() {
 
 	if (currentPlayerID != DataManager.readPlayerIcon()) {
 		currentPlayerID = DataManager.readPlayerIcon();
+		setPlayerSize();
 	}
 
 	// Do not scroll if level is finished
 	if (isGameStandBy() || isEndOfMap()) {
 		SkyLayer.endOfLevel();
 		MountainLayer.endOfLevel();
+	}
+
+	if (isBossInScene()) {
+		GameInfoLayer.SetShowBossLife(true);
 	}
 
 	if (isGameStandBy()) {
@@ -353,7 +366,9 @@ bool cGame::Process() {
 		}
 
 		float scroll = GAME_SCROLL;
-		if (isEndOfMap()) scroll = 0;
+		if (isEndOfMap()) {
+			scroll = 0;
+		}
 
 		bool playerDead = false;
 
@@ -369,12 +384,14 @@ bool cGame::Process() {
 		Matrix map = Scene.GetMap();
 		Player.LogicProjectiles(map);
 
+		bool enemyHasShoot;
 		for (int i = 0; i < Enemies.size(); ++i) {
 			Enemies[i]->Logic(map, scroll);
-			Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
+			enemyHasShoot = Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
 		}
 
-		Boss.Logic(map, scroll);
+		Boss->Logic(map, scroll);
+		bool bossHasShoot = Boss->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
 
 		Scene.SetMap(map);
 
@@ -460,7 +477,8 @@ void cGame::Render() {
 		tex_id_boss = Data.GetID(IMG_GROUDON);
 		tex_id_boss_proj = Data.GetID(IMG_PROJ_PIRATE);
 	}
-	Boss.Draw(tex_id_boss);
+	Boss->Draw(tex_id_boss);
+	Boss->DrawProjectiles(Data.GetID(IMG_PROJ_BOSS));
 
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
 	RestartCameraScene();
@@ -509,6 +527,10 @@ bool cGame::HasGameEnd() {
 
 bool cGame::isPlayerLostLife() {
 	return playerLostLife;
+}
+
+bool cGame::isBossInScene() {
+	return cameraXScene <= Boss->GetX() && (Boss->GetX() - cameraXScene <= GAME_WIDTH);
 }
 
 void cGame::startSound(int sound) {
@@ -610,10 +632,16 @@ void cGame::setBossDead() {
 		float px = projsRight[p].x;
 		float py = projsRight[p].y;
 
-		if (Boss.GetX() <= px && px <= Boss.GetX() + Boss.GetWidth() &&
-			Boss.GetY() <= py && py <= Boss.GetY() + Boss.GetHeight()) {
-			bossDead = true;
-			Boss.SetWidthHeight(0, 0);
+		if (Boss->GetX() <= px && px <= Boss->GetX() + Boss->GetWidth() &&
+			Boss->GetY() <= py && py <= Boss->GetY() + Boss->GetHeight()) {
+			//bossDead = true;
+			
+			int bossLife = GameInfoLayer.GetCurrentLifeBoss() - 1;
+			GameInfoLayer.SetCurrentLifeBoss(bossLife);
+			if (bossLife == 0) {
+				bossDead = true;
+				Boss->SetWidthHeight(0, 0);
+			}
 
 			projsRight.erase(projsRight.begin() + p);
 		}
@@ -707,4 +735,16 @@ bool cGame::checkProjectilesEnemy(vector<Projectile>& projs) {
 		}
 	}
 	return false;
+}
+
+void cGame::setPlayerSize() {
+	if (Data.GetIMGPlayer(currentPlayerID) == IMG_MEXICAN) {
+		Player.SetWidthHeight(4 * TILE_SIZE, 3 * TILE_SIZE);
+	}
+	else if (Data.GetIMGPlayer(currentPlayerID) == IMG_OKTOBER) {
+		Player.SetWidthHeight(3 * TILE_SIZE, 3 * TILE_SIZE);
+	}
+	else {
+		Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+	}
 }

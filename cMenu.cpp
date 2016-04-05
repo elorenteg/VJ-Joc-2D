@@ -298,7 +298,7 @@ void cMenu::showMenu() {
 	glPopMatrix();
 
 	Player.SetPosition(GAME_WIDTH / 2.0f + 203.0f, GAME_HEIGHT / 2.0f + 130.0f);
-	Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
+	setPlayerSize();
 	Player.SetZ(MSS_DEPTH);
 	Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
 
@@ -342,7 +342,7 @@ void cMenu::showInstrucctions() {
 		//Nyan Image
 		glColor3f(1.0f, 1.0f, 1.0f);
 		Player.SetPosition(GAME_WIDTH / 2.0f - 40.0f, GAME_HEIGHT - 235.0f);
-		Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
+		setPlayerSize();
 		Player.SetZ(MSS_DEPTH - 1);
 		Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
 
@@ -380,7 +380,7 @@ void cMenu::showCredits() {
 	//Nyan Image
 	glColor3f(1.0f, 1.0f, 1.0f);
 	Player.SetPosition(65.0f, GAME_HEIGHT - 185.0f);
-	Player.SetWidthHeight(3 * TILE_SIZE, 2 * TILE_SIZE);
+	setPlayerSize();
 	Player.SetZ(MSS_DEPTH - 1);
 	Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
 
@@ -441,9 +441,9 @@ void cMenu::render_stars() {
 		glColor3f(1.0f, 1.0f, 0.0f);
 		glBegin(GL_QUADS);
 		glVertex3f(x, y, MSS_DEPTH - 3);
-		glVertex3f(x + 3.5f, y, MSS_DEPTH - 3);
-		glVertex3f(x + 3.5f, y + 3.5f, MSS_DEPTH - 3);
-		glVertex3f(x, y + 3.5f, MSS_DEPTH - 3);
+		glVertex3f(x + 4, y, MSS_DEPTH - 3);
+		glVertex3f(x + 4, y + 4, MSS_DEPTH - 3);
+		glVertex3f(x, y + 4, MSS_DEPTH - 3);
 		glEnd();
 	}
 }
@@ -458,5 +458,17 @@ void cMenu::calculate_stars() {
 
 		starsX[i] = x;
 		starsY[i] = y;
+	}
+}
+
+void cMenu::setPlayerSize() {
+	if (Data.GetIMGPlayer(currentPlayerIDPos) == IMG_MEXICAN) {
+		Player.SetWidthHeight(4 * TILE_SIZE, 3 * TILE_SIZE);
+	}
+	else if (Data.GetIMGPlayer(currentPlayerIDPos) == IMG_OKTOBER) {
+		Player.SetWidthHeight(3 * TILE_SIZE, 3 * TILE_SIZE);
+	}
+	else {
+		Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 	}
 }

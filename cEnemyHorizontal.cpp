@@ -104,7 +104,9 @@ void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
 	xWindow+= cameraXSceneInc;
 }
 
-void cEnemyHorizontal::LogicProjectiles(Matrix& map, int level, int total_levels) {
+bool cEnemyHorizontal::LogicProjectiles(Matrix& map, int level, int total_levels) {
+	bool enemyShoot = false;
+
 	MoveProjectiles(map);
 
 	--freq_shoots;
@@ -112,5 +114,8 @@ void cEnemyHorizontal::LogicProjectiles(Matrix& map, int level, int total_levels
 		freq_shoots = maxFreqProjectiles(level, total_levels);
 
 		Shoot(map);
+		enemyShoot = true;
 	}
+
+	return enemyShoot;
 }

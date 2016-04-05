@@ -107,8 +107,8 @@ void cPlayer::DrawRainbow(int tex_id, float xWindow) {
 		glBegin(GL_QUADS);
 		glTexCoord2f(xo, yo);	glVertex3f(x, (y+5) + count * 4, SCENE_DEPTH);
 		glTexCoord2f(xf, yo);	glVertex3f(x + SIZE_RAINBOW, (y+5) + count * 4, SCENE_DEPTH);
-		glTexCoord2f(xf, yf);	glVertex3f(x + SIZE_RAINBOW, (y+h-5) + count * 4, SCENE_DEPTH);
-		glTexCoord2f(xo, yf);	glVertex3f(x, (y+h-5) + count * 4, SCENE_DEPTH);
+		glTexCoord2f(xf, yf);	glVertex3f(x + SIZE_RAINBOW, (y+2*TILE_SIZE-5) + count * 4, SCENE_DEPTH);
+		glTexCoord2f(xo, yf);	glVertex3f(x, (y+ 2 * TILE_SIZE -5) + count * 4, SCENE_DEPTH);
 		glEnd();
 	}
 
@@ -161,4 +161,12 @@ void cPlayer::Logic(Matrix& map, float cameraXSceneInc) {
 
 void cPlayer::LogicProjectiles(Matrix& map) {
 	MoveProjectiles(map);
+}
+
+Projectile cPlayer::InitShoot() {
+	Projectile proj;
+	proj.x = (x + w) + 10;
+	proj.y = y + (2*TILE_SIZE - h_proj) / 2;
+
+	return proj;
 }

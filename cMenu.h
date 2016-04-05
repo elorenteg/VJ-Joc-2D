@@ -91,6 +91,8 @@ private:
 	void render_stars();
 	void calculate_stars();
 
+	void setPlayerSize();
+
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 60;
 	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;

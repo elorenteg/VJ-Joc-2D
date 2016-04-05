@@ -14,9 +14,11 @@ using namespace std;
 #define LEVELS_FOLDER	"Levels"
 #define IMAGES_FOLDER	"Images"
 
+#define TOTAL_LEVELS	3
+
 #define GAME_WIDTH	640
-#define GAME_HEIGHT 490
-#define GAME_MARGIN 30
+#define GAME_HEIGHT	510
+#define GAME_MARGIN	30
 #define GAME_DEPTH	10
 
 #define GAME_SCROLL 1.2f
@@ -25,7 +27,8 @@ using namespace std;
 #define MSS_DEPTH		0
 #define GAMEINFO_DEPTH	-1
 
-#define	GROUND			1
+#define	GROUND			9
+#define	GRASS			1
 #define CLOUD_SUP_ESQ	2
 #define CLOUD_SUP_CEN	3
 #define CLOUD_SUP_DRE	4

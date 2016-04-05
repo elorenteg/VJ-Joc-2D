@@ -46,6 +46,7 @@ bool cScene::LoadLevel(int level) {
 
 				switch (map[j][i]) {
 					case GROUND:
+					case GRASS:
 						coordxo_tile = 0.0f;
 						coordxf_tile = 0.1f;
 						break;
@@ -68,8 +69,12 @@ bool cScene::LoadLevel(int level) {
 
 				switch (map[j][i]) {
 					case GROUND:
+						coordyo_tile = 0.2f;
+						coordyf_tile = 0.4f;
+						break;
+					case GRASS:
 						coordyo_tile = 0.0f;
-						coordyf_tile = 0.25f;
+						coordyf_tile = 0.2f;
 						break;
 					case CLOUD_SUP_ESQ:
 					case CLOUD_SUP_CEN:
@@ -85,7 +90,7 @@ bool cScene::LoadLevel(int level) {
 						break;
 				}
 
-				if (map[j][i] == GROUND) glColor3f(1.0f, 1.0f, 1.0f);
+				if (map[j][i] == GROUND || map[j][i] == GRASS) glColor3f(1.0f, 1.0f, 1.0f);
 				else glColor3f(0.9f, 0.9f, 1.0f);
 
 				glTexCoord2f(coordxo_tile, coordyf_tile);	glVertex3i(px, py, SCENE_DEPTH);
@@ -100,8 +105,6 @@ bool cScene::LoadLevel(int level) {
 
 	glEnd();
 	glEndList();
-
-	glColor3f(1.0f, 1.0f, 1.0f);
 
 	fclose(fd);
 
@@ -145,6 +148,8 @@ bool cScene::isEnemy(int tile_x, int tile_y) {
 
 bool cScene::isScene(int tile_x, int tile_y) {
 	if (map[tile_y][tile_x] == GROUND) return true;
+	if (map[tile_y][tile_x] == GRASS
+		) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_ESQ) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_CEN) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_DRE) return true;
