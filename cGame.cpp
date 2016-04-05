@@ -182,6 +182,7 @@ bool cGame::loadLevel(int level) {
 	SkyLayer.restartLevel();
 
 	GameInfoLayer.SetCurrentLevel(level);
+	GameInfoLayer.SetCurrentLifeBoss(30 / (TOTAL_LEVELS-level+1));
 
 	// Load level
 	res = Scene.LoadLevel(level);
@@ -254,10 +255,11 @@ bool cGame::initEnemies(int level) {
 				Enemies.push_back(enemy);
 			}
 			else if (tile == BOSS) {
-				Boss.SetTile(i, j);
-				Boss.SetZ(SCENE_DEPTH);
-				Boss.SetWidthHeight(2 * BICHO_WIDTH, 2 * BICHO_HEIGHT);
-				Boss.SetWidthHeightProjectiles(20, 20);
+				Boss = new cBoss();
+				Boss->SetTile(i, j);
+				Boss->SetZ(SCENE_DEPTH);
+				Boss->SetWidthHeight(2 * BICHO_WIDTH, 2 * BICHO_HEIGHT);
+				Boss->SetWidthHeightProjectiles(20, 20);
 				Scene.SetMapValue(i, j, 2 * BICHO_WIDTH, 2 * BICHO_HEIGHT, BOSS - 48);
 			}
 		}
@@ -381,8 +383,8 @@ bool cGame::Process() {
 			enemyHasShoot = Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
 		}
 
-		Boss.Logic(map, scroll);
-		bool bossHasShoot = Boss.LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
+		Boss->Logic(map, scroll);
+		bool bossHasShoot = Boss->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
 
 		Scene.SetMap(map);
 
@@ -468,8 +470,8 @@ void cGame::Render() {
 		tex_id_boss = Data.GetID(IMG_GROUDON);
 		tex_id_boss_proj = Data.GetID(IMG_PROJ_PIRATE);
 	}
-	Boss.Draw(tex_id_boss);
-	Boss.DrawProjectiles(Data.GetID(IMG_PROJ_BOSS));
+	Boss->Draw(tex_id_boss);
+	Boss->DrawProjectiles(Data.GetID(IMG_PROJ_BOSS));
 
 	Player.DrawRainbow(Data.GetID(IMG_RAINBOW), cameraXScene);
 	RestartCameraScene();
@@ -619,10 +621,16 @@ void cGame::setBossDead() {
 		float px = projsRight[p].x;
 		float py = projsRight[p].y;
 
-		if (Boss.GetX() <= px && px <= Boss.GetX() + Boss.GetWidth() &&
-			Boss.GetY() <= py && py <= Boss.GetY() + Boss.GetHeight()) {
-			bossDead = true;
-			Boss.SetWidthHeight(0, 0);
+		if (Boss->GetX() <= px && px <= Boss->GetX() + Boss->GetWidth() &&
+			Boss->GetY() <= py && py <= Boss->GetY() + Boss->GetHeight()) {
+			//bossDead = true;
+			
+			int bossLife = GameInfoLayer.GetCurrentLifeBoss() - 1;
+			GameInfoLayer.SetCurrentLifeBoss(bossLife);
+			if (bossLife == 0) {
+				bossDead = true;
+				Boss->SetWidthHeight(0, 0);
+			}
 
 			projsRight.erase(projsRight.begin() + p);
 		}

@@ -16,8 +16,6 @@
 #include "cSound.h"
 #include "Globals.h"
 
-#define TOTAL_LEVELS	1
-
 #define END_GAME_OVER	0
 #define END_OF_GAME		1
 #define END_OF_LEVEL	2
@@ -72,7 +70,7 @@ private:
 	cData Data;
 	cFont Font;
 	vector<cBicho*> Enemies;
-	cBoss Boss;
+	cBoss* Boss;
 	cSound Sound;
 	cDataManager DataManager;
 	

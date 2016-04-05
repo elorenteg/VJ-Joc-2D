@@ -105,6 +105,22 @@ void cGameInfoLayer::Draw() {
 	sprintf(high_score_value, "%d", high_score);
 	strcat(high_score_text, high_score_value);
 	Font.drawText(GAME_WIDTH - 140.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 120.0f, 20.0f, high_score_text);
+
+	int w = 150;
+	float xo = GAME_WIDTH - w - 25;
+	int max_life = 30 / (TOTAL_LEVELS - current_level + 1);
+	float xm = (double(current_life_boss)/max_life)*w;
+	float yo = 5;
+
+	glColor3f(0.0f, 1.0f, 0.0f);
+	drawRectangle(xo, yo, GAMEINFO_DEPTH, xm, 18);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawRectangle(xo+xm, yo, GAMEINFO_DEPTH, w-xm, 18);
+
+	char boss_health_text[32];
+	strcpy(boss_health_text, ABR_HEALTH_BOSS_TEXT);
+	strcat(boss_health_text, ": ");
+	Font.drawText(xo - 120.0f, yo-1, GAMEINFO_DEPTH, 120.0f, 20.0f, boss_health_text);
 }
 
 void cGameInfoLayer::SetCurrentLevel(int level) {
@@ -145,6 +161,14 @@ void cGameInfoLayer::SetCurrentLife(int life) {
 
 int cGameInfoLayer::GetCurrentLife() {
 	return current_life;
+}
+
+void cGameInfoLayer::SetCurrentLifeBoss(int life) {
+	current_life_boss = life;
+}
+
+int cGameInfoLayer::GetCurrentLifeBoss() {
+	return current_life_boss;
 }
 
 void cGameInfoLayer::SaveHighScore(int high_score) {

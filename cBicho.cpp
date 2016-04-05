@@ -315,6 +315,7 @@ bool cBicho::isEnemy(Matrix& map, int tile_x, int tile_y) {
 
 bool cBicho::isScene(Matrix& map, int tile_x, int tile_y) {
 	if (map[tile_y][tile_x] == GROUND) return true;
+	if (map[tile_y][tile_x] == GRASS) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_ESQ) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_CEN) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_DRE) return true;

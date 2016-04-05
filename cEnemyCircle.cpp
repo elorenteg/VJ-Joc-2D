@@ -59,6 +59,7 @@ bool cEnemyCircle::lookAtRight() {
 
 void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
 	if (GetX() < GetXWindow()) return;
+
 	float incX = 0;
 	float incY = 0;
 	switch (moves[state]) {
