@@ -14,7 +14,7 @@ using namespace std;
 #define LEVELS_FOLDER	"Levels"
 #define IMAGES_FOLDER	"Images"
 
-#define TOTAL_LEVELS	3
+#define TOTAL_LEVELS	2
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT	510
