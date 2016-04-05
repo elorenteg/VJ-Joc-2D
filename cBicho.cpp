@@ -249,7 +249,7 @@ bool cBicho::MapCollidesRight(Matrix& map, float step) {
 
 void cBicho::MoveLeft(Matrix& map) {
 	for (int step = STEP_LENGTH; step > 0; step -= 0.2f) {
-		if (!MapCollidesLeft(map, step)) {
+		if (x-step >= xWindow && !MapCollidesLeft(map, step)) {
 			x = x - step;
 			return;
 		}
@@ -258,7 +258,7 @@ void cBicho::MoveLeft(Matrix& map) {
 
 void cBicho::MoveRight(Matrix& map) {
 	for (int step = STEP_LENGTH; step > 0; step -= 0.2f) {
-		if (!MapCollidesRight(map, step)) {
+		if (x + w + step <= xWindow + GAME_WIDTH && !MapCollidesRight(map, step)) {
 			x = x + step;
 			return;
 		}
