@@ -473,8 +473,10 @@ bool cBicho::frequencyShoot(Matrix& map, int level, int total_levels) {
 		if (freq_shoots <= 0) {
 			freq_shoots = maxFreqProjectiles(level, total_levels);
 
-			Shoot(map);
-			enemyShoot = true;
+			if (canShoot()) {
+				Shoot(map);
+				enemyShoot = true;
+			}
 		}
 	}
 
