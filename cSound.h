@@ -10,7 +10,8 @@
 #define SOUND_CAT_SHOOT		2
 #define SOUND_CAT_DYING		3
 #define SOUND_ENEMY_DEAD	4
-#define SOUND_BOSS_DEAD		5
+#define SOUND_BOSS_SHOOT	5
+#define SOUND_BOSS_DEAD		6
 
 class cSound
 {
@@ -26,9 +27,12 @@ public:
 		*cat_shoot,
 		*cat_dying,
 		*enemy_dead,
+		*boss_shoot,
 		*boss_dead;
 
-	FMOD::Channel* channel0;
+	FMOD::Channel* channel_music;
+	FMOD::Channel* channel_shoots;
+	FMOD::Channel* channel_deads;
 
 	bool playingMainSound;
 
