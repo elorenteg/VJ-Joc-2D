@@ -379,8 +379,6 @@ bool cGame::Process() {
 			playerDead = true;
 		}
 
-		playerDead = playerDead || checkPlayerPosition();
-
 		Matrix map = Scene.GetMap();
 		Player.LogicProjectiles(map);
 
@@ -395,10 +393,10 @@ bool cGame::Process() {
 
 		Scene.SetMap(map);
 
-		setBossDead();
-
+		playerDead = playerDead || checkPlayerPosition();
 		checkCollisionsPlayer();
 		//playerDead = playerDead || checkCollisionsEnemies();
+		setBossDead();
 
 		if (playerDead) {
 			startSound(SOUND_CAT_DYING);
@@ -684,20 +682,31 @@ bool cGame::checkPositionWithEnemy(float enX, float enY, int enW, int enH) {
 	int wPlayer = Player.GetWidth();
 	int hPlayer = Player.GetHeight();
 
-	if (isPositionInside(enX, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
-		isPositionInside(enX + enW, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
-		isPositionInside(enX + enW, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
-		isPositionInside(enX, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer)) {
+	if (isPositionInsideX(enX, enY, enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
+		isPositionInsideX(enX+enW, enY, enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
+		isPositionInsideY(enX, enY, enW, xPlayer, yPlayer, wPlayer, hPlayer) ||
+		isPositionInsideY(enX, enY+enH, enW, xPlayer, yPlayer, wPlayer, hPlayer)) {
 		return true;
 	}
 
 	return false;
 }
 
-bool cGame::isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer) {
-	if (xPlayer < x && x < xPlayer + wPlayer &&
-		yPlayer < y && y < yPlayer + hPlayer) {
-		return true;
+bool cGame::isPositionInsideX(float x, float y, float h, float xPlayer, float yPlayer, int wPlayer, int hPlayer) {
+	if (xPlayer < x && x < xPlayer + wPlayer) {
+		if (y < yPlayer && yPlayer + hPlayer < y + h) return true;
+		if (yPlayer < y && y < yPlayer + hPlayer) return true;
+		if (yPlayer < y && y + h < yPlayer + hPlayer) return true;
+	}
+
+	return false;
+}
+
+bool cGame::isPositionInsideY(float x, float y, float w, float xPlayer, float yPlayer, int wPlayer, int hPlayer) {
+	if (yPlayer < y && y < yPlayer + hPlayer) {
+		if (x < xPlayer && xPlayer + wPlayer < x + w) return true;
+		if (xPlayer < x && x < xPlayer + wPlayer) return true;
+		if (xPlayer < x && x + w < xPlayer + wPlayer) return true;
 	}
 
 	return false;

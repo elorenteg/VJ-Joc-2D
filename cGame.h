@@ -86,7 +86,8 @@ private:
 	bool initEnemies(int level);
 
 	bool checkPlayerPosition();
-	bool isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer);
+	bool isPositionInsideX(float x, float y, float h, float xPlayer, float yPlayer, int wPlayer, int hPlayer);
+	bool isPositionInsideY(float x, float y, float w, float xPlayer, float yPlayer, int wPlayer, int hPlayer);
 	void checkCollisionsPlayer();
 	void setBossDead();
 	bool checkCollisionsEnemies();
