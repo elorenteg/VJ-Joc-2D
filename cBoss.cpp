@@ -88,7 +88,7 @@ void cBoss::Logic(Matrix& map, float cameraXSceneInc) {
 
 	//move = false;
 
-	if (move) {
+	if (move && !isRafaga) {
 		int tile_y_new = (y + inc*TILE_SIZE) / TILE_SIZE;
 		SetMapValue(map, tile_x, tile_y_new, ENEMY_VER - 48);
 		SetTile(tile_x, tile_y_new);
@@ -117,8 +117,9 @@ bool cBoss::LogicProjectiles(Matrix& map, int level, int total_levels) {
 		
 		--time_rafaga;
 		if (time_rafaga <= 0) {
-			time_rafaga = RANG_RAFAGA;
 			isRafaga = !isRafaga;
+			if (isRafaga) time_rafaga = RANG_RAFAGA / 2;
+			else time_rafaga = RANG_RAFAGA;
 		}
 	}
 

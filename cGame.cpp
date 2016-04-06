@@ -395,19 +395,21 @@ bool cGame::Process() {
 			Sound.PlayCustomSound(SOUND_BOSS_SHOOT);
 		}
 
-		bool bossDead = checkBossDead();
-		if (bossDead) {
-			Sound.PlayCustomSound(SOUND_BOSS_DEAD);
-		}
+		Scene.SetMap(map);
 
 		playerDead = playerDead || checkPlayerPosition();
+		playerDead = playerDead || checkEnemiesProjectiles();
+		playerDead = playerDead || checkBossProjectiles();
 
 		bool enemyDead = checkPlayerProjectiles();
 		if (enemyDead) {
 			Sound.PlayCustomSound(SOUND_ENEMY_DEAD);
 		}
 
-		Scene.SetMap(map);
+		bool bossDead = checkBossDead();
+		if (bossDead) {
+			Sound.PlayCustomSound(SOUND_BOSS_DEAD);
+		}
 
 		if (playerDead) {
 			startSound(SOUND_CAT_DYING);
@@ -761,12 +763,18 @@ bool cGame::checkPlayerProjectiles() {
 	return hitSomeEnemies;
 }
 
-bool cGame::checkCollisionsEnemies() {
+bool cGame::checkEnemiesProjectiles() {
 	bool collides = false;
 	for (int i = 0; i < Enemies.size() && !collides; ++i) {
 		collides = checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_RIGHT));
 		collides = collides || checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_LEFT));
 	}
+
+	return collides;
+}
+
+bool cGame::checkBossProjectiles() {
+	bool collides = checkProjectilesEnemy(Boss->GetProjectiles(DIR_LEFT));
 
 	return collides;
 }
