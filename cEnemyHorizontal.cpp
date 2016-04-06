@@ -19,43 +19,26 @@ bool cEnemyHorizontal::lookAtRight() {
 }
 
 void cEnemyHorizontal::Draw(int tex_id) {
-	float xo, yo, xf, yf;
+	if (!definitiveDead) {
+		float xo, yo, xf, yf;
+		TexCoords tex;
 
-	switch (GetFrame()) {
-	case FRAME_0:
-		xo = 0.0f;
-		xf = 0.2f;
-		break;
-	case FRAME_1:
-		xo = 0.2f;
-		xf = 0.4f;
-		break;
-	case FRAME_2:
-		xo = 0.4f;
-		xf = 0.6f;
-		break;
-	case FRAME_3:
-		xo = 0.6f;
-		xf = 0.8f;
-		break;
-	case FRAME_4:
-		xo = 0.8f;
-		xf = 1.0f;
-		break;
+		if (!isDead) tex = TextureCoordinates();
+		else tex = BubblesTextureCoordinates();
+
+		xo = tex.xo;
+		xf = tex.xf;
+		yo = tex.yo;
+		yf = tex.yf;
+
+		DrawRect(tex_id, xo, yo, xf, yf);
+
+		int max_frames = MAX_FRAMES;
+		if (isDead) max_frames = MAX_FRAMES_DEAD;
+		NextFrame(max_frames);
+
+		if (isDead && GetFrame() > FRAME_5) definitiveDead = true;
 	}
-
-	if (moves[state] == RIGHT) {
-		float aux = xo;
-		xo = xf;
-		xf = aux;
-	}
-
-	yo = 1.0f;
-	yf = 0.0f;
-
-	DrawRect(tex_id, xo, yo, xf, yf);
-
-	NextFrame(5);
 }
 
 void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
@@ -91,7 +74,7 @@ void cEnemyHorizontal::Logic(Matrix& map, float cameraXSceneInc) {
 		move = false;
 	}
 
-	if (move) {
+	if (move && !isDead) {
 		int tile_x_new = (x + inc*TILE_SIZE) / TILE_SIZE;
 		SetMapValue(map, tile_x_new, tile_y, ENEMY_HOR - 48);
 		SetTile(tile_x_new, tile_y);
@@ -109,4 +92,12 @@ bool cEnemyHorizontal::LogicProjectiles(Matrix& map, int level, int total_levels
 	bool enemyShoot = frequencyShoot(map, level, total_levels);
 
 	return enemyShoot;
+}
+
+TexCoords cEnemyHorizontal::ChildYCoords() {
+	TexCoords tex;
+	tex.yo = 2 * 1.0f / 3;
+	tex.yf = 1.0f / 3;
+
+	return tex;
 }

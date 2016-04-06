@@ -25,6 +25,7 @@ public:
 
 protected:
 	int maxFramesProjectiles();
+	TexCoords ChildYCoords();
 
 private:
 	int num_moves;

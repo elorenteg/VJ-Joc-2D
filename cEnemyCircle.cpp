@@ -14,42 +14,26 @@ cEnemyCircle::cEnemyCircle() {
 cEnemyCircle::~cEnemyCircle() {}
 
 void cEnemyCircle::Draw(int tex_id) {
-	float xo, yo, xf, yf;
+	if (!definitiveDead) {
+		float xo, yo, xf, yf;
+		TexCoords tex;
 
-	switch (GetFrame()) {
-	case FRAME_0:
-		xo = 0.0f;
-		xf = 0.2f;
-		break;
-	case FRAME_1:
-		xo = 0.2f;
-		xf = 0.4f;
-		break;
-	case FRAME_2:
-		xo = 0.4f;
-		xf = 0.6f;
-		break;
-	case FRAME_3:
-		xo = 0.6f;
-		xf = 0.8f;
-		break;
-	case FRAME_4:
-		xo = 0.8f;
-		xf = 1.0f;
-		break;
+		if (!isDead) tex = TextureCoordinates();
+		else tex = BubblesTextureCoordinates();
+
+		xo = tex.xo;
+		xf = tex.xf;
+		yo = tex.yo;
+		yf = tex.yf;
+
+		DrawRect(tex_id, xo, yo, xf, yf);
+
+		int max_frames = MAX_FRAMES;
+		if (isDead) max_frames = MAX_FRAMES_DEAD;
+		NextFrame(max_frames);
+
+		if (isDead && GetFrame() > FRAME_5) definitiveDead = true;
 	}
-
-	if (state == RIGHT || state == UP) {
-		float aux = xo;
-		xo = xf;
-		xf = aux;
-	}
-	yo = 1.0f;
-	yf = 0.0f;
-
-	DrawRect(tex_id, xo, yo, xf, yf);
-
-	NextFrame(5);
 }
 
 bool cEnemyCircle::lookAtRight() {
@@ -99,7 +83,7 @@ void cEnemyCircle::Logic(Matrix& map, float cameraXSceneInc) {
 		move = false;
 	}
 
-	if (move) {
+	if (move && !isDead) {
 		int tile_x_new = (x + incX*TILE_SIZE) / TILE_SIZE;
 		int tile_y_new = (y + incY*TILE_SIZE) / TILE_SIZE;
 		SetMapValue(map, tile_x_new, tile_y_new, ENEMY_CIR - 48);
@@ -122,4 +106,12 @@ bool cEnemyCircle::LogicProjectiles(Matrix& map, int level, int total_levels) {
 
 int cEnemyCircle::maxFramesProjectiles() {
 	return 4;
+}
+
+TexCoords cEnemyCircle::ChildYCoords() {
+	TexCoords tex;
+	tex.yo = 1.0f / 3;
+	tex.yf = 0.0f;
+
+	return tex;
 }

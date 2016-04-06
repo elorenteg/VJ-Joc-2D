@@ -28,6 +28,7 @@ public:
 protected:
 	bool lookAtRight();
 	int maxFramesProjectiles();
+	TexCoords ChildYCoords();
 
 private:
 	int num_moves;

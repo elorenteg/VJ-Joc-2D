@@ -13,6 +13,7 @@ cBicho::cBicho(void) {
 	h_proj = PROJ_HEIGHT;
 	speed_proj = PROJ_SPEED;
 	isDead = false;
+	definitiveDead = false;
 }
 
 cBicho::~cBicho(void) {}
@@ -63,6 +64,16 @@ void cBicho::SetWidthHeightProjectiles(int width, int height) {
 
 void cBicho::SetIsDead(bool dead) {
 	isDead = dead;
+
+	seq = FRAME_0;
+	int wNew = 3 * TILE_SIZE;
+	int hNew = 2 * TILE_SIZE;
+
+	x = x + (w - wNew) / 2.0f;
+	y = y + (h - hNew) / 2.0f;
+
+	w = wNew;
+	h = hNew;
 }
 
 float cBicho::GetX() {
@@ -94,7 +105,73 @@ bool cBicho::GetIsDead() {
 	return isDead;
 }
 
+TexCoords cBicho::TextureCoordinates() {
+	float xo, xf;
+
+	switch (GetFrame()) {
+	case FRAME_0:
+		xo = 0.0f;
+		xf = 0.2f;
+		break;
+	case FRAME_1:
+		xo = 0.2f;
+		xf = 0.4f;
+		break;
+	case FRAME_2:
+		xo = 0.4f;
+		xf = 0.6f;
+		break;
+	case FRAME_3:
+		xo = 0.6f;
+		xf = 0.8f;
+		break;
+	case FRAME_4:
+		xo = 0.8f;
+		xf = 1.0f;
+		break;
+	}
+
+	if (!lookAtRight()) {
+		float aux = xo;
+		xo = xf;
+		xf = aux;
+	}
+
+	TexCoords tex;
+	tex.xo = xo;
+	tex.xf = xf;
+
+	tex.yo = 1.0f;
+	tex.yf = 0.0f;
+
+	return tex;
+}
+
+TexCoords cBicho::BubblesTextureCoordinates() {
+	float xo, xf;
+
+	xo = 1.0f / MAX_FRAMES_DEAD * GetFrame();
+	xf = xo + 0.125f;
+
+	TexCoords tex;
+	tex.xo = xo;
+	tex.xf = xf;
+
+	TexCoords tex2 = ChildYCoords();
+	tex.yo = tex2.yo;
+	tex.yf = tex2.yf;
+
+	return tex;
+}
+
+TexCoords cBicho::ChildYCoords() {
+	TexCoords tex;
+	return tex;
+}
+
 void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 
@@ -106,6 +183,7 @@ void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 }
 
 void cBicho::DrawProjectiles(int tex_id) {
@@ -287,8 +365,11 @@ void cBicho::MoveDown(Matrix& map) {
 }
 
 void cBicho::NextFrame(int max) {
+	int frame_delay = FRAME_DELAY;
+	if (isDead) frame_delay = int(FRAME_DELAY / 3.0f);
+
 	delay++;
-	if (delay == FRAME_DELAY) {
+	if (delay >= frame_delay) {
 		seq++;
 		seq %= max;
 		delay = 0;

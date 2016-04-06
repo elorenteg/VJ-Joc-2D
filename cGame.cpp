@@ -151,6 +151,11 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PROJ_BOSS, path, GL_RGBA);
 	if (!res) return false;
 
+	//Bubbles initialization
+	strcpy(path, concat_path(IMAGES_FOLDER, "burbujas_2.png").c_str());
+	res = Data.LoadImage(IMG_BURBUJA, path, GL_RGBA);
+	if (!res) return false;
+
 	currentPlayerID = DataManager.readPlayerIcon();
 
 	startGame();
@@ -385,7 +390,7 @@ bool cGame::Process() {
 
 		bool enemyHasShoot;
 		for (int i = 0; i < Enemies.size(); ++i) {
-			if (!Enemies[i]->GetIsDead()) Enemies[i]->Logic(map, scroll);
+			Enemies[i]->Logic(map, scroll);
 			enemyHasShoot = Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
 		}
 
@@ -474,6 +479,9 @@ void cGame::Render() {
 
 		if (!Enemies[i]->GetIsDead()) {
 			Enemies[i]->Draw(tex_id_bicho);
+		}
+		else {
+			Enemies[i]->Draw(Data.GetID(IMG_BURBUJA));
 		}
 		Enemies[i]->DrawProjectiles(tex_id_proj);
 	}

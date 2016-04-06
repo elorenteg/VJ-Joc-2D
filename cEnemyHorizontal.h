@@ -25,6 +25,7 @@ public:
 
 protected:
 	bool lookAtRight();
+	TexCoords ChildYCoords();
 
 private:
 	int num_moves;

@@ -29,6 +29,10 @@
 #define FRAME_3		3
 #define FRAME_4		4
 
+#define MAX_FRAMES_DEAD	7
+#define FRAME_5			5
+#define FRAME_6			6
+
 typedef struct Projectile {
 	float x;
 	float y;
@@ -36,6 +40,13 @@ typedef struct Projectile {
 	int time_color;
 	int time_stamp;
 	int type;
+};
+
+typedef struct TexCoords {
+	float xo;
+	float xf;
+	float yo;
+	float yf;
 };
 
 class cRect
@@ -104,8 +115,12 @@ protected:
 	vector<Projectile> projsLeft;
 	vector<Projectile> projsRight;
 	bool isDead;
+	bool definitiveDead;
 	int freq_shoots;
 
+	TexCoords TextureCoordinates();
+	TexCoords BubblesTextureCoordinates();
+	virtual TexCoords ChildYCoords();
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
 	void DrawProjectiles(int tex_id, vector<Projectile>& projectiles, int dir);
 
