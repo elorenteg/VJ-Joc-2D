@@ -386,7 +386,7 @@ bool cGame::Process() {
 
 		bool enemyHasShoot;
 		for (int i = 0; i < Enemies.size(); ++i) {
-			Enemies[i]->Logic(map, scroll);
+			if (!Enemies[i]->GetIsDead()) Enemies[i]->Logic(map, scroll);
 			enemyHasShoot = Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
 		}
 
@@ -460,7 +460,10 @@ void cGame::Render() {
 			tex_id_bicho = Data.GetID(IMG_PIRATE);
 			tex_id_proj = Data.GetID(IMG_PROJ_PIRATE);
 		}
-		Enemies[i]->Draw(tex_id_bicho);
+
+		if (!Enemies[i]->GetIsDead()) {
+			Enemies[i]->Draw(tex_id_bicho);
+		}
 		Enemies[i]->DrawProjectiles(tex_id_proj);
 	}
 
@@ -658,15 +661,17 @@ bool cGame::checkPlayerPosition() {
 	int hPlayer = Player.GetHeight();
 
 	for (int i = 0; i < Enemies.size() && !collides; ++i) {
-		float enX = Enemies[i]->GetX();
-		float enY = Enemies[i]->GetY();
-		float enW = Enemies[i]->GetWidth();
-		float enH = Enemies[i]->GetHeight();
-		if (isPositionInside(enX, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
-			isPositionInside(enX + enW, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
-			isPositionInside(enX + enW, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
-			isPositionInside(enX, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer)) {
-			collides = true;
+		if (!Enemies[i]->GetIsDead()) {
+			float enX = Enemies[i]->GetX();
+			float enY = Enemies[i]->GetY();
+			float enW = Enemies[i]->GetWidth();
+			float enH = Enemies[i]->GetHeight();
+			if (isPositionInside(enX, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
+				isPositionInside(enX + enW, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
+				isPositionInside(enX + enW, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
+				isPositionInside(enX, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer)) {
+				collides = true;
+			}
 		}
 	}
 
@@ -693,18 +698,21 @@ void cGame::checkCollisionsPlayer() {
 		if (Scene.isEnemy(tx, ty) || Scene.isEnemy(tx2, ty)) {
 			bool found = false;
 			for (int v = 0; v < Enemies.size() && !found; ++v) {
-				int v_tx = Enemies[v]->GetX() / TILE_SIZE;
-				int v_ty = Enemies[v]->GetY() / TILE_SIZE;
-				int v_tx2 = (Enemies[v]->GetX() + Enemies[v]->GetWidth()) / TILE_SIZE;
-				int v_ty2 = (Enemies[v]->GetY() + Enemies[v]->GetHeight()) / TILE_SIZE;
+				if (!Enemies[v]->GetIsDead()) {
+					int v_tx = Enemies[v]->GetX() / TILE_SIZE;
+					int v_ty = Enemies[v]->GetY() / TILE_SIZE;
+					int v_tx2 = (Enemies[v]->GetX() + Enemies[v]->GetWidth()) / TILE_SIZE;
+					int v_ty2 = (Enemies[v]->GetY() + Enemies[v]->GetHeight()) / TILE_SIZE;
 
-				if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
-					found = true;
-					Enemies.erase(Enemies.begin() + v);
-					projsRight.erase(projsRight.begin() + p);
-					Scene.SetMapValue(v_tx, v_ty, BICHO_WIDTH, BICHO_HEIGHT, 0);
+					if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
+						found = true;
+						//Enemies.erase(Enemies.begin() + v);
+						Enemies[v]->SetIsDead(true);
+						projsRight.erase(projsRight.begin() + p);
+						Scene.SetMapValue(v_tx, v_ty, BICHO_WIDTH, BICHO_HEIGHT, 0);
 
-					GameInfoLayer.SetCurrentScore(GameInfoLayer.GetCurrentScore() + 1);
+						GameInfoLayer.SetCurrentScore(GameInfoLayer.GetCurrentScore() + 1);
+					}
 				}
 			}
 		}

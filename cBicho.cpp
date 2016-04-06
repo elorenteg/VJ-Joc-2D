@@ -12,6 +12,7 @@ cBicho::cBicho(void) {
 	w_proj = PROJ_WIDTH;
 	h_proj = PROJ_HEIGHT;
 	speed_proj = PROJ_SPEED;
+	isDead = false;
 }
 
 cBicho::~cBicho(void) {}
@@ -60,6 +61,10 @@ void cBicho::SetWidthHeightProjectiles(int width, int height) {
 	h_proj = height;
 }
 
+void cBicho::SetIsDead(bool dead) {
+	isDead = dead;
+}
+
 float cBicho::GetX() {
 	return x;
 }
@@ -83,6 +88,10 @@ int cBicho::GetHeight() {
 vector<Projectile> cBicho::GetProjectiles(int dir) {
 	if (dir == DIR_LEFT) return projsLeft;
 	if (dir == DIR_RIGHT) return projsRight;
+}
+
+bool cBicho::GetIsDead() {
+	return isDead;
 }
 
 void cBicho::DrawRect(int tex_id, float xo, float yo, float xf, float yf) {
@@ -455,4 +464,19 @@ bool cBicho::canMove(float step) {
 	//if (x > xWindow + GAME_WIDTH) return false;
 
 	return true;
+}
+
+bool cBicho::frequencyShoot(Matrix& map, int level, int total_levels) {
+	bool enemyShoot = false;
+	if (!isDead) {
+		--freq_shoots;
+		if (freq_shoots <= 0) {
+			freq_shoots = maxFreqProjectiles(level, total_levels);
+
+			Shoot(map);
+			enemyShoot = true;
+		}
+	}
+
+	return enemyShoot;
 }
