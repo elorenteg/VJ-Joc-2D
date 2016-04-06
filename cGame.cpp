@@ -582,8 +582,8 @@ void cGame::renderMessage(int message) {
 
 	glDisable(GL_TEXTURE_2D);
 
+	glColor3f(0.2f, 0.2f, 0.2f);
 	if (message == END_OF_LEVEL || message == GAME_PAUSED || message == LIFE_LOST) {
-		glColor3f(0.0f, 0.0f, 0.0f);
 		char message_main[64];
 		char message_second[64];
 		if (message == END_OF_LEVEL) {
@@ -599,11 +599,9 @@ void cGame::renderMessage(int message) {
 			strcpy(message_second, PLAYER_LOSES_LIFE_MESSAGE_NEXT);
 		}
 		Font.drawText(GAME_WIDTH / 2 - 100.0f, GAME_HEIGHT / 2 - 5.0f, MSS_DEPTH, 200.0f, 50.0f, message_main);
-		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 45.0f, MSS_DEPTH, 300.0f, 25.0f, message_second);
+		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 45.0f, MSS_DEPTH, 300.0f, 20.0f, message_second);
 	}
 	else {
-		glColor3f(0.0f, 0.0f, 0.0f);
-
 		char message_main[64];
 		if (message == END_OF_GAME) {
 			strcpy(message_main, END_OF_GAME_MESSAGE);

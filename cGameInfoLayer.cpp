@@ -57,7 +57,7 @@ void cGameInfoLayer::Draw() {
 	glDisable(GL_TEXTURE_2D);
 
 	// Nivell
-	glColor3f(0.0f, 0.0f, 0.0f);
+	glColor3f(0.1f, 0.1f, 0.1f);
 	char level_text[32];
 	strcpy(level_text, ABR_LEVEL_TEXT);
 	strcat(level_text, ": ");
@@ -67,7 +67,7 @@ void cGameInfoLayer::Draw() {
 	Font.drawText(5.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 90.0f, 20.0f, level_text);
 
 	// Vides
-	glColor3f(0.0f, 0.0f, 0.0f);
+	glColor3f(0.1f, 0.1f, 0.1f);
 	char life_text[32];
 	strcpy(life_text, ABR_HEALTH_TEXT);
 	strcat(life_text, ": ");
@@ -88,7 +88,7 @@ void cGameInfoLayer::Draw() {
 	}
 
 	// Puntuacio
-	glColor3f(0.0f, 0.0f, 0.0f);
+	glColor3f(0.1f, 0.1f, 0.1f);
 	char score_text[32];
 	strcpy(score_text, ABR_SCORE_TEXT);
 	strcat(score_text, ": ");
@@ -98,7 +98,7 @@ void cGameInfoLayer::Draw() {
 	Font.drawText(GAME_WIDTH - 300.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 135.0f, 20.0f, score_text);
 
 	// Maxima Puntuacio
-	glColor3f(0.0f, 0.0f, 0.0f);
+	glColor3f(0.1f, 0.1f, 0.1f);
 	char high_score_text[32];
 	strcpy(high_score_text, ABR_HIGH_SCORE_TEXT);
 	strcat(high_score_text, ": ");
@@ -120,6 +120,7 @@ void cGameInfoLayer::Draw() {
 		glColor3f(0.0f, 0.0f, 0.0f);
 		drawRectangle(xo + xm, yo, GAMEINFO_DEPTH, w - xm, 18);
 
+		glColor3f(0.1f, 0.1f, 0.1f);
 		char boss_health_text[32];
 		strcpy(boss_health_text, ABR_HEALTH_BOSS_TEXT);
 		strcat(boss_health_text, ": ");

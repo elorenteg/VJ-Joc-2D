@@ -206,7 +206,7 @@ bool cMenu::Process()
 void cMenu::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
+	glClearColor(0.1f, 0.2f, 0.8f, 0.0f);
 	glLoadIdentity();
 
 	render_stars();
@@ -225,6 +225,12 @@ void cMenu::Render()
 		showCredits();
 		break;
 	}
+
+	// ESC to exit label
+	glPushMatrix();
+	glColor3f(0.8f, 0.8f, 0.8f);
+	Font.drawText(GAME_WIDTH - 200.0f, 20.0f, MSS_DEPTH, 175.0f, 20.0f, EXIT_HOW_TEXT);
+	glPopMatrix();
 
 	glutSwapBuffers();
 }
@@ -315,32 +321,30 @@ void cMenu::showMenu() {
 
 	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f - 170.0f, MSS_DEPTH, 200.0f, 50.0f, CREDITS_TEXT);
 
-	Font.drawText(GAME_WIDTH - 200.0f, 20.0f, MSS_DEPTH, 175.0f, 20.0f, EXIT_HOW_TEXT);
-
 	glPopMatrix();
 
 	if (actionSelected == gameAction)
-		glColor3f(1.0f, 0.0f, 0.0f);
+		glColor3f(0.9f, 0.4f, 0.4f);
 	else
-		glColor3f(0.5f, 0.5f, 0.5f);
+		glColor3f(0.7f, 0.65f, 0.65f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 115.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
 
 	if (actionSelected == howtoAction)
-		glColor3f(0.0f, 1.0f, 0.0f);
+		glColor3f(0.0f, 0.4f, 0.8f);
 	else
-		glColor3f(0.5f, 0.5f, 0.5f);
+		glColor3f(0.7f, 0.65f, 0.65f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 15.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
 
 	if (actionSelected == optionsAction)
-		glColor3f(1.0f, 1.0f, 0.0f);
+		glColor3f(0.95f, 0.6f, 0.5f);
 	else
-		glColor3f(0.5f, 0.5f, 0.5f);
+		glColor3f(0.7f, 0.65f, 0.65f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 85.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
 
 	if (actionSelected == creditsAction)
-		glColor3f(0.0f, 0.0f, 1.0f);
+		glColor3f(0.6f, 0.35f, 0.80f);
 	else
-		glColor3f(0.5f, 0.5f, 0.5f);
+		glColor3f(0.7f, 0.65f, 0.65f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 185.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
 }
 
