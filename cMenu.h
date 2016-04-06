@@ -10,7 +10,8 @@
 #define START_GAME	1
 #define GAME		2
 #define HOW_TO		3
-#define CREDITS		4
+#define OPTIONS		4
+#define CREDITS		5
 
 #define PAGE_1 1
 #define PAGE_2 2
@@ -18,6 +19,7 @@
 #define APP_GAME_TEXT	"NYAN CAT RETURNS!"
 #define PLAY_TEXT		"JUGAR"
 #define HOW_TO_TEXT		"INSTRUCCIONS"
+#define OPTIONS_TEXT	"OPCIONS"
 #define CREDITS_TEXT	"CREDITS"
 #define EXIT_TEXT		"SORTIR"
 
@@ -27,10 +29,15 @@
 #define HOW_TO_PLAYER_TEXT_2_1 "DISPARAR: ESPAI"
 #define HOW_TO_PLAYER_TEXT_2_2 "PAUSA:    P    "
 
+#define OPTIONS_SELECCIO_PLAYER "SEL. PERSONATGE: "
+#define OPTIONS_HIGH_SCORE		"HIGHSCORE: "
+
 #define CREDITS_MARC_TEXT	"MARC VILA GOMEZ"
 #define CREDITS_ESTER_TEXT	"ESTER LORENTE GARCIA"
 #define CREDITS_WHERE_TEXT	"VIDEOJOCS  FIB  UPC"
 #define CREDITS_WHEN_TEXT	"QP 2015 2016"
+
+#define EXIT_HOW_TEXT	"[ESC] SORTIR"
 
 class cMenu
 {
@@ -64,7 +71,7 @@ private:
 	cSound Sound;
 	bool processingKey;
 
-	enum Action { gameAction, howtoAction, creditsAction, stopAction };
+	enum Action { gameAction, howtoAction, optionsAction, creditsAction, stopAction };
 	Action actionSelected;
 
 	int internalState;
@@ -86,6 +93,7 @@ private:
 
 	void showMenu();
 	void showInstrucctions();
+	void showOptions();
 	void showCredits();
 
 	void render_stars();
@@ -94,7 +102,7 @@ private:
 	void setPlayerSize();
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/
-	const int FRAMES_PER_SECOND = 60;
+	const int FRAMES_PER_SECOND = 70;
 	const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 	// Returns the current number of ms elapsed since the system was started
 	DWORD next_game_tick;
