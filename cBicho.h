@@ -4,7 +4,6 @@
 #include "cScene.h"
 #include "Globals.h"
 
-
 #define BICHO_WIDTH		TILE_SIZE*3
 #define BICHO_HEIGHT	TILE_SIZE*2
 
