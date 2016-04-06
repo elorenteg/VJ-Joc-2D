@@ -90,7 +90,7 @@ private:
 	bool isPositionInsideY(float x, float y, float w, float xPlayer, float yPlayer, int wPlayer, int hPlayer);
 	bool checkPlayerProjectiles();
 	bool checkBossDead();
-	bool checkCollisionsEnemies();
+	bool checkEnemiesProjectiles();
 	bool checkProjectilesEnemy(vector<Projectile>& projs);
 	bool checkPositionWithEnemy(float enX, float enY, int enW, int enH);
 

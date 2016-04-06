@@ -401,6 +401,7 @@ bool cGame::Process() {
 		}
 
 		playerDead = playerDead || checkPlayerPosition();
+		playerDead = playerDead || checkEnemiesProjectiles();
 
 		bool enemyDead = checkPlayerProjectiles();
 		if (enemyDead) {
@@ -761,7 +762,7 @@ bool cGame::checkPlayerProjectiles() {
 	return hitSomeEnemies;
 }
 
-bool cGame::checkCollisionsEnemies() {
+bool cGame::checkEnemiesProjectiles() {
 	bool collides = false;
 	for (int i = 0; i < Enemies.size() && !collides; ++i) {
 		collides = checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_RIGHT));
