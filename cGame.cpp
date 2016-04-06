@@ -514,6 +514,7 @@ void cGame::Render() {
 	RestartCameraScene();
 
 	GameInfoLayer.Draw();
+	DrawMiniMap();
 
 	Sound.Update();
 
@@ -819,4 +820,80 @@ void cGame::setPlayerSize() {
 	else {
 		Player.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
 	}
+}
+
+void cGame::DrawMiniMap() {
+	Matrix map = Scene.GetMap();
+	float size = 1.0f;
+	float pxo = 10.0f;
+	float pyo = 2.0f;
+
+	float px, py;
+	float pxmid1 = cameraXScene;
+	float pxmid2 = cameraXScene + GAME_WIDTH;
+
+	float pxini = pxo - size*2;
+	float pxfi = pxini + size*2 + SCENE_WIDTH*size + size * 2;
+	float pyini = pyo;
+	float pyfi = pyini + SCENE_HEIGHT*size + size * 2;
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_QUADS);
+	glVertex3i(pxini, pyini, GAMEINFO_DEPTH - 1);
+	glVertex3i(pxfi, pyini, GAMEINFO_DEPTH - 1);
+	glVertex3i(pxfi, pyfi, GAMEINFO_DEPTH - 1);
+	glVertex3i(pxini, pyfi, GAMEINFO_DEPTH - 1);
+	glEnd();
+
+	glColor3f(0.4f, 0.4f, 0.4f);
+	glBegin(GL_QUADS);
+	glVertex3i(pxo, pyo + 2*size, GAMEINFO_DEPTH);
+	glVertex3i(pxo + max(0,floor(pxmid1 / TILE_SIZE * size)-2*size), pyo + 2 * size, GAMEINFO_DEPTH);
+	glVertex3i(pxo + max(0, floor(pxmid1 / TILE_SIZE * size)-2*size), pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH);
+	glVertex3i(pxo, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH);
+	glEnd();
+
+	px = pxo + pxmid1 / TILE_SIZE * size;
+	for (int tx = floor(pxmid1 / TILE_SIZE); tx <= min(ceil(pxmid2 / TILE_SIZE), SCENE_WIDTH-1); ++tx) {
+		for (int ty = SCENE_HEIGHT - 1; ty >= 2; --ty) {
+			py = pyo + ty*size;
+
+			float r, g, b;
+			if (Scene.isScene(tx, ty)) {
+				r = 0.2f;
+				g = 0.2f;
+				b = 0.2f;
+			}
+			else if (Scene.isEnemy(tx, ty)) {
+				r = 1.0f;
+				g = 0.0f;
+				b = 0.0f;
+			}
+			else {
+				r = 0.0f;
+				g = 0.7f;
+				b = 1.0f;
+			}
+
+			glColor3f(r, g, b);
+			glBegin(GL_QUADS);
+			glVertex3i(px, py, GAMEINFO_DEPTH);
+			glVertex3i(px + size, py, GAMEINFO_DEPTH);
+			glVertex3i(px + size, py + size, GAMEINFO_DEPTH);
+			glVertex3i(px, py + size, GAMEINFO_DEPTH);
+			glEnd();
+		}
+
+		px += size;
+	}
+
+	glColor3f(0.3f, 0.3f, 0.3f);
+	glBegin(GL_QUADS);
+	glVertex3i(pxo + size * 3 + ceil(pxmid2 / TILE_SIZE) * size, pyo + 2 * size, GAMEINFO_DEPTH);
+	glVertex3i(pxo + SCENE_WIDTH * size, pyo + 2 * size, GAMEINFO_DEPTH);
+	glVertex3i(pxo + SCENE_WIDTH * size, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH);
+	glVertex3i(pxo + size * 3 + ceil(pxmid2 / TILE_SIZE) * size, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH);
+	glEnd();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
 }

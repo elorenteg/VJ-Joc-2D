@@ -148,8 +148,7 @@ bool cScene::isEnemy(int tile_x, int tile_y) {
 
 bool cScene::isScene(int tile_x, int tile_y) {
 	if (map[tile_y][tile_x] == GROUND) return true;
-	if (map[tile_y][tile_x] == GRASS
-		) return true;
+	if (map[tile_y][tile_x] == GRASS) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_ESQ) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_CEN) return true;
 	if (map[tile_y][tile_x] == CLOUD_SUP_DRE) return true;
@@ -163,3 +162,4 @@ bool cScene::isBoss(int tile_x, int tile_y) {
 	if (map[tile_y][tile_x] == BOSS - 48) return true;
 	return false;
 }
+

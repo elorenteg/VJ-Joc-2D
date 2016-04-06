@@ -56,6 +56,7 @@ public:
 	void Render();
 	void UpdateCameraScene();
 	void RestartCameraScene();
+	void DrawMiniMap();
 
 	void SetGameEnd(bool end);
 	bool HasGameEnd();
