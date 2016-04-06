@@ -655,10 +655,6 @@ void cGame::setBossDead() {
 
 bool cGame::checkPlayerPosition() {
 	bool collides = false;
-	float xPlayer = Player.GetX();
-	float yPlayer = Player.GetY();
-	int wPlayer = Player.GetWidth();
-	int hPlayer = Player.GetHeight();
 
 	for (int i = 0; i < Enemies.size() && !collides; ++i) {
 		if (!Enemies[i]->GetIsDead()) {
@@ -666,16 +662,36 @@ bool cGame::checkPlayerPosition() {
 			float enY = Enemies[i]->GetY();
 			float enW = Enemies[i]->GetWidth();
 			float enH = Enemies[i]->GetHeight();
-			if (isPositionInside(enX, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
-				isPositionInside(enX + enW, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
-				isPositionInside(enX + enW, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
-				isPositionInside(enX, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer)) {
-				collides = true;
-			}
+			collides = checkPositionWithEnemy(enX, enY, enW, enH);
 		}
 	}
 
+	if (!collides) {
+		float enX = Boss->GetX();
+		float enY = Boss->GetY();
+		float enW = Boss->GetWidth();
+		float enH = Boss->GetHeight();
+		collides = checkPositionWithEnemy(enX, enY, enW, enH);
+	}
+
 	return collides;
+}
+
+
+bool cGame::checkPositionWithEnemy(float enX, float enY, int enW, int enH) {
+	float xPlayer = Player.GetX();
+	float yPlayer = Player.GetY();
+	int wPlayer = Player.GetWidth();
+	int hPlayer = Player.GetHeight();
+
+	if (isPositionInside(enX, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
+		isPositionInside(enX + enW, enY, xPlayer, yPlayer, wPlayer, hPlayer) ||
+		isPositionInside(enX + enW, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
+		isPositionInside(enX, enY + enH, xPlayer, yPlayer, wPlayer, hPlayer)) {
+		return true;
+	}
+
+	return false;
 }
 
 bool cGame::isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer) {

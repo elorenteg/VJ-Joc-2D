@@ -91,6 +91,7 @@ private:
 	void setBossDead();
 	bool checkCollisionsEnemies();
 	bool checkProjectilesEnemy(vector<Projectile>& projs);
+	bool checkPositionWithEnemy(float enX, float enY, int enW, int enH);
 
 	void startSound(int sound);
 	void renderMessage(int message);
