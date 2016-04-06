@@ -156,11 +156,11 @@ bool cMenu::Process()
 			}
 		}
 		else if (keys[GLUT_KEY_UP]) {
-			if (internalState != HOW_TO)
+			if (internalState != HOW_TO && internalState != OPTIONS)
 				moveAction(-1);
 		}
 		else if (keys[GLUT_KEY_DOWN]) {
-			if (internalState != HOW_TO)
+			if (internalState != HOW_TO && internalState != OPTIONS)
 				moveAction(1);
 		}
 		else if (keys[GLUT_KEY_LEFT]) {
@@ -179,8 +179,12 @@ bool cMenu::Process()
 		}
 		else if (keys[13]) { //Enter
 			keys[13] = false;
-			if (internalState != HOW_TO)
+			if (internalState == OPTIONS) {
+				internalState = MENU;
+			}
+			else if (internalState != HOW_TO) {
 				executeAction();
+			}
 		}
 
 		if (internalState == OPTIONS) {
