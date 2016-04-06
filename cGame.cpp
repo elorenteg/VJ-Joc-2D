@@ -402,6 +402,7 @@ bool cGame::Process() {
 
 		playerDead = playerDead || checkPlayerPosition();
 		playerDead = playerDead || checkEnemiesProjectiles();
+		playerDead = playerDead || checkBossProjectiles();
 
 		bool enemyDead = checkPlayerProjectiles();
 		if (enemyDead) {
@@ -768,6 +769,12 @@ bool cGame::checkEnemiesProjectiles() {
 		collides = checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_RIGHT));
 		collides = collides || checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_LEFT));
 	}
+
+	return collides;
+}
+
+bool cGame::checkBossProjectiles() {
+	bool collides = checkProjectilesEnemy(Boss->GetProjectiles(DIR_LEFT));
 
 	return collides;
 }

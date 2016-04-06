@@ -91,6 +91,7 @@ private:
 	bool checkPlayerProjectiles();
 	bool checkBossDead();
 	bool checkEnemiesProjectiles();
+	bool checkBossProjectiles();
 	bool checkProjectilesEnemy(vector<Projectile>& projs);
 	bool checkPositionWithEnemy(float enX, float enY, int enW, int enH);
 
