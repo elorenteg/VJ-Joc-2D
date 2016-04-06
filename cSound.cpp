@@ -8,14 +8,16 @@ cSound::cSound(void)
 
 	system->createSound("Sound/menu_change.wav", FMOD_HARDWARE, 0, &menu_change);
 	system->createSound("Sound/nyan_cat_base.wav", FMOD_HARDWARE, 0, &nyan_base);
+	system->createSound("Sound/nyan_cat_base_8bit.mp3", FMOD_HARDWARE, 0, &nyan_base_8bit);
 	system->createSound("Sound/cat_shoot.wav", FMOD_HARDWARE, 0, &cat_shoot);
 	system->createSound("Sound/cat_dying.wav", FMOD_HARDWARE, 0, &cat_dying);
 	system->createSound("Sound/enemy_dead.wav", FMOD_HARDWARE, 0, &enemy_dead);
 	system->createSound("Sound/boss_shoot.wav", FMOD_HARDWARE, 0, &boss_shoot);
 	system->createSound("Sound/boss_dead.wav", FMOD_HARDWARE, 0, &boss_dead);
-	nyan_base->setMode(FMOD_LOOP_OFF);
+	//nyan_base->setMode(FMOD_LOOP_OFF);
 
-	playingMainSound = false;
+	playingMainBaseSound = false;
+	playingMain8BITSound = false;
 }
 
 cSound::~cSound(void)
@@ -27,10 +29,16 @@ void cSound::PlayCustomSound(int sound) {
 		system->playSound(FMOD_CHANNEL_FREE, menu_change, false, 0);
 	}
 	else if (sound == SOUND_NYAN_BASE) {
-		if (channel_music->isPlaying(&playingMainSound) == FMOD_OK && playingMainSound) {
+		if (channel_music->isPlaying(&playingMainBaseSound) == FMOD_OK && playingMainBaseSound) {
 			channel_music->stop();
 		}
 		system->playSound(FMOD_CHANNEL_FREE, nyan_base, false, &channel_music);
+	}
+	else if (sound == SOUND_NYAN_BASE_8BIT) {
+		if (channel_music->isPlaying(&playingMain8BITSound) == FMOD_OK && playingMain8BITSound) {
+			channel_music->stop();
+		}
+		system->playSound(FMOD_CHANNEL_FREE, nyan_base_8bit, false, &channel_music);
 	}
 	else if (sound == SOUND_CAT_SHOOT) {
 		system->playSound(FMOD_CHANNEL_FREE, cat_shoot, false, &channel_shoots);
@@ -49,7 +57,18 @@ void cSound::PlayCustomSound(int sound) {
 	}
 }
 
-void cSound::StopCustomChannel(FMOD::Channel* channel){
+void cSound::StopCustomChannel(int channelID){
+	FMOD::Channel* channel;
+	if (channelID == CHANNEL_MUSIC) {
+		channel = channel_music;
+	}
+	else if (channelID == CHANNEL_SHOOTS) {
+		channel = channel_shoots;
+	}
+	else if (channelID == CHANNEL_DEADS) {
+		channel = channel_deads;
+	}
+
 	bool isPlayingSomeSound = false;
 	if (channel->isPlaying(&isPlayingSomeSound) == FMOD_OK && isPlayingSomeSound) {
 		channel->stop();

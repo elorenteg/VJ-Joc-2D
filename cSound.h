@@ -5,13 +5,18 @@
 
 #include "fmod.hpp" //fmod c++ header
 
-#define CHANGE_IN_MENU		0
-#define SOUND_NYAN_BASE		1
-#define SOUND_CAT_SHOOT		2
-#define SOUND_CAT_DYING		3
-#define SOUND_ENEMY_DEAD	4
-#define SOUND_BOSS_SHOOT	5
-#define SOUND_BOSS_DEAD		6
+#define CHANGE_IN_MENU			0
+#define SOUND_NYAN_BASE			1
+#define SOUND_NYAN_BASE_8BIT	2
+#define SOUND_CAT_SHOOT			3
+#define SOUND_CAT_DYING			4
+#define SOUND_ENEMY_DEAD		5
+#define SOUND_BOSS_SHOOT		6
+#define SOUND_BOSS_DEAD			7
+
+#define CHANNEL_MUSIC			100
+#define CHANNEL_SHOOTS			101
+#define CHANNEL_DEADS			102
 
 class cSound
 {
@@ -24,6 +29,7 @@ public:
 	FMOD::Sound      //sound that will be loaded and played
 		*menu_change,
 		*nyan_base,
+		*nyan_base_8bit,
 		*cat_shoot,
 		*cat_dying,
 		*enemy_dead,
@@ -34,10 +40,11 @@ public:
 	FMOD::Channel* channel_shoots;
 	FMOD::Channel* channel_deads;
 
-	bool playingMainSound;
+	bool playingMainBaseSound;
+	bool playingMain8BITSound;
 
 	void PlayCustomSound(int sound);
-	void StopCustomChannel(FMOD::Channel* channel);
+	void StopCustomChannel(int channelID);
 
 private:
 
