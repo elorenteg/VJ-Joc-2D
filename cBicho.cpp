@@ -379,12 +379,12 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 		if (projs[p].type != DIR_NONE) {
 			if (projs[p].type > 0) {
 				if (projs[p].time_stamp < 20) {
-					projs[p].y += 3;
+					projs[p].y += 4;
 				}
 			}
 			else {
 				if (projs[p].time_stamp < 20) {
-					projs[p].y -= 3;
+					projs[p].y -= 4;
 				}
 			}
 		}
