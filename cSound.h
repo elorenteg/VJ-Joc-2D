@@ -24,6 +24,8 @@ public:
 	cSound(void);
 	~cSound(void);
 
+	void Update();
+
 	//FMod Stuff
 	FMOD::System     *system; //handle to FMOD engine
 	FMOD::Sound      //sound that will be loaded and played

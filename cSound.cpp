@@ -74,3 +74,7 @@ void cSound::StopCustomChannel(int channelID){
 		channel->stop();
 	}
 }
+
+void cSound::Update() {
+	system->update();
+}

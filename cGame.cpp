@@ -499,6 +499,8 @@ void cGame::Render() {
 
 	GameInfoLayer.Draw();
 
+	Sound.Update();
+
 	glutSwapBuffers();
 }
 
