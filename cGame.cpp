@@ -395,10 +395,7 @@ bool cGame::Process() {
 			Sound.PlayCustomSound(SOUND_BOSS_SHOOT);
 		}
 
-		bool bossDead = checkBossDead();
-		if (bossDead) {
-			Sound.PlayCustomSound(SOUND_BOSS_DEAD);
-		}
+		Scene.SetMap(map);
 
 		playerDead = playerDead || checkPlayerPosition();
 		playerDead = playerDead || checkEnemiesProjectiles();
@@ -409,7 +406,10 @@ bool cGame::Process() {
 			Sound.PlayCustomSound(SOUND_ENEMY_DEAD);
 		}
 
-		Scene.SetMap(map);
+		bool bossDead = checkBossDead();
+		if (bossDead) {
+			Sound.PlayCustomSound(SOUND_BOSS_DEAD);
+		}
 
 		if (playerDead) {
 			startSound(SOUND_CAT_DYING);
