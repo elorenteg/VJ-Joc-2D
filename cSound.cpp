@@ -13,6 +13,8 @@ cSound::cSound(void)
 	system->createSound("Sound/enemy_dead.wav", FMOD_HARDWARE, 0, &enemy_dead);
 	system->createSound("Sound/boss_dead.wav", FMOD_HARDWARE, 0, &boss_dead);
 	nyan_base->setMode(FMOD_LOOP_OFF);
+
+	playingMainSound = false;
 }
 
 cSound::~cSound(void)
@@ -24,7 +26,10 @@ void cSound::PlayCustomSound(int sound) {
 		system->playSound(FMOD_CHANNEL_FREE, menu_change, false, 0);
 	}
 	else if (sound == SOUND_NYAN_BASE) {
-		system->playSound(FMOD_CHANNEL_FREE, nyan_base, false, 0);
+		if (channel0->isPlaying(&playingMainSound) == FMOD_OK && playingMainSound) {
+			channel0->stop();
+		}
+		system->playSound(FMOD_CHANNEL_FREE, nyan_base, false, &channel0);
 	}
 	else if (sound == SOUND_CAT_SHOOT) {
 		system->playSound(FMOD_CHANNEL_FREE, cat_shoot, false, 0);

@@ -28,6 +28,10 @@ public:
 		*enemy_dead,
 		*boss_dead;
 
+	FMOD::Channel* channel0;
+
+	bool playingMainSound;
+
 	void PlayCustomSound(int sound);
 	void StopCustomSound();
 
