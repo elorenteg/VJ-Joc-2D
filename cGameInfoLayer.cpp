@@ -107,12 +107,13 @@ void cGameInfoLayer::Draw() {
 	strcat(high_score_text, high_score_value);
 	Font.drawText(GAME_WIDTH - 140.0f, GAME_HEIGHT - 22.0f, GAMEINFO_DEPTH, 120.0f, 20.0f, high_score_text);
 
+	// Vida del Boss
 	if (showBossLife) {
 		int w = 150;
-		float xo = GAME_WIDTH - w - 25;
+		float xo = GAME_WIDTH - w - 7;
 		int max_life = 30 / (TOTAL_LEVELS - current_level + 1);
 		float xm = (double(current_life_boss) / max_life)*w;
-		float yo = 5;
+		float yo = 7;
 
 		glColor3f(0.0f, 1.0f, 0.0f);
 		drawRectangle(xo, yo, GAMEINFO_DEPTH, xm, 18);

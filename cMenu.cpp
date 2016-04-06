@@ -314,9 +314,9 @@ void cMenu::showMenu() {
 	Font.drawText(GAME_WIDTH / 2.0f - 100.0f, GAME_HEIGHT / 2.0f - 70.0f, MSS_DEPTH, 200.0f, 50.0f, OPTIONS_TEXT);
 
 	Font.drawText(GAME_WIDTH / 2.0f - 105.0f, GAME_HEIGHT / 2.0f - 170.0f, MSS_DEPTH, 200.0f, 50.0f, CREDITS_TEXT);
-	
+
 	Font.drawText(GAME_WIDTH - 200.0f, 20.0f, MSS_DEPTH, 175.0f, 20.0f, EXIT_HOW_TEXT);
-	
+
 	glPopMatrix();
 
 	if (actionSelected == gameAction)
@@ -384,6 +384,15 @@ void cMenu::showInstrucctions() {
 	glColor3f(0.8f, 0.8f, 0.85f);
 	drawRectangle(50.0f, 50.0f, MSS_DEPTH - 2, GAME_WIDTH - 100.0f, GAME_HEIGHT - 180.0f);
 
+	glColor3f(0.0f, 0.0f, 0.0f);
+	char current_page_text[32];
+	sprintf(current_page_text, "%d", page);
+	Font.drawText(GAME_WIDTH - 125.0f, 55.0f, MSS_DEPTH - 1, 10.0f, 20.0f, current_page_text);
+	Font.drawText(GAME_WIDTH - 100.0f, 55.0f, MSS_DEPTH - 1, 10.0f, 20.0f, HOW_TO_DIVISION);
+	char max_page_text[32];
+	sprintf(max_page_text, "%d", MAX_PAGES);
+	Font.drawText(GAME_WIDTH - 75.0f, 55.0f, MSS_DEPTH - 1, 10.0f, 20.0f, max_page_text);
+
 	glPopMatrix();
 }
 
@@ -402,18 +411,18 @@ void cMenu::showOptions() {
 	int high_score = DataManager.readMaxScore();
 	sprintf(high_score_value, "%d", high_score);
 	strcat(high_score_text, high_score_value);
-	Font.drawText(75.0f, GAME_HEIGHT - 210.0f, MSS_DEPTH - 1, 200.0f, 20.0f, high_score_text);
+	Font.drawText(75.0f, GAME_HEIGHT - 210.0f, MSS_DEPTH - 1, 250.0f, 20.0f, high_score_text);
 
 	//Fons
-	glColor3f(0.0f, 0.8f, 0.85f);
+	glColor3f(0.8f, 0.8f, 0.85f);
 	drawRectangle(50.0f, GAME_HEIGHT - 250.0f, MSS_DEPTH - 2, GAME_WIDTH - 100.0f, 100.0f);
 
 	//Seleccio personatge
 	glColor3f(0.0f, 0.0f, 0.0f);
-	Font.drawText(75.0f, GAME_HEIGHT - 375.0f, MSS_DEPTH - 1, 250.0f, 20.0f, OPTIONS_SELECCIO_PLAYER);
+	Font.drawText(75.0f, GAME_HEIGHT - 373.0f, MSS_DEPTH - 1, 250.0f, 20.0f, OPTIONS_SELECCIO_PLAYER);
 
 	Font.drawText(GAME_WIDTH / 2.0f + 5.0f, GAME_HEIGHT - 385.0f, MSS_DEPTH - 1, 30.0f, 50.0f, "<");
-	Font.drawText(GAME_WIDTH / 2.0f + 105.0f, GAME_HEIGHT - 385.0f, MSS_DEPTH - 1, 30.0f, 50.0f, ">");
+	Font.drawText(GAME_WIDTH / 2.0f + 115.0f, GAME_HEIGHT - 385.0f, MSS_DEPTH - 1, 30.0f, 50.0f, ">");
 	glColor3f(1.0f, 1.0f, 1.0f);
 	Player.SetPosition(GAME_WIDTH / 2.0f + 40.0f, GAME_HEIGHT - 380.0f);
 	setPlayerSize();
