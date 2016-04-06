@@ -110,8 +110,10 @@ bool cBoss::LogicProjectiles(Matrix& map, int level, int total_levels) {
 		OutputDebugStringA("SHOOT\n");
 		freq_shoots = maxFreqProjectiles(level, total_levels);
 
-		Shoot(map);
-		bossShoot = true;
+		if (canShoot()) {
+			Shoot(map);
+			bossShoot = true;
+		}
 		
 		--time_rafaga;
 		if (time_rafaga <= 0) {
