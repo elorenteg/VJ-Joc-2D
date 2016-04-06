@@ -61,6 +61,7 @@ public:
 	void SetMapValue(Matrix& map, int tile_x, int tile_y, int value);
 	void SetProjectiles(vector<Projectile>& projs, int dir);
 	void SetWidthHeightProjectiles(int w, int h);
+	void SetIsDead(bool dead);
 
 	float GetX();
 	float GetY();
@@ -68,6 +69,7 @@ public:
 	int GetWidth();
 	int GetHeight();
 	vector<Projectile> GetProjectiles(int dir);
+	bool GetIsDead();
 
 	void MoveRight(Matrix& map);
 	void MoveLeft(Matrix& map);
@@ -101,6 +103,8 @@ protected:
 	float speed_proj;
 	vector<Projectile> projsLeft;
 	vector<Projectile> projsRight;
+	bool isDead;
+	int freq_shoots;
 
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
 	void DrawProjectiles(int tex_id, vector<Projectile>& projectiles, int dir);
@@ -120,6 +124,7 @@ protected:
 	virtual Projectile InitShoot();
 	virtual void MoveProjectiles(Matrix& map);
 	virtual int maxFreqProjectiles(int level, int total_levels);
+	bool frequencyShoot(Matrix& map, int level, int total_levels);
 
 	bool canShoot();
 	virtual bool canMove(float step);
