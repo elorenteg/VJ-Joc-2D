@@ -152,10 +152,12 @@ bool cMenu::Process()
 			}
 		}
 		else if (keys[GLUT_KEY_UP]) {
-			moveAction(-1);
+			if (internalState != HOW_TO)
+				moveAction(-1);
 		}
 		else if (keys[GLUT_KEY_DOWN]) {
-			moveAction(1);
+			if (internalState != HOW_TO)
+				moveAction(1);
 		}
 		else if (keys[GLUT_KEY_LEFT]) {
 			if (internalState == HOW_TO) {
@@ -173,7 +175,8 @@ bool cMenu::Process()
 		}
 		else if (keys[13]) { //Enter
 			keys[13] = false;
-			executeAction();
+			if (internalState != HOW_TO)
+				executeAction();
 		}
 
 		if (actionSelected == gameAction) {
