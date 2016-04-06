@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include <windows.h>
 
-#define SCENE_WIDTH		90
+#define SCENE_WIDTH		260
 #define SCENE_HEIGHT	24
 
 #define FILENAME		"level"
