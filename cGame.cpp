@@ -1,5 +1,7 @@
 #include "cGame.h"
 
+bool firstRender;
+
 string concat_path(string folder, string file) {
 	string path = folder + "/" + file;
 	return path;
@@ -182,6 +184,7 @@ bool cGame::loadLevel(int level) {
 	cameraXScene = 0.0f;
 	playerLostLife = false;
 	bossDead = false;
+	firstRender = true;
 
 	MountainLayer.restartLevel();
 	SkyLayer.restartLevel();
@@ -283,7 +286,12 @@ bool cGame::Loop() {
 	res = Process();
 	if (res) Render();
 
-	next_game_tick = GetTickCount() + SKIP_TICKS;
+	if (firstRender) {
+		next_game_tick = GetTickCount();
+		firstRender = false;
+	}
+
+	next_game_tick += SKIP_TICKS;
 	sleep_time = next_game_tick - GetTickCount();
 	if (sleep_time >= 0) {
 		Sleep(sleep_time);
