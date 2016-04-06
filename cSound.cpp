@@ -45,11 +45,13 @@ void cSound::PlayCustomSound(int sound) {
 		system->playSound(FMOD_CHANNEL_FREE, boss_dead, false, &channel_deads);
 	}
 	else if (sound == SOUND_BOSS_SHOOT) {
-		system->playSound(FMOD_CHANNEL_FREE, boss_dead, false, &channel_shoots);
+		system->playSound(FMOD_CHANNEL_FREE, boss_shoot, false, &channel_shoots);
 	}
 }
 
-// TODO
-void cSound::StopCustomSound() {
-	//PlaySound(NULL, 0, 0);
+void cSound::StopCustomChannel(FMOD::Channel* channel){
+	bool isPlayingSomeSound = false;
+	if (channel->isPlaying(&isPlayingSomeSound) == FMOD_OK && isPlayingSomeSound) {
+		channel->stop();
+	}
 }

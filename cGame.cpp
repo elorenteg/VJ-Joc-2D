@@ -402,7 +402,10 @@ bool cGame::Process() {
 
 		playerDead = playerDead || checkPlayerPosition();
 
-		checkCollisionsPlayer();
+		bool enemyDead = checkPlayerProjectiles();
+		if (enemyDead) {
+			Sound.PlayCustomSound(SOUND_ENEMY_DEAD);
+		}
 
 		Scene.SetMap(map);
 
@@ -722,9 +725,9 @@ bool cGame::isPositionInsideY(float x, float y, float w, float xPlayer, float yP
 	return false;
 }
 
-void cGame::checkCollisionsPlayer() {
+bool cGame::checkPlayerProjectiles() {
 	vector<Projectile> projsRight = Player.GetProjectiles(DIR_RIGHT);
-
+	bool hitSomeEnemies = false;
 	for (int p = 0; p < projsRight.size(); ++p) {
 		int tx = projsRight[p].x / TILE_SIZE;
 		int ty = projsRight[p].y / TILE_SIZE;
@@ -741,6 +744,7 @@ void cGame::checkCollisionsPlayer() {
 
 					if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
 						found = true;
+						hitSomeEnemies = true;
 						//Enemies.erase(Enemies.begin() + v);
 						Enemies[v]->SetIsDead(true);
 						projsRight.erase(projsRight.begin() + p);
@@ -752,8 +756,9 @@ void cGame::checkCollisionsPlayer() {
 			}
 		}
 	}
-
+	
 	Player.SetProjectiles(projsRight, DIR_RIGHT);
+	return hitSomeEnemies;
 }
 
 bool cGame::checkCollisionsEnemies() {

@@ -37,7 +37,7 @@ public:
 	bool playingMainSound;
 
 	void PlayCustomSound(int sound);
-	void StopCustomSound();
+	void StopCustomChannel(FMOD::Channel* channel);
 
 private:
 
