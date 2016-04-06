@@ -356,6 +356,7 @@ bool cGame::Process() {
 
 		if (keys[' ']) {
 			Player.Shoot(Scene.GetMap());
+			Sound.PlayCustomSound(SOUND_CAT_SHOOT);
 			keys[' '] = false;
 		}
 
@@ -392,13 +393,19 @@ bool cGame::Process() {
 
 		Boss->Logic(map, scroll);
 		bool bossHasShoot = Boss->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
+		if (bossHasShoot) {
+			Sound.PlayCustomSound(SOUND_BOSS_SHOOT);
+		}
 
-		Scene.SetMap(map);
-
-		setBossDead();
+		bool bossDead = checkBossDead();
+		if (bossDead) {
+			Sound.PlayCustomSound(SOUND_BOSS_DEAD);
+		}
 
 		checkCollisionsPlayer();
 		//playerDead = playerDead || checkCollisionsEnemies();
+
+		Scene.SetMap(map);
 
 		if (playerDead) {
 			startSound(SOUND_CAT_DYING);
@@ -628,7 +635,8 @@ void cGame::RestartCameraScene() {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void cGame::setBossDead() {
+bool cGame::checkBossDead() {
+	bossDead = false;
 	vector<Projectile> projsRight = Player.GetProjectiles(DIR_RIGHT);
 
 	for (int p = 0; p < projsRight.size(); ++p) {
@@ -651,6 +659,7 @@ void cGame::setBossDead() {
 	}
 
 	Player.SetProjectiles(projsRight, DIR_RIGHT);
+	return bossDead;
 }
 
 bool cGame::checkPlayerPosition() {

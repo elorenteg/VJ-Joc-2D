@@ -88,7 +88,7 @@ private:
 	bool checkPlayerPosition();
 	bool isPositionInside(float x, float y, float xPlayer, float yPlayer, int wPlayer, int hPlayer);
 	void checkCollisionsPlayer();
-	void setBossDead();
+	bool checkBossDead();
 	bool checkCollisionsEnemies();
 	bool checkProjectilesEnemy(vector<Projectile>& projs);
 	bool checkPositionWithEnemy(float enX, float enY, int enW, int enH);
