@@ -14,6 +14,8 @@
 #define RANG_RAFAGA	30
 #define PROJ_SPEED	6
 
+#define RANDOM_PONDERATION rand() % 25 + (-20)
+
 class cBoss : public cBicho
 {
 public:

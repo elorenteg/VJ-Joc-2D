@@ -10,7 +10,8 @@
 #define TILES_MOVE	4
 #define MAX_MOVES	2
 
-#define FREQ_SHOOTS 100
+#define RANDOM_PONDERATION rand() % 10 + (-15)
+#define FREQ_SHOOTS 100 + RANDOM_PONDERATION
 
 class cEnemyHorizontal : public cBicho
 {

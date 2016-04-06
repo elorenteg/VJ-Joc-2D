@@ -107,8 +107,7 @@ bool cBoss::LogicProjectiles(Matrix& map, int level, int total_levels) {
 
 	--freq_shoots;
 	if (freq_shoots <= 0) {
-		OutputDebugStringA("SHOOT\n");
-		freq_shoots = maxFreqProjectiles(level, total_levels);
+		freq_shoots = maxFreqProjectiles(level, total_levels) + RANDOM_PONDERATION; //Mas cercano a cero mas rapido
 
 		if (canShoot()) {
 			Shoot(map);
@@ -160,10 +159,5 @@ int cBoss::maxFreqProjectiles(int level, int total_levels) {
 	freq = freq / 3;
 	int freq_s = FREQ_SHOOTS - freq;
 
-	if (xWindow <= x && x + w <= xWindow + GAME_WIDTH) {
-		char msgbuf[128];
-		sprintf(msgbuf, "FREQ - %f -- %d\n", freq, freq_s);
-		OutputDebugStringA(msgbuf);
-	}
 	return freq_s;
 }
