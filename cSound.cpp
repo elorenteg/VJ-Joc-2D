@@ -11,6 +11,7 @@ cSound::cSound(void)
 	system->createSound("Sound/nyan_cat_base_8bit.mp3", FMOD_HARDWARE, 0, &nyan_base_8bit);
 	system->createSound("Sound/cat_shoot.wav", FMOD_HARDWARE, 0, &cat_shoot);
 	system->createSound("Sound/cat_dying.wav", FMOD_HARDWARE, 0, &cat_dying);
+	system->createSound("Sound/enemy_shoot.wav", FMOD_HARDWARE, 0, &enemy_shoot);
 	system->createSound("Sound/enemy_dead.wav", FMOD_HARDWARE, 0, &enemy_dead);
 	system->createSound("Sound/boss_shoot.wav", FMOD_HARDWARE, 0, &boss_shoot);
 	system->createSound("Sound/boss_dead.wav", FMOD_HARDWARE, 0, &boss_dead);
@@ -45,6 +46,9 @@ void cSound::PlayCustomSound(int sound) {
 	}
 	else if (sound == SOUND_CAT_DYING) {
 		system->playSound(FMOD_CHANNEL_FREE, cat_dying, false, &channel_deads);
+	}
+	else if (sound == SOUND_ENEMY_SHOOT) {
+		system->playSound(FMOD_CHANNEL_FREE, enemy_shoot, false, &channel_shoots);
 	}
 	else if (sound == SOUND_ENEMY_DEAD) {
 		system->playSound(FMOD_CHANNEL_FREE, enemy_dead, false, &channel_deads);

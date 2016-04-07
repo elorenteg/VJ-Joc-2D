@@ -1,6 +1,6 @@
 #include "cGame.h"
 
-bool firstRender;
+bool initializedCounter;
 
 string concat_path(string folder, string file) {
 	string path = folder + "/" + file;
@@ -184,7 +184,7 @@ bool cGame::loadLevel(int level) {
 	cameraXScene = 0.0f;
 	playerLostLife = false;
 	bossDead = false;
-	firstRender = true;
+	initializedCounter = true;
 
 	MountainLayer.restartLevel();
 	SkyLayer.restartLevel();
@@ -286,9 +286,9 @@ bool cGame::Loop() {
 	res = Process();
 	if (res) Render();
 
-	if (firstRender) {
+	if (initializedCounter) {
 		next_game_tick = GetTickCount();
-		firstRender = false;
+		initializedCounter = false;
 	}
 
 	next_game_tick += SKIP_TICKS;
@@ -396,10 +396,13 @@ bool cGame::Process() {
 		Matrix map = Scene.GetMap();
 		Player.LogicProjectiles(map);
 
-		bool enemyHasShoot;
+		bool enemyHasShoot = false;
 		for (int i = 0; i < Enemies.size(); ++i) {
 			Enemies[i]->Logic(map, scroll);
-			enemyHasShoot = Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
+			enemyHasShoot = Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS) || enemyHasShoot;
+		}
+		if (enemyHasShoot) {
+			//Sound.PlayCustomSound(SOUND_ENEMY_SHOOT);
 		}
 
 		Boss->Logic(map, scroll);
@@ -569,6 +572,10 @@ bool cGame::isBossInScene() {
 	return cameraXScene <= Boss->GetX() && (Boss->GetX() - cameraXScene <= GAME_WIDTH);
 }
 
+void cGame::reinitializeRenderCounter() {
+	initializedCounter = true;
+}
+
 void cGame::startSound(int sound) {
 	Sound.PlayCustomSound(sound);
 }
@@ -709,7 +716,6 @@ bool cGame::checkPlayerPosition() {
 
 	return collides;
 }
-
 
 bool cGame::checkPositionWithEnemy(float enX, float enY, int enW, int enH) {
 	float xPlayer = Player.GetX();
