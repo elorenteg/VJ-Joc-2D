@@ -172,8 +172,6 @@ void cGame::startGame() {
 	gameEnd = false;
 	GameInfoLayer.Init();
 
-	//Reiniciar puntuacion de Player
-
 	loadLevel(currentLevel);
 }
 
