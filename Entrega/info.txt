@@ -1,0 +1,58 @@
+VJ - Joc 2D
+
+INTEGRANTS
+* Ester Lorente García
+* Marc Vila Gómez
+
+####
+
+FUNCIONALITATS IMPLEMENTADES
+
+* GUI composta de 2 marges: superior i inferior.
+*** superior: mostra el nivell, la vida (numero de cors), puntuació del jugador a la 
+    partida i màxima puntuació de totes les partides
+*** inferior: mostra un mini-mapa que recorre l'escena amb el jugador i una barra de 
+    vida del boss del nivell
+	
+* Estructura bàsica (Menu):
+*** Jugar: per inicial la partida
+*** Instruccions: instruccions simples i introducció als diferents personatges
+*** Opcions: màxima puntuació i selecció del personatge del jugador
+*** Crèdits: Informació de l'equip
+
+* Só:
+*** Música de fons
+*** Só per quan mor el jugador
+*** Sons per quan moren els enemics i els bosses
+*** Sons per quan disparen el jugador i els bosses (amb els enemics, s'escoltaven massa sons)
+
+FUNCIONALITATS IMPLEMENTADES (Part Creativa)
+
+* Selecció del personatge del jugador
+*** Deixa escollir entre 5 skins nyancats diferents
+
+* Persistència de dades:
+*** Guarda la selecció del personatge que vol l'usuari
+*** Guarda la màxima puntuació del joc
+
+####
+
+INSTRUCCIONS
+* El jugador de l'usuari és el nyancat (a les opcions es pot personalitzar el personatge)
+* Amb les fletxes es pot fer moure el jugador.
+* Hi ha 3 nivells on a cada nivell hi hauràn diferents enemics i bosses finals.
+* Amb l'espai es pot disparar projectiles cap els enemics (ells també):
+*** Si colpegen els enemics o els bosses, es moren
+*** Si colpegen altres projectiles, s'eliminen entre ells.
+*** Si colpegen l'escenari, el projectil desapareix.
+* El jugador té 3 vides. Quan es mor, comença de nou el nivell al que estava.
+* Els enemics es maten d'1 sol cop.
+* Els bosses són més difícils de matar i requereixen de molts projectils.
+*** A més nivell, el boss té més vida (10-15-30 de vida)
+*** Quan s'estigui davant del boss, s'indicarà amb una barra la vida que li queda.
+* Quan s'elimini el boss d'un nivell, es passarà al següent (amb un total de 3).
+* Al completar el joc o al morir el jugador, s'indicarà la puntuació final.
+*** Les puntuacions es calculen amb:
+****** Encert amb enemic: +1
+****** Encert amb boss:
+****** Bonificació per vides al final del joc: puntuació * num_vides
