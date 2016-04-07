@@ -32,21 +32,21 @@
 #define FRAME_5			5
 #define FRAME_6			6
 
-typedef struct Projectile {
+typedef struct {
 	float x;
 	float y;
 	int state_color;
 	int time_color;
 	int time_stamp;
 	int type;
-};
+} Projectile;
 
-typedef struct TexCoords {
+typedef struct {
 	float xo;
 	float xf;
 	float yo;
 	float yf;
-};
+} TexCoords;
 
 class cRect
 {

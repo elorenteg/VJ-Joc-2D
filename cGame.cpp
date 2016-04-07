@@ -30,7 +30,7 @@ bool cGame::Init() {
 	char path[64];
 
 	//Background initialization
-	strcpy(path, concat_path(IMAGES_FOLDER, "fondo_cielo4.png").c_str());
+	strcpy(path, concat_path(IMAGES_FOLDER, "fondo_cielo.png").c_str());
 	res = Data.LoadImage(IMG_BACKGROUND, path, GL_RGBA);
 	if (!res) return false;
 
@@ -124,7 +124,7 @@ bool cGame::Init() {
 	if (!res) return false;
 
 	//Rainbow initialization
-	strcpy(path, concat_path(IMAGES_FOLDER, "rainbow2.png").c_str());
+	strcpy(path, concat_path(IMAGES_FOLDER, "rainbow.png").c_str());
 	res = Data.LoadImage(IMG_RAINBOW, path, GL_RGBA);
 	if (!res) return false;
 
@@ -154,7 +154,7 @@ bool cGame::Init() {
 	if (!res) return false;
 
 	//Bubbles initialization
-	strcpy(path, concat_path(IMAGES_FOLDER, "burbujas_2.png").c_str());
+	strcpy(path, concat_path(IMAGES_FOLDER, "burbujas.png").c_str());
 	res = Data.LoadImage(IMG_BURBUJA, path, GL_RGBA);
 	if (!res) return false;
 

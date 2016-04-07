@@ -8,10 +8,10 @@
 
 #define SIZE_RAINBOW	3
 
-typedef struct Position {
+typedef struct {
 	float x;
 	float y;
-};
+} Position;
 
 class cPlayer : public cBicho
 {
