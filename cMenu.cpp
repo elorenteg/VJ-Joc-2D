@@ -328,25 +328,25 @@ void cMenu::showMenu() {
 	glPopMatrix();
 
 	if (actionSelected == gameAction)
-		glColor3f(0.9f, 0.4f, 0.4f);
+		glColor3f(0.9f, 0.5f, 0.5f);
 	else
 		glColor3f(0.7f, 0.65f, 0.65f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 115.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
 
 	if (actionSelected == howtoAction)
-		glColor3f(0.0f, 0.4f, 0.8f);
+		glColor3f(0.2f, 0.9f, 0.4f);
 	else
 		glColor3f(0.7f, 0.65f, 0.65f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f + 15.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
 
 	if (actionSelected == optionsAction)
-		glColor3f(0.95f, 0.6f, 0.5f);
+		glColor3f(0.55f, 0.55f, 0.9f);
 	else
 		glColor3f(0.7f, 0.65f, 0.65f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 85.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
 
 	if (actionSelected == creditsAction)
-		glColor3f(0.6f, 0.35f, 0.80f);
+		glColor3f(0.95f, 0.95f, 0.6f);
 	else
 		glColor3f(0.7f, 0.65f, 0.65f);
 	drawRectangle(GAME_WIDTH / 2.0f - 150.0f, GAME_HEIGHT / 2.0f - 185.0f, MSS_DEPTH - 1, 300.0f, 75.0f);
