@@ -1,7 +1,22 @@
 #include "cMenu.h"
 #include "cPlayer.h"
+#include "cEnemyHorizontal.h"
+#include "cBoss.h"
 
 cPlayer Player;
+cPlayer Player_1;
+cPlayer Player_2;
+cPlayer Player_3;
+cPlayer Player_4;
+cPlayer Player_5;
+
+cEnemyHorizontal* Enemy_1 = new cEnemyHorizontal();
+cEnemyHorizontal* Enemy_2 = new cEnemyHorizontal();
+cEnemyHorizontal* Enemy_3 = new cEnemyHorizontal();
+
+cBoss* Boss_1 = new cBoss();
+cBoss* Boss_2 = new cBoss();
+cBoss* Boss_3 = new cBoss();
 
 cMenu::cMenu(void)
 {
@@ -71,6 +86,48 @@ bool cMenu::Init()
 	strcat(player_path_5, "/");
 	strcat(player_path_5, "nyancat_player_picachu.png");
 	res = Data.LoadImage(IMG_PIKACHU, player_path_5, GL_RGBA);
+	if (!res) return false;
+
+	char enemy_path_1[64];
+	strcpy(enemy_path_1, IMAGES_FOLDER);
+	strcat(enemy_path_1, "/");
+	strcat(enemy_path_1, "nyancat_enemy_ninja.png");
+	res = Data.LoadImage(IMG_NINJA, enemy_path_1, GL_RGBA);
+	if (!res) return false;
+
+	char enemy_path_2[64];
+	strcpy(enemy_path_2, IMAGES_FOLDER);
+	strcat(enemy_path_2, "/");
+	strcat(enemy_path_2, "nyancat_enemy_pirate.png");
+	res = Data.LoadImage(IMG_PIRATE, enemy_path_2, GL_RGBA);
+	if (!res) return false;
+
+	char enemy_path_3[64];
+	strcpy(enemy_path_3, IMAGES_FOLDER);
+	strcat(enemy_path_3, "/");
+	strcat(enemy_path_3, "nyancat_enemy_zombie.png");
+	res = Data.LoadImage(IMG_ZOMBIE, enemy_path_3, GL_RGBA);
+	if (!res) return false;
+
+	char boss_path_1[64];
+	strcpy(boss_path_1, IMAGES_FOLDER);
+	strcat(boss_path_1, "/");
+	strcat(boss_path_1, "nyancat_boss_tac.png");
+	res = Data.LoadImage(IMG_TAC, boss_path_1, GL_RGBA);
+	if (!res) return false;
+
+	char boss_path_2[64];
+	strcpy(boss_path_2, IMAGES_FOLDER);
+	strcat(boss_path_2, "/");
+	strcat(boss_path_2, "nyancat_boss_mummy.png");
+	res = Data.LoadImage(IMG_MUMMY, boss_path_2, GL_RGBA);
+	if (!res) return false;
+
+	char boss_path_3[64];
+	strcpy(boss_path_3, IMAGES_FOLDER);
+	strcat(boss_path_3, "/");
+	strcat(boss_path_3, "nyancat_boss_groudon.png");
+	res = Data.LoadImage(IMG_GROUDON, boss_path_3, GL_RGBA);
 	if (!res) return false;
 
 	char keyboard_arrow_path[64];
@@ -165,7 +222,10 @@ bool cMenu::Process()
 		}
 		else if (keys[GLUT_KEY_LEFT]) {
 			if (internalState == HOW_TO) {
-				if (page == PAGE_2) {
+				if (page == PAGE_3) {
+					page = PAGE_2;
+				}
+				else if (page == PAGE_2) {
 					page = PAGE_1;
 				}
 			}
@@ -174,6 +234,9 @@ bool cMenu::Process()
 			if (internalState == HOW_TO) {
 				if (page == PAGE_1) {
 					page = PAGE_2;
+				}
+				else if (page == PAGE_2) {
+					page = PAGE_3;
 				}
 			}
 		}
@@ -362,31 +425,111 @@ void cMenu::showInstrucctions() {
 	if (page == PAGE_1) {
 		//Explicacio 1
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(65.0f, GAME_HEIGHT - 165.0f, MSS_DEPTH - 1, 350.0f, 20.0f, HOW_TO_PLAYER_TEXT_1_1);
+		Font.drawText(65.0f, GAME_HEIGHT - 175.0f, MSS_DEPTH - 1, 450.0f, 20.0f, HOW_TO_PLAYER_TEXT_1_1);
 
-		//Nyan Image
+		// Player 1
 		glColor3f(1.0f, 1.0f, 1.0f);
-		Player.SetPosition(GAME_WIDTH / 2.0f - 40.0f, GAME_HEIGHT - 235.0f);
-		setPlayerSize();
-		Player.SetZ(MSS_DEPTH - 1);
-		Player.Draw(Data.GetID(Data.GetIMGPlayer(currentPlayerIDPos)));
+		Player_1.SetPosition(110.0f, GAME_HEIGHT - 250.0f);
+		Player_1.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+		Player_1.SetZ(MSS_DEPTH - 1);
+		Player_1.Draw(Data.GetID(IMG_WINGS));
 
-		//Explicacio 2
+		// Player 2
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Player_2.SetPosition(200.0f, GAME_HEIGHT - 250.0f);
+		Player_2.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+		Player_2.SetZ(MSS_DEPTH - 1);
+		Player_2.Draw(Data.GetID(IMG_GAME_BOY));
+
+		// Player 3
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Player_3.SetPosition(280.0f, GAME_HEIGHT - 250.0f);
+		Player_3.SetWidthHeight(4 * TILE_SIZE, 3 * TILE_SIZE);
+		Player_3.SetZ(MSS_DEPTH - 1);
+		Player_3.Draw(Data.GetID(IMG_MEXICAN));
+
+		// Player 4
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Player_4.SetPosition(380.0f, GAME_HEIGHT - 250.0f);
+		Player_4.SetWidthHeight(3 * TILE_SIZE, 3 * TILE_SIZE);
+		Player_4.SetZ(MSS_DEPTH - 1);
+		Player_4.Draw(Data.GetID(IMG_OKTOBER));
+
+		// Player 5
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Player_5.SetPosition(460.0f, GAME_HEIGHT - 250.0f);
+		Player_5.SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+		Player_5.SetZ(MSS_DEPTH - 1);
+		Player_5.Draw(Data.GetID(IMG_PIKACHU));
+
+		// Enemics
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(65.0f, GAME_HEIGHT - 300.0f, MSS_DEPTH - 1, 500.0f, 20.0f, HOW_TO_PLAYER_TEXT_1_2);
+		Font.drawText(65.0f, GAME_HEIGHT - 320.0f, MSS_DEPTH - 1, 450.0f, 20.0f, HOW_TO_PLAYER_TEXT_1_2);
 
-		//Keyboard Image
+		// Enemy 1
 		glColor3f(1.0f, 1.0f, 1.0f);
-		drawImage(Data.GetID(IMG_KEYBOARD), GAME_WIDTH / 2.0f - 105.0f, 60.0f, MSS_DEPTH - 1, 200.0f, 120.0f);
+		Enemy_1->SetPosition(170.0f, GAME_HEIGHT - 395.0f);
+		Enemy_1->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+		Enemy_1->SetZ(MSS_DEPTH - 1);
+		Enemy_1->Draw(Data.GetID(IMG_NINJA));
+
+		// Enemy 2
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Enemy_2->SetPosition(260.0f, GAME_HEIGHT - 395.0f);
+		Enemy_2->SetWidthHeight(5 * TILE_SIZE, BICHO_HEIGHT);
+		Enemy_2->SetZ(MSS_DEPTH - 1);
+		Enemy_2->Draw(Data.GetID(IMG_PIRATE));
+
+		// Enemy 3
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Enemy_3->SetPosition(400.0f, GAME_HEIGHT - 395.0f);
+		Enemy_3->SetWidthHeight(BICHO_WIDTH, BICHO_HEIGHT);
+		Enemy_3->SetZ(MSS_DEPTH - 1);
+		Enemy_3->Draw(Data.GetID(IMG_ZOMBIE));
 	}
 	else if (page == 2) {
 		//Explicacio 1
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(65.0f, GAME_HEIGHT - 165.0f, MSS_DEPTH - 1, 350.0f, 20.0f, HOW_TO_PLAYER_TEXT_2_1);
+		Font.drawText(65.0f, GAME_HEIGHT - 175.0f, MSS_DEPTH - 1, 500.0f, 20.0f, HOW_TO_PLAYER_TEXT_2_1);
+
+		// Boss 1
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Boss_1->SetPosition(100.0f, GAME_HEIGHT - 295.0f);
+		Boss_1->SetWidthHeight(2 * BICHO_WIDTH, 2 * BICHO_HEIGHT);
+		Boss_1->SetZ(MSS_DEPTH - 1);
+		Boss_1->Draw(Data.GetID(IMG_TAC));
+
+		// Boss 2
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Boss_2->SetPosition(265.0f, GAME_HEIGHT - 295.0f);
+		Boss_2->SetWidthHeight(2 * BICHO_WIDTH, 2 * BICHO_HEIGHT);
+		Boss_2->SetZ(MSS_DEPTH - 1);
+		Boss_2->Draw(Data.GetID(IMG_MUMMY));
+
+		// Boss 3
+		glColor3f(1.0f, 1.0f, 1.0f);
+		Boss_3->SetPosition(425.0f, GAME_HEIGHT - 295.0f);
+		Boss_3->SetWidthHeight(2 * BICHO_WIDTH, 2 * BICHO_HEIGHT);
+		Boss_3->SetZ(MSS_DEPTH - 1);
+		Boss_3->Draw(Data.GetID(IMG_GROUDON));
+
+	}
+	else if (page == 3) {
+		//Explicacio 1
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(65.0f, GAME_HEIGHT - 165.0f, MSS_DEPTH - 1, 300.0f, 20.0f, HOW_TO_PLAYER_TEXT_3_1);
 
 		//Explicacio 2
 		glColor3f(0.0f, 0.0f, 0.0f);
-		Font.drawText(64.0f, GAME_HEIGHT - 200.0f, MSS_DEPTH - 1, 350.0f, 20.0f, HOW_TO_PLAYER_TEXT_2_2);
+		Font.drawText(64.0f, GAME_HEIGHT - 200.0f, MSS_DEPTH - 1, 300.0f, 20.0f, HOW_TO_PLAYER_TEXT_3_2);
+
+		//Explicacio 3
+		glColor3f(0.0f, 0.0f, 0.0f);
+		Font.drawText(65.0f, GAME_HEIGHT - 300.0f, MSS_DEPTH - 1, 400.0f, 20.0f, HOW_TO_PLAYER_TEXT_3_3);
+
+		//Keyboard Image
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawImage(Data.GetID(IMG_KEYBOARD), GAME_WIDTH / 2.0f - 105.0f, 60.0f, MSS_DEPTH - 1, 200.0f, 120.0f);
 	}
 	//Fons
 	glColor3f(0.8f, 0.8f, 0.85f);
