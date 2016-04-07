@@ -95,6 +95,10 @@ private:
 	bool checkProjectilesEnemy(vector<Projectile>& projs);
 	bool checkPositionWithEnemy(float enX, float enY, int enW, int enH);
 
+	bool checkProjectileCollisions();
+	bool checkProjectileCollisions(int dir);
+	vector<Projectile> collisionProjectiles(vector<Projectile>& projP, int dir, vector<Projectile>& projE, int wE, int hE);
+
 	void startSound(int sound);
 	void renderMessage(int message);
 

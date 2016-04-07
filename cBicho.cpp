@@ -105,6 +105,14 @@ bool cBicho::GetIsDead() {
 	return isDead;
 }
 
+int cBicho::GetWProj() {
+	return w_proj;
+}
+
+int cBicho::GetHProj() {
+	return h_proj;
+}
+
 TexCoords cBicho::TextureCoordinates() {
 	float xo, xf;
 

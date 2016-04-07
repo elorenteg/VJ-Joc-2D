@@ -424,6 +424,8 @@ bool cGame::Process() {
 			Sound.PlayCustomSound(SOUND_BOSS_DEAD);
 		}
 
+		bool projCollisions = checkProjectileCollisions();
+
 		if (playerDead) {
 			startSound(SOUND_CAT_DYING);
 			GameInfoLayer.SetCurrentLife(GameInfoLayer.GetCurrentLife() - 1);
@@ -936,4 +938,69 @@ void cGame::DrawRect(float x, float y, float z, int w, int h, float xmin, float 
 		glVertex3i(max(x, xmin), y + h, z);
 		glEnd();
 	}
+}
+
+bool cGame::checkProjectileCollisions() {
+	bool collides = false;
+
+	collides = collides || checkProjectileCollisions(DIR_LEFT);
+	collides = collides || checkProjectileCollisions(DIR_RIGHT);
+
+	return collides;
+}
+
+bool cGame::checkProjectileCollisions(int dir) {
+	bool collides = false;
+	vector<Projectile> projP = Player.GetProjectiles(dir);
+
+	for (int i = 0; i < Enemies.size(); ++i) {
+		vector<Projectile> projE = Enemies[i]->GetProjectiles(-dir);
+		int wE = Enemies[i]->GetWProj();
+		int hE = Enemies[i]->GetHProj();
+		vector<Projectile> projE2 = collisionProjectiles(projP, dir, projE, wE, hE);
+		Enemies[i]->SetProjectiles(projE2,-dir);
+		if (projE2.size() != projE.size()) collides = true;
+	}
+
+	vector<Projectile> projB = Boss->GetProjectiles(-dir);
+	int wB = Boss->GetWProj();
+	int hB = Boss->GetHProj();
+	vector<Projectile> projB2 = collisionProjectiles(projP, dir, projB, wB, hB);
+	Boss->SetProjectiles(projB2, -dir);
+	if (projB2.size() != projB.size()) collides = true;
+
+	return collides;
+}
+
+vector<Projectile> cGame::collisionProjectiles(vector<Projectile>& projP, int dir, vector<Projectile>& projE, int wE, int hE) {
+	bool collides = false;
+	int wP = Player.GetWProj();
+	int hP = Player.GetHProj();
+
+	for (int i = 0; i < projP.size(); ++i) {
+		float xP = projP[i].x;
+		float yP = projP[i].y;
+
+		bool collision = false;
+		for (int j = 0; j < projE.size() && !collision; ++j) {
+			float xE = projE[j].x;
+			float yE = projE[j].y;
+
+			bool notCollision = false;
+			if (yE + hE < yP || yP + hP < yE) notCollision = true;
+			if (xE + wE < xP || xP + wP < xE) notCollision = true;
+
+			collision = !notCollision;
+
+			if (collision) {
+				OutputDebugStringA("Collision!\n");
+				projP.erase(projP.begin() + i);
+				projE.erase(projE.begin() + j);
+			}
+		}
+	}
+
+	Player.SetProjectiles(projP, dir);
+
+	return projE;
 }

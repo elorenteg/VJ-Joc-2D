@@ -80,6 +80,8 @@ public:
 	int GetHeight();
 	vector<Projectile> GetProjectiles(int dir);
 	bool GetIsDead();
+	int GetWProj();
+	int GetHProj();
 
 	void MoveRight(Matrix& map);
 	void MoveLeft(Matrix& map);

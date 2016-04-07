@@ -135,10 +135,6 @@ void cScene::SetMapValue(int tile_x, int tile_y, int width, int height, int valu
 	for (int i = tile_x; i < tile_x + width / TILE_SIZE; ++i) {
 		for (int j = tile_y; j < tile_y + height / TILE_SIZE; ++j) {
 			map[j][i] = value;
-
-			char msgbuf[128];
-			sprintf(msgbuf, "map=%d -- %d,%d\n", map[j][i], i,j);
-			OutputDebugStringA(msgbuf);
 		}
 	}
 }
