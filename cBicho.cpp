@@ -487,13 +487,30 @@ vector<Projectile> cBicho::MoveProjectiles(Matrix& map, vector<Projectile>& proj
 		}
 		else {
 			// proyectiles dentro de escena
-			int tile_x = projs[p].x / TILE_SIZE;
-			int tile_y = projs[p].y / TILE_SIZE;
-			int width_tiles = w_proj / TILE_SIZE;
+			int tile_x = (projs[p].x / TILE_SIZE);
+			int tile_y = (projs[p].y / TILE_SIZE);
+
+			int width_tiles = (double(w_proj) / TILE_SIZE);
+			int height_tiles = ceil(double(h_proj) / TILE_SIZE);
+
+			if (fmod(projs[p].x, TILE_SIZE) != 0) width_tiles++;
+			if (fmod(projs[p].y, TILE_SIZE) != 0) height_tiles++;
 
 			bool hitScene = false;
+			float xScene, yScene;
 			for (int tx = tile_x; tx < tile_x + width_tiles; ++tx) {
-				if (isScene(map, tx, tile_y)) hitScene = true;
+				for (int ty = tile_y; ty < tile_y + height_tiles; ++ty) {
+					if (isScene(map, tx, ty)) {
+						xScene = tx*TILE_SIZE;
+						yScene = ty*TILE_SIZE;
+
+						bool notCollision = false;
+						if (yScene + TILE_SIZE < projs[p].y || projs[p].y + h_proj < yScene) notCollision = true;
+						if (xScene + TILE_SIZE < projs[p].x || projs[p].x + w_proj < xScene) notCollision = true;
+
+						hitScene = !notCollision;
+					}
+				}
 			}
 
 			if (hitScene) projs.erase(projs.begin() + p);
