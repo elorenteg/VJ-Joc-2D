@@ -190,7 +190,7 @@ bool cGame::loadLevel(int level) {
 	SkyLayer.restartLevel();
 
 	GameInfoLayer.SetCurrentLevel(level);
-	GameInfoLayer.SetCurrentLifeBoss(30 / (TOTAL_LEVELS-level+1));
+	GameInfoLayer.SetCurrentLifeBoss(30 / (TOTAL_LEVELS - level + 1));
 	GameInfoLayer.SetShowBossLife(false);
 
 	// Load level
@@ -643,7 +643,9 @@ void cGame::renderMessage(int message) {
 		strcat(msgbuf, intbuf);
 		Font.drawText(GAME_WIDTH / 2 - 150.0f, GAME_HEIGHT / 2 - 70.0f, MSS_DEPTH, 300.0f, 20.0f, msgbuf);
 
-		GameInfoLayer.SaveHighScore(GameInfoLayer.GetCurrentScore() * GameInfoLayer.GetCurrentLife());
+		int actualScore = GameInfoLayer.GetCurrentScore() * GameInfoLayer.GetCurrentLife();
+		if (actualScore > GameInfoLayer.GetHighScore())
+			GameInfoLayer.SaveHighScore(actualScore);
 	}
 }
 
@@ -677,7 +679,7 @@ bool cGame::checkBossDead() {
 		if (Boss->GetX() <= px && px <= Boss->GetX() + Boss->GetWidth() &&
 			Boss->GetY() <= py && py <= Boss->GetY() + Boss->GetHeight()) {
 			//bossDead = true;
-			
+
 			int bossLife = GameInfoLayer.GetCurrentLifeBoss() - 1;
 			GameInfoLayer.SetCurrentLifeBoss(bossLife);
 			if (bossLife == 0) {
@@ -770,7 +772,7 @@ bool cGame::checkPlayerProjectiles() {
 			}
 		}
 	}
-	
+
 	Player.SetProjectiles(projsRight, DIR_RIGHT);
 	return hitSomeEnemies;
 }
@@ -832,8 +834,8 @@ void cGame::DrawMiniMap(Matrix &map) {
 	float pxmid1 = cameraXScene;
 	float pxmid2 = cameraXScene + GAME_WIDTH;
 
-	float pxini = pxo - size*2;
-	float pxfi = pxini + size*2 + SCENE_WIDTH*size + size * 2;
+	float pxini = pxo - size * 2;
+	float pxfi = pxini + size * 2 + SCENE_WIDTH*size + size * 2;
 	float pyini = pyo;
 	float pyfi = pyini + SCENE_HEIGHT*size + size * 2;
 
@@ -849,25 +851,25 @@ void cGame::DrawMiniMap(Matrix &map) {
 	// Region Izquierda gris
 	glColor3f(0.4f, 0.4f, 0.4f);
 	glBegin(GL_QUADS);
-	glVertex3i(pxo, pyo + 2*size, GAMEINFO_DEPTH);
-	glVertex3i(pxo + max(0,floor(pxmid1 / TILE_SIZE * size)-2*size), pyo + 2 * size, GAMEINFO_DEPTH);
-	glVertex3i(pxo + max(0, floor(pxmid1 / TILE_SIZE * size)-2*size), pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH);
+	glVertex3i(pxo, pyo + 2 * size, GAMEINFO_DEPTH);
+	glVertex3i(pxo + max(0, floor(pxmid1 / TILE_SIZE * size) - 2 * size), pyo + 2 * size, GAMEINFO_DEPTH);
+	glVertex3i(pxo + max(0, floor(pxmid1 / TILE_SIZE * size) - 2 * size), pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH);
 	glVertex3i(pxo, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH);
 	glEnd();
 
 	// Region fondo visto
 	glColor3f(0.3f, 0.4f, 1.0f);
 	glBegin(GL_QUADS);
-	glVertex3i(pxo + floor(pxmid1 / TILE_SIZE) * size, pyo + 2 * size, GAMEINFO_DEPTH-1);
-	glVertex3i(pxo + ceil(pxmid2 / TILE_SIZE) * size + size, pyo + 2 * size, GAMEINFO_DEPTH-1);
-	glVertex3i(pxo + ceil(pxmid2 / TILE_SIZE) * size + size, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH-1);
-	glVertex3i(pxo + floor(pxmid1 / TILE_SIZE) * size, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH-1);
+	glVertex3i(pxo + floor(pxmid1 / TILE_SIZE) * size, pyo + 2 * size, GAMEINFO_DEPTH - 1);
+	glVertex3i(pxo + ceil(pxmid2 / TILE_SIZE) * size + size, pyo + 2 * size, GAMEINFO_DEPTH - 1);
+	glVertex3i(pxo + ceil(pxmid2 / TILE_SIZE) * size + size, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH - 1);
+	glVertex3i(pxo + floor(pxmid1 / TILE_SIZE) * size, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH - 1);
 	glEnd();
 
 	// Escena vista
 	glColor3f(0.2f, 0.2f, 0.2f);
 	px = pxo + pxmid1 / TILE_SIZE * size;
-	for (int tx = floor(pxmid1 / TILE_SIZE); tx <= min(ceil(pxmid2 / TILE_SIZE), SCENE_WIDTH-1); ++tx) {
+	for (int tx = floor(pxmid1 / TILE_SIZE); tx <= min(ceil(pxmid2 / TILE_SIZE), SCENE_WIDTH - 1); ++tx) {
 		for (int ty = SCENE_HEIGHT - 1; ty >= 2; --ty) {
 			py = pyo + ty*size;
 
@@ -897,7 +899,7 @@ void cGame::DrawMiniMap(Matrix &map) {
 	float xmax = pxo + ceil(pxmid2 / TILE_SIZE) * size + size;
 
 	// Enemigos rojos
-	glColor3f(1.0f,0.0f,0.0f);
+	glColor3f(1.0f, 0.0f, 0.0f);
 	for (int i = 0; i < Enemies.size(); ++i) {
 		if (!Enemies[i]->GetIsDead()) {
 			px = pxo + Enemies[i]->GetX() / TILE_SIZE * size;
@@ -928,7 +930,7 @@ void cGame::DrawMiniMap(Matrix &map) {
 }
 
 void cGame::DrawRect(float x, float y, float z, int w, int h, float xmin, float xmax) {
-	if (x + w>= xmin && x <= xmax) {
+	if (x + w >= xmin && x <= xmax) {
 		glBegin(GL_QUADS);
 		glVertex3i(max(x, xmin), y, z);
 		glVertex3i(min(x + w, xmax), y, z);
@@ -956,7 +958,7 @@ bool cGame::checkProjectileCollisions(int dir) {
 		int wE = Enemies[i]->GetWProj();
 		int hE = Enemies[i]->GetHProj();
 		vector<Projectile> projE2 = collisionProjectiles(projP, dir, projE, wE, hE);
-		Enemies[i]->SetProjectiles(projE2,-dir);
+		Enemies[i]->SetProjectiles(projE2, -dir);
 		if (projE2.size() != projE.size()) collides = true;
 	}
 
