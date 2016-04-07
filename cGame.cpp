@@ -462,6 +462,8 @@ void cGame::Render() {
 	SkyLayer.Draw(Data.GetID(IMG_BACKGROUND));
 	MountainLayer.Draw(Data.GetID(IMG_LAYER2), currentLevel);
 
+	DrawMiniMap(Scene.GetMap());
+
 	UpdateCameraScene();
 	Scene.Draw(Data.GetID(IMG_SCENE));
 
@@ -514,7 +516,6 @@ void cGame::Render() {
 	RestartCameraScene();
 
 	GameInfoLayer.Draw();
-	DrawMiniMap();
 
 	Sound.Update();
 
@@ -764,10 +765,10 @@ bool cGame::checkPlayerProjectiles() {
 					if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
 						found = true;
 						hitSomeEnemies = true;
-						//Enemies.erase(Enemies.begin() + v);
 						Enemies[v]->SetIsDead(true);
 						projsRight.erase(projsRight.begin() + p);
-						Scene.SetMapValue(v_tx, v_ty, BICHO_WIDTH, BICHO_HEIGHT, 0);
+
+						Scene.SetMapValue(v_tx, v_ty, Enemies[v]->GetWidth(), Enemies[v]->GetHeight(), EMPTY);
 
 						GameInfoLayer.SetCurrentScore(GameInfoLayer.GetCurrentScore() + 1);
 					}
@@ -822,13 +823,12 @@ void cGame::setPlayerSize() {
 	}
 }
 
-void cGame::DrawMiniMap() {
-	Matrix map = Scene.GetMap();
+void cGame::DrawMiniMap(Matrix &map) {
 	float size = 1.0f;
 	float pxo = 10.0f;
 	float pyo = 2.0f;
 
-	float px, py;
+	float px, py, w, h;
 	float pxmid1 = cameraXScene;
 	float pxmid2 = cameraXScene + GAME_WIDTH;
 
@@ -837,14 +837,16 @@ void cGame::DrawMiniMap() {
 	float pyini = pyo;
 	float pyfi = pyini + SCENE_HEIGHT*size + size * 2;
 
+	// Margen negro
 	glColor3f(0.0f, 0.0f, 0.0f);
 	glBegin(GL_QUADS);
-	glVertex3i(pxini, pyini, GAMEINFO_DEPTH - 1);
-	glVertex3i(pxfi, pyini, GAMEINFO_DEPTH - 1);
-	glVertex3i(pxfi, pyfi, GAMEINFO_DEPTH - 1);
-	glVertex3i(pxini, pyfi, GAMEINFO_DEPTH - 1);
+	glVertex3i(pxini, pyini, GAMEINFO_DEPTH - 2);
+	glVertex3i(pxfi, pyini, GAMEINFO_DEPTH - 2);
+	glVertex3i(pxfi, pyfi, GAMEINFO_DEPTH - 2);
+	glVertex3i(pxini, pyfi, GAMEINFO_DEPTH - 2);
 	glEnd();
 
+	// Region Izquierda gris
 	glColor3f(0.4f, 0.4f, 0.4f);
 	glBegin(GL_QUADS);
 	glVertex3i(pxo, pyo + 2*size, GAMEINFO_DEPTH);
@@ -853,41 +855,37 @@ void cGame::DrawMiniMap() {
 	glVertex3i(pxo, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH);
 	glEnd();
 
+	// Region fondo visto
+	glColor3f(0.3f, 0.4f, 1.0f);
+	glBegin(GL_QUADS);
+	glVertex3i(pxo + floor(pxmid1 / TILE_SIZE) * size, pyo + 2 * size, GAMEINFO_DEPTH-1);
+	glVertex3i(pxo + ceil(pxmid2 / TILE_SIZE) * size + size, pyo + 2 * size, GAMEINFO_DEPTH-1);
+	glVertex3i(pxo + ceil(pxmid2 / TILE_SIZE) * size + size, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH-1);
+	glVertex3i(pxo + floor(pxmid1 / TILE_SIZE) * size, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH-1);
+	glEnd();
+
+	// Escena vista
+	glColor3f(0.2f, 0.2f, 0.2f);
 	px = pxo + pxmid1 / TILE_SIZE * size;
 	for (int tx = floor(pxmid1 / TILE_SIZE); tx <= min(ceil(pxmid2 / TILE_SIZE), SCENE_WIDTH-1); ++tx) {
 		for (int ty = SCENE_HEIGHT - 1; ty >= 2; --ty) {
 			py = pyo + ty*size;
 
-			float r, g, b;
 			if (Scene.isScene(tx, ty)) {
-				r = 0.2f;
-				g = 0.2f;
-				b = 0.2f;
+				glBegin(GL_QUADS);
+				glVertex3i(px, py, GAMEINFO_DEPTH);
+				glVertex3i(px + size, py, GAMEINFO_DEPTH);
+				glVertex3i(px + size, py + size, GAMEINFO_DEPTH);
+				glVertex3i(px, py + size, GAMEINFO_DEPTH);
+				glEnd();
 			}
-			else if (Scene.isEnemy(tx, ty)) {
-				r = 1.0f;
-				g = 0.0f;
-				b = 0.0f;
-			}
-			else {
-				r = 0.0f;
-				g = 0.7f;
-				b = 1.0f;
-			}
-
-			glColor3f(r, g, b);
-			glBegin(GL_QUADS);
-			glVertex3i(px, py, GAMEINFO_DEPTH);
-			glVertex3i(px + size, py, GAMEINFO_DEPTH);
-			glVertex3i(px + size, py + size, GAMEINFO_DEPTH);
-			glVertex3i(px, py + size, GAMEINFO_DEPTH);
-			glEnd();
 		}
 
 		px += size;
 	}
 
-	glColor3f(0.3f, 0.3f, 0.3f);
+	// Region Derecha gris
+	glColor3f(0.4f, 0.4f, 0.4f);
 	glBegin(GL_QUADS);
 	glVertex3i(pxo + size * 3 + ceil(pxmid2 / TILE_SIZE) * size, pyo + 2 * size, GAMEINFO_DEPTH);
 	glVertex3i(pxo + SCENE_WIDTH * size, pyo + 2 * size, GAMEINFO_DEPTH);
@@ -895,5 +893,47 @@ void cGame::DrawMiniMap() {
 	glVertex3i(pxo + size * 3 + ceil(pxmid2 / TILE_SIZE) * size, pyo + size * SCENE_HEIGHT, GAMEINFO_DEPTH);
 	glEnd();
 
+	float xmin = pxo + floor(pxmid1 / TILE_SIZE) * size;
+	float xmax = pxo + ceil(pxmid2 / TILE_SIZE) * size + size;
+
+	// Enemigos rojos
+	glColor3f(1.0f,0.0f,0.0f);
+	for (int i = 0; i < Enemies.size(); ++i) {
+		if (!Enemies[i]->GetIsDead()) {
+			px = pxo + Enemies[i]->GetX() / TILE_SIZE * size;
+			py = pyo + Enemies[i]->GetY() / TILE_SIZE * size;
+			w = Enemies[i]->GetWidth() / TILE_SIZE * size;
+			h = Enemies[i]->GetHeight() / TILE_SIZE * size;
+			DrawRect(px, py, GAMEINFO_DEPTH, w, h, xmin, xmax);
+		}
+	}
+
+	// Player cyan
+	px = pxo + Player.GetX() / TILE_SIZE * size;
+	py = pyo + Player.GetY() / TILE_SIZE * size;
+	w = Player.GetWidth() / TILE_SIZE * size;
+	h = Player.GetHeight() / TILE_SIZE * size;
+	glColor3f(0.0f, 1.0f, 1.0f);
+	DrawRect(px, py, GAMEINFO_DEPTH, w, h, xmin, xmax);
+
+	// Boss amarillo
+	px = pxo + Boss->GetX() / TILE_SIZE * size;
+	py = pyo + Boss->GetY() / TILE_SIZE * size;
+	w = Boss->GetWidth() / TILE_SIZE * size;
+	h = Boss->GetHeight() / TILE_SIZE * size;
+	glColor3f(1.0f, 1.0f, 0.0f);
+	DrawRect(px, py, GAMEINFO_DEPTH, w, h, xmin, xmax);
+
 	glColor3f(1.0f, 1.0f, 1.0f);
+}
+
+void cGame::DrawRect(float x, float y, float z, int w, int h, float xmin, float xmax) {
+	if (x + w>= xmin && x <= xmax) {
+		glBegin(GL_QUADS);
+		glVertex3i(max(x, xmin), y, z);
+		glVertex3i(min(x + w, xmax), y, z);
+		glVertex3i(min(x + w, xmax), y + h, z);
+		glVertex3i(max(x, xmin), y + h, z);
+		glEnd();
+	}
 }

@@ -56,7 +56,6 @@ public:
 	void Render();
 	void UpdateCameraScene();
 	void RestartCameraScene();
-	void DrawMiniMap();
 
 	void SetGameEnd(bool end);
 	bool HasGameEnd();
@@ -111,6 +110,9 @@ private:
 	bool isBossInScene();
 
 	void setPlayerSize();
+
+	void DrawMiniMap(Matrix& map);
+	void DrawRect(float x, float y, float z, int w, int h, float xmin, float xmax);
 
 	//http://www.koonsolo.com/news/dewitters-gameloop/
 	const int FRAMES_PER_SECOND = 70;

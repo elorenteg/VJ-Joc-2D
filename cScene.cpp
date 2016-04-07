@@ -39,7 +39,7 @@ bool cScene::LoadLevel(int level) {
 		for (i = 0; i<SCENE_WIDTH; i++) {
 			fscanf(fd, "%c", &tile);
 			if (tile == ' ' || tile == ENEMY_HOR || tile == ENEMY_VER || tile == ENEMY_CIR || tile == BOSS || tile == RESERVED) {
-				map[j][i] = 0;
+				map[j][i] = EMPTY;
 			}
 			else {
 				map[j][i] = tile - 48;
@@ -131,10 +131,14 @@ bool cScene::endOfMap(float cameraX) {
 	return false;
 }
 
-void cScene::SetMapValue(int tile_x, int tile_y, int width, int heihgt, int value) {
+void cScene::SetMapValue(int tile_x, int tile_y, int width, int height, int value) {
 	for (int i = tile_x; i < tile_x + width / TILE_SIZE; ++i) {
-		for (int j = tile_y; j < tile_y + heihgt / TILE_SIZE; ++j) {
+		for (int j = tile_y; j < tile_y + height / TILE_SIZE; ++j) {
 			map[j][i] = value;
+
+			char msgbuf[128];
+			sprintf(msgbuf, "map=%d -- %d,%d\n", map[j][i], i,j);
+			OutputDebugStringA(msgbuf);
 		}
 	}
 }
