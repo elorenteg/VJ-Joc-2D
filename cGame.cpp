@@ -396,10 +396,13 @@ bool cGame::Process() {
 		Matrix map = Scene.GetMap();
 		Player.LogicProjectiles(map);
 
-		bool enemyHasShoot;
+		bool enemyHasShoot = false;
 		for (int i = 0; i < Enemies.size(); ++i) {
 			Enemies[i]->Logic(map, scroll);
-			enemyHasShoot = Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS);
+			enemyHasShoot = Enemies[i]->LogicProjectiles(map, currentLevel, TOTAL_LEVELS) || enemyHasShoot;
+		}
+		if (enemyHasShoot) {
+			//Sound.PlayCustomSound(SOUND_ENEMY_SHOOT);
 		}
 
 		Boss->Logic(map, scroll);

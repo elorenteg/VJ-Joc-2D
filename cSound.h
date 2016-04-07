@@ -10,9 +10,10 @@
 #define SOUND_NYAN_BASE_8BIT	2
 #define SOUND_CAT_SHOOT			3
 #define SOUND_CAT_DYING			4
-#define SOUND_ENEMY_DEAD		5
-#define SOUND_BOSS_SHOOT		6
-#define SOUND_BOSS_DEAD			7
+#define SOUND_ENEMY_SHOOT		5
+#define SOUND_ENEMY_DEAD		6
+#define SOUND_BOSS_SHOOT		7
+#define SOUND_BOSS_DEAD			8
 
 #define CHANNEL_MUSIC			100
 #define CHANNEL_SHOOTS			101
@@ -34,6 +35,7 @@ public:
 		*nyan_base_8bit,
 		*cat_shoot,
 		*cat_dying,
+		*enemy_shoot,
 		*enemy_dead,
 		*boss_shoot,
 		*boss_dead;
