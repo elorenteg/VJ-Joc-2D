@@ -92,7 +92,7 @@ private:
 	bool checkBossDead();
 	bool checkEnemiesProjectiles();
 	bool checkBossProjectiles();
-	bool checkProjectilesEnemy(vector<Projectile>& projs);
+	bool checkProjectilesEnemy(vector<Projectile>& projs, int wE, int hE);
 	bool checkPositionWithEnemy(float enX, float enY, int enW, int enH);
 
 	bool checkProjectileCollisions();

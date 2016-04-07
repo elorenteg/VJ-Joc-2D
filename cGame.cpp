@@ -717,63 +717,49 @@ bool cGame::checkPositionWithEnemy(float enX, float enY, int enW, int enH) {
 	int wPlayer = Player.GetWidth();
 	int hPlayer = Player.GetHeight();
 
-	if (isPositionInsideX(enX, enY, enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
-		isPositionInsideX(enX+enW, enY, enH, xPlayer, yPlayer, wPlayer, hPlayer) ||
-		isPositionInsideY(enX, enY, enW, xPlayer, yPlayer, wPlayer, hPlayer) ||
-		isPositionInsideY(enX, enY+enH, enW, xPlayer, yPlayer, wPlayer, hPlayer)) {
-		return true;
-	}
+	bool notCollision = false;
+	if (enY + enH < yPlayer || yPlayer + hPlayer < enY) notCollision = true;
+	if (enX + enW < xPlayer || xPlayer + wPlayer < enX) notCollision = true;
 
-	return false;
-}
-
-bool cGame::isPositionInsideX(float x, float y, float h, float xPlayer, float yPlayer, int wPlayer, int hPlayer) {
-	if (xPlayer < x && x < xPlayer + wPlayer) {
-		if (y < yPlayer && yPlayer + hPlayer < y + h) return true;
-		if (yPlayer < y && y < yPlayer + hPlayer) return true;
-		if (yPlayer < y && y + h < yPlayer + hPlayer) return true;
-	}
-
-	return false;
-}
-
-bool cGame::isPositionInsideY(float x, float y, float w, float xPlayer, float yPlayer, int wPlayer, int hPlayer) {
-	if (yPlayer < y && y < yPlayer + hPlayer) {
-		if (x < xPlayer && xPlayer + wPlayer < x + w) return true;
-		if (xPlayer < x && x < xPlayer + wPlayer) return true;
-		if (xPlayer < x && x + w < xPlayer + wPlayer) return true;
-	}
-
-	return false;
+	return (!notCollision);
 }
 
 bool cGame::checkPlayerProjectiles() {
 	vector<Projectile> projsRight = Player.GetProjectiles(DIR_RIGHT);
 	bool hitSomeEnemies = false;
+	int wP = Player.GetWProj();
+	int hP = Player.GetHProj();
+
 	for (int p = 0; p < projsRight.size(); ++p) {
-		int tx = projsRight[p].x / TILE_SIZE;
-		int ty = projsRight[p].y / TILE_SIZE;
-		int tx2 = tx + 1;
+		float xP = projsRight[p].x;
+		float yP = projsRight[p].y;
 
-		if (Scene.isEnemy(tx, ty) || Scene.isEnemy(tx2, ty)) {
-			bool found = false;
-			for (int v = 0; v < Enemies.size() && !found; ++v) {
-				if (!Enemies[v]->GetIsDead()) {
-					int v_tx = Enemies[v]->GetX() / TILE_SIZE;
-					int v_ty = Enemies[v]->GetY() / TILE_SIZE;
-					int v_tx2 = (Enemies[v]->GetX() + Enemies[v]->GetWidth()) / TILE_SIZE;
-					int v_ty2 = (Enemies[v]->GetY() + Enemies[v]->GetHeight()) / TILE_SIZE;
+		bool found = false;
+		for (int v = 0; v < Enemies.size() && !found; ++v) {
+			if (!Enemies[v]->GetIsDead()) {
+				float xE = Enemies[v]->GetX();
+				float yE = Enemies[v]->GetY();
+				int wE = Enemies[v]->GetWidth();
+				int hE = Enemies[v]->GetHeight();
 
-					if (((tx >= v_tx && tx <= v_tx2) || (tx2 >= v_tx && tx2 <= v_tx2)) && ty >= v_ty && ty <= v_ty2) {
-						found = true;
-						hitSomeEnemies = true;
-						Enemies[v]->SetIsDead(true);
-						projsRight.erase(projsRight.begin() + p);
+				bool notCollision = false;
+				if (yE + hE < yP || yP + hP < yE) notCollision = true;
+				if (xE + wE < xP || xP + wP < xE) notCollision = true;
 
-						Scene.SetMapValue(v_tx, v_ty, Enemies[v]->GetWidth(), Enemies[v]->GetHeight(), EMPTY);
+				bool collision = !notCollision;
 
-						GameInfoLayer.SetCurrentScore(GameInfoLayer.GetCurrentScore() + 1);
-					}
+				if (collision) {
+					found = true;
+					hitSomeEnemies = true;
+					Enemies[v]->SetIsDead(true);
+					projsRight.erase(projsRight.begin() + p);
+
+					int txE = xE / TILE_SIZE;
+					int tyE = yE / TILE_SIZE;
+
+					Scene.SetMapValue(txE, tyE, Enemies[v]->GetWidth(), Enemies[v]->GetHeight(), EMPTY);
+
+					GameInfoLayer.SetCurrentScore(GameInfoLayer.GetCurrentScore() + 1);
 				}
 			}
 		}
@@ -786,29 +772,35 @@ bool cGame::checkPlayerProjectiles() {
 bool cGame::checkEnemiesProjectiles() {
 	bool collides = false;
 	for (int i = 0; i < Enemies.size() && !collides; ++i) {
-		collides = checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_RIGHT));
-		collides = collides || checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_LEFT));
+		collides = checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_RIGHT), Enemies[i]->GetWProj(), Enemies[i]->GetHProj());
+		collides = collides || checkProjectilesEnemy(Enemies[i]->GetProjectiles(DIR_LEFT), Enemies[i]->GetWProj(), Enemies[i]->GetHProj());
 	}
 
 	return collides;
 }
 
 bool cGame::checkBossProjectiles() {
-	bool collides = checkProjectilesEnemy(Boss->GetProjectiles(DIR_LEFT));
+	bool collides = checkProjectilesEnemy(Boss->GetProjectiles(DIR_LEFT), Boss->GetWProj(), Boss->GetHProj());
 
 	return collides;
 }
 
-bool cGame::checkProjectilesEnemy(vector<Projectile>& projs) {
-	for (int p = 0; p < projs.size(); ++p) {
-		float projX = projs[p].x;
-		float projY = projs[p].y;
+bool cGame::checkProjectilesEnemy(vector<Projectile>& projs, int wE, int hE) {
+	float xP = Player.GetX();
+	float yP = Player.GetY();
+	int wP = Player.GetWidth();
+	int hP = Player.GetHeight();
 
-		if (projX >= Player.GetX() && projX + PROJ_WIDTH <= Player.GetX() + Player.GetWidth() &&
-			projY >= Player.GetY() && projY + PROJ_HEIGHT <= Player.GetY() + Player.GetHeight()) {
-			// Proyectile hit Player
-			return true;
-		}
+	for (int p = 0; p < projs.size(); ++p) {
+		float xE = projs[p].x;
+		float yE = projs[p].y;
+
+		bool notCollision = false;
+		if (yE + hE < yP || yP + hP < yE) notCollision = true;
+		if (xE + wE < xP || xP + wP < xE) notCollision = true;
+
+		bool collision = !notCollision;
+		if (collision) return true;
 	}
 	return false;
 }
