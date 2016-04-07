@@ -344,9 +344,10 @@ bool cGame::Process() {
 				loadLevel(currentLevel);
 			}
 		}
-		else if (keys['p']) {
+		else if (keys['p'] || keys['P']) {
 			gamePaused = false;
 			keys['p'] = false;
+			keys['P'] = false;
 		}
 	}
 	else {
@@ -370,9 +371,10 @@ bool cGame::Process() {
 			keys[' '] = false;
 		}
 
-		if (keys['p'] || keys[27]) {
+		if (keys['p'] || keys['P'] || keys[27]) {
 			gamePaused = true;
 			keys['p'] = false;
+			keys['P'] = false;
 			keys[27] = false;
 		}
 
@@ -675,13 +677,14 @@ bool cGame::checkBossDead() {
 
 		if (Boss->GetX() <= px && px <= Boss->GetX() + Boss->GetWidth() &&
 			Boss->GetY() <= py && py <= Boss->GetY() + Boss->GetHeight()) {
-			//bossDead = true;
 
 			int bossLife = GameInfoLayer.GetCurrentLifeBoss() - 1;
 			GameInfoLayer.SetCurrentLifeBoss(bossLife);
 			if (bossLife == 0) {
 				bossDead = true;
 				Boss->SetWidthHeight(0, 0);
+
+				GameInfoLayer.SetCurrentScore(GameInfoLayer.GetCurrentScore() + 10);
 			}
 
 			projsRight.erase(projsRight.begin() + p);
