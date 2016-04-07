@@ -5,8 +5,13 @@
 //Delete console
 #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 
+#define MENUSTATE		1
+#define GAMESTATE		2
+#define GAMESTARTSTATE	3
 cGame Game;
 cMenu Menu;
+
+int currentState;
 
 void AppRender()
 {
@@ -87,13 +92,22 @@ void AppIdle()
 {
 	switch (Menu.GetState()) {
 	case MENU:
+		currentState = MENUSTATE;
 		if (!Menu.Loop()) exit(0);
 		break;
 	case START_GAME:
+		if (currentState != START_GAME) {
+			Game.reinitializeRenderCounter();
+		}
+		currentState = START_GAME;
 		Game.SetGameEnd(false);
 		Menu.SetState(GAME);
 		break;
 	case GAME:
+		if (currentState != GAME) {
+			Game.reinitializeRenderCounter();
+		}
+		currentState = GAME;
 		bool res = Game.Loop();
 		if (res && Game.HasGameEnd()) {
 			Menu.SetState(MENU);
@@ -108,6 +122,8 @@ void AppIdle()
 void main(int argc, char** argv)
 {
 	int res_x, res_y, pos_x, pos_y;
+
+	currentState = MENUSTATE;
 
 	//GLUT initialization
 	glutInit(&argc, argv);

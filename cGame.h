@@ -57,6 +57,7 @@ public:
 	void UpdateCameraScene();
 	void RestartCameraScene();
 
+	void reinitializeRenderCounter();
 	void SetGameEnd(bool end);
 	bool HasGameEnd();
 
