@@ -103,17 +103,17 @@ bool cGame::Init() {
 	res = Data.LoadImage(IMG_PIRATE, path, GL_RGBA);
 	if (!res) return false;
 
-	//Ninja-nyancat initialization
+	//Tac-nyancat initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_tac.png").c_str());
 	res = Data.LoadImage(IMG_TAC, path, GL_RGBA);
 	if (!res) return false;
 
-	//Zombie-nyancat initialization
+	//Mummy-nyancat initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_mummy.png").c_str());
 	res = Data.LoadImage(IMG_MUMMY, path, GL_RGBA);
 	if (!res) return false;
 
-	//Pirate-nyancat initialization
+	//Groudon-nyancat initialization
 	strcpy(path, concat_path(IMAGES_FOLDER, "nyancat_boss_groudon.png").c_str());
 	res = Data.LoadImage(IMG_GROUDON, path, GL_RGBA);
 	if (!res) return false;
