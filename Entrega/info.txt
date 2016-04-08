@@ -1,4 +1,4 @@
-VJ - Joc 2D
+﻿VJ - Joc 2D - NyanCat Returns! (R-Type like)
 
 INTEGRANTS
 * Ester Lorente García
@@ -9,44 +9,45 @@ INTEGRANTS
 FUNCIONALITATS IMPLEMENTADES
 
 * GUI composta de 2 marges: superior i inferior.
-*** superior: mostra el nivell, la vida (numero de cors), puntuació del jugador a la 
-    partida i màxima puntuació de totes les partides
+*** superior: mostra el nivell actual, la vida del jugador (numero de cors, entre 1 i 3), puntuació del jugador a la 
+    partida i màxima puntuació de totes les partides jugades.
 *** inferior: mostra un mini-mapa que recorre l'escena amb el jugador i una barra de 
-    vida del boss del nivell
+    vida del boss del nivell (quan s'arriba).
 	
 * Estructura bàsica (Menu):
-*** Jugar: per inicial la partida
-*** Instruccions: instruccions simples i introducció als diferents personatges
-*** Opcions: màxima puntuació i selecció del personatge del jugador
-*** Crèdits: Informació de l'equip
+*** Jugar: per inicial la partida.
+*** Instruccions: instruccions simples i introducció als diferents personatges i enemics del joc.
+*** Opcions: màxima puntuació i selecció del personatge del jugador.
+*** Crèdits: Informació de l'equip desenvolupador.
 
 * Só:
-*** Música de fons
-*** Só per quan mor el jugador
-*** Sons per quan moren els enemics i els bosses
-*** Sons per quan disparen el jugador i els bosses (amb els enemics, s'escoltaven massa sons)
+*** Música de fons mentre es juga.
+*** Só per quan mor el jugador.
+*** Sons per quan moren els enemics i els bosses.
+*** Sons per quan disparen el jugador i els bosses. Es descarten sons pels trets dels enemics degut a la acumulació de sons.
 
 FUNCIONALITATS IMPLEMENTADES (Part Creativa)
 
 * Selecció del personatge del jugador
-*** Deixa escollir entre 5 skins nyancats diferents
+*** Deixa escollir entre 5 skins nyancats diferents (amb mides de tiles diferents).
 
 * Persistència de dades:
-*** Guarda la selecció del personatge que vol l'usuari
-*** Guarda la màxima puntuació del joc
+*** Guarda la selecció del personatge que vol l'usuari per així al tornar a jugar tenir-la disponible automàticament.
+*** Guarda la màxima puntuació del joc.
 
 ####
 
 INSTRUCCIONS
-* El jugador de l'usuari és el nyancat (a les opcions es pot personalitzar el personatge)
-* Amb les fletxes es pot fer moure el jugador.
+* El jugador de l'usuari, per defecte, es el nyancat bàsic.
+* Amb les fletxes es pot fer moure el jugador i amb l'espai es dispara.
+* Estat de pausa amb la tecla 'p' (o 'P').
 * Hi ha 3 nivells on a cada nivell hi hauràn diferents enemics i bosses finals.
-* Amb l'espai es pot disparar projectiles cap els enemics (ells també):
+* Amb l'espai es pot disparar projectils cap els enemics (ells també):
 *** Si colpegen els enemics o els bosses, es moren
-*** Si colpegen altres projectiles, s'eliminen entre ells.
+*** Si colpegen altres projectils, s'eliminen entre ells.
 *** Si colpegen l'escenari, el projectil desapareix.
-* El jugador té 3 vides. Quan es mor, comença de nou el nivell al que estava.
-* Els enemics es maten d'1 sol cop.
+* El jugador té 3 vides. Quan es mor, comença de nou el nivell al que estava. Si es queda sense vides, ha de tornar a començar des del nivell 1.
+* Els enemics es maten d'un sol cop.
 * Els bosses són més difícils de matar i requereixen de molts projectils.
 *** A més nivell, el boss té més vida (10-15-30 de vida)
 *** Quan s'estigui davant del boss, s'indicarà amb una barra la vida que li queda.
@@ -54,5 +55,5 @@ INSTRUCCIONS
 * Al completar el joc o al morir el jugador, s'indicarà la puntuació final.
 *** Les puntuacions es calculen amb:
 ****** Encert amb enemic: +1
-****** Encert amb boss:
+****** Encert amb boss: +10 (Encara que al video es fa un +0 per errada tipografica).
 ****** Bonificació per vides al final del joc: puntuació * num_vides
