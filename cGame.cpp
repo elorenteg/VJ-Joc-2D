@@ -343,6 +343,9 @@ bool cGame::Process() {
 				currentLevel++;
 				loadLevel(currentLevel);
 			}
+			else if (isEndOfLevel() && currentLevel == TOTAL_LEVELS&& isBossDead()) {
+				startGame();
+			}
 		}
 		else if (keys['p'] || keys['P']) {
 			gamePaused = false;
